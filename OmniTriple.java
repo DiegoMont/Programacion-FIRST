@@ -38,20 +38,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-/**
- * This file contains an example of an iterative (Non-Linear) "OpMode".
- * An OpMode is a 'program' that runs in either the autonomous or the teleop period of an FTC match.
- * The names of OpModes appear on the menu of the FTC Driver Station.
- * When an selection is made from the menu, the corresponding OpMode
- * class is instantiated on the Robot Controller and executed.
- *
- * This particular OpMode just executes a basic Tank Drive Teleop for a two wheeled robot
- * It includes all the skeletal structure that all iterative OpModes contain.
- *
- * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
- */
-
 @TeleOp(name="RoboPro", group="Iterative Opmode")
 
 public class RoboPro extends OpMode
@@ -65,6 +51,7 @@ public class RoboPro extends OpMode
     private CRServo cajasDrive = null;
     double cajasPower = 0;
     boolean presionar = false;
+    boolean Presionar = false;
     /*
      * Code to run ONCE when the driver hits INIT
      */
@@ -136,7 +123,7 @@ public class RoboPro extends OpMode
 
         // Move the lift.
         if (gamepad1.dpad_up) {
-          elevadorPower = 0.5;
+          elevadorPower = 1.0;
         } else if (gamepad1.dpad_down) {
           elevadorPower = -0.5;
         } else {
@@ -144,7 +131,7 @@ public class RoboPro extends OpMode
         }
 
         // Activate the movement of the mechanism to pick boxes.
-        if (gamepad1.left_bumper || gamepad1.right_bumper) {
+        if (gamepad1.left_bumper) {
           presionar = true;
         } else if (!gamepad1.left_bumper && presionar) {
           if (cajasPower == 0.0) {
@@ -153,15 +140,17 @@ public class RoboPro extends OpMode
             cajasPower = 0.0;
           }
           presionar = false;
-        } else if (!gamepad1.right_bumper && presionar){
+        }
+        if(gamepad1.right_bumper){
+          Presionar = true;
+        }
+        else if (!gamepad1.right_bumper && Presionar){
           if (cajasPower == 0){
             cajasPower = 1;
           } else {
             cajasPower = 0;
           }
-          presionar = false;
-        } else {
-          presionar = false;
+          Presionar = false;
         }
 
         // Send calculated power to wheels
