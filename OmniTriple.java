@@ -40,7 +40,7 @@ import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name="RoboPro", group="Iterative Opmode")
 
-public class RoboPro extends OpMode
+public class OmniTriple extends OpMode
 {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -49,55 +49,43 @@ public class RoboPro extends OpMode
     private DcMotor centreDrive = null;
     private DcMotor elevadorDrive = null;
     private CRServo cajasDrive = null;
-    double cajasPower = 0;
-    boolean presionar = false;
-    boolean Presionar = false;
-    /*
-     * Code to run ONCE when the driver hits INIT
-     */
+
+    //Code to run ONCE when the driver hits INIT
     @Override
     public void init() {
         telemetry.addData("Status", "Initialized");
 
-        // Initialize the hardware variables. Note that the strings used here as parameters
-        // to 'get' must correspond to the names assigned during the robot configuration
-        // step (using the FTC Robot Controller app on the phone).
         leftDrive  = hardwareMap.get(DcMotor.class, "leftMotor");
         rightDrive = hardwareMap.get(DcMotor.class, "rightMotor");
         centreDrive = hardwareMap.get(DcMotor.class, "centreMotor");
         elevadorDrive = hardwareMap.get(DcMotor.class, "motor");
-        cajasDrive = hardwareMap.get(CRServo.class,"servoCajas");
+        cajasDrive = hardwareMap.get(CRServo.class, "servoCajas");
 
-        // Most robots need the motor on one side to be reversed to drive forward
-        // Reverse the motor that runs backwards when connected directly to the battery
-        leftDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightDrive.setDirection(DcMotor.Direction.REVERSE);
+        leftDrive.setDirection(DcMotor.Direction.REVERSE);
+        rightDrive.setDirection(DcMotor.Direction.FORWARD);
+        centreDrive.setDirection(DcMotor.Direction.FORWARD);
 
-        // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
     }
 
-    /*
-     * Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
-     */
+    //Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
     @Override
     public void init_loop() {
     }
 
-    /*
-     * Code to run ONCE when the driver hits PLAY
-     */
+    //Code to run ONCE when the driver hits PLAY
     @Override
     public void start() {
         runtime.reset();
     }
 
-    /*
-     * Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
-     */
+    //Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
+    double cajasPower = 0;
+    boolean presd = false;
+    boolean presd1 = false;
+
     @Override
     public void loop() {
-        // Setup a variable for each drive wheel to save power level for telemetry
         double leftPower;
         double rightPower;
         double centrePower;
@@ -132,45 +120,38 @@ public class RoboPro extends OpMode
 
         // Activate the movement of the mechanism to pick boxes.
         if (gamepad1.left_bumper) {
-          presionar = true;
-        } else if (!gamepad1.left_bumper && presionar) {
-          if (cajasPower == 0.0) {
-            cajasPower = -1.0;
+          presd = true;
+        } else if(gamepad1.right_bumper) {
+          presd1 = true;
+        } else if (!gamepad1.left_bumper && presd) {
+          if (cajasPower == 0) {
+            cajasPower = -1;
           } else {
-            cajasPower = 0.0;
+            cajasPower = 0;
           }
-          presionar = false;
-        }
-        if(gamepad1.right_bumper){
-          Presionar = true;
-        }
-        else if (!gamepad1.right_bumper && Presionar){
-          if (cajasPower == 0){
+          presd = false;
+        } else if (!gamepad1.right_bumper && presd1) {
+          if (cajasPower == 0) {
             cajasPower = 1;
           } else {
             cajasPower = 0;
           }
-          Presionar = false;
+          presd1 = false;
         }
 
         // Send calculated power to wheels
         leftDrive.setPower(leftPower);
         rightDrive.setPower(rightPower);
         centreDrive.setPower(centrePower);
-        cajasDrive.setPower(cajasPower);
         elevadorDrive.setPower(elevadorPower);
-        
-        
+        cajasDrive.setPower(cajasPower);
 
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addData("Motors", "left (%f), right (%f)", leftPower, rightPower);
-        telemetry.addData("SitckX", gamepad1.right_stick_x);
     }
 
-    /*
-     * Code to run ONCE after the driver hits STOP
-     */
+    //Code to run ONCE after the driver hits STOP
     @Override
     public void stop() {
     }
