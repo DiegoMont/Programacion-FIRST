@@ -61,8 +61,8 @@ public class OmniTriple extends OpMode
         elevadorDrive = hardwareMap.get(DcMotor.class, "motor");
         cajasDrive = hardwareMap.get(CRServo.class, "servoCajas");
 
-        leftDrive.setDirection(DcMotor.Direction.REVERSE);
-        rightDrive.setDirection(DcMotor.Direction.FORWARD);
+        leftDrive.setDirection(DcMotor.Direction.FORWARD);
+        rightDrive.setDirection(DcMotor.Direction.REVERSE);
         centreDrive.setDirection(DcMotor.Direction.FORWARD);
 
         telemetry.addData("Status", "Initialized");
@@ -94,8 +94,8 @@ public class OmniTriple extends OpMode
         // POV Mode uses left stick to go forward, and right stick to turn.
         double drive = -gamepad1.left_stick_y;
         double turn  =  gamepad1.left_stick_x;
-        leftPower    = Range.clip(drive + turn, -1.0, 1.0) ;
-        rightPower   = Range.clip(drive - turn, -1.0, 1.0) ;
+        leftPower    = Range.clip(drive + turn, -1.0, 1.0);
+        rightPower   = Range.clip(drive - turn, -1.0, 1.0);
         centrePower = gamepad1.right_stick_x;
 
         // Tank Mode uses one stick to control each wheel.
@@ -103,10 +103,14 @@ public class OmniTriple extends OpMode
         rightPower = -gamepad1.left_stick_x ;*/
 
         // Control power of wheels.
-        if (!gamepad1.a) {
+        if (gamepad1.right_trigger>0) {
           leftPower = leftPower * 0.75;
           rightPower = rightPower * 0.75;
           centrePower = centrePower * 0.75;
+        } else if(gamepad1.left_trigger>0){
+          leftPower = leftPower * 0.5*(1.1-gamepad1.left_trigger);
+          rightPower = rightPower * 0.5*(1.1-gamepad1.left_trigger);
+          centrePower = centrePower * 0.5*(1.1-gamepad1.left_trigger);
         }
 
         // Move the lift.
