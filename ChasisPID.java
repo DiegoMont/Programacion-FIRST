@@ -85,9 +85,9 @@ public class ChasisPID extends OpMode
       double dif = Math.abs(des)-Math.abs(pAct);
       if (dif != 0) {
         if (des > pAct) {
-          pAct = pAct + 0.05;
+          pAct = pAct + 0.01;
         } else if (des < pAct) {
-          pAct = pAct - 0.05;
+          pAct = pAct - 0.01;
         }
       }  else {
         pAct = des;
@@ -104,7 +104,7 @@ public class ChasisPID extends OpMode
         double centreDeseado = gamepad1.right_stick_x;
 
         //Acceleration control
-        if (runtime.seconds() >= tiempo + 0.5) {
+        if (runtime.seconds() >= tiempo + 0.1) {
           leftPower = Range.clip(controlP(leftPower,leftDeseado), -1, +1);
           rightPower = Range.clip(controlP(rightPower,rightDeseado), -1, +1);
           centrePower = Range.clip(controlP(centrePower,centreDeseado), -1, +1);
