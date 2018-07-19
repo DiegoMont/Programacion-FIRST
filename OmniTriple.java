@@ -48,7 +48,9 @@ public class OmniTriple extends OpMode
     private DcMotor rightDrive = null;
     private DcMotor centreDrive = null;
     private DcMotor elevadorDrive = null;
-    private CRServo cajasDrive = null;
+    private CRServo eolicoDrive = null;
+    private Servo brazoServo = null;
+    private Servo manoServo = null;
 
     //Code to run ONCE when the driver hits INIT
     @Override
@@ -58,12 +60,13 @@ public class OmniTriple extends OpMode
         leftDrive  = hardwareMap.get(DcMotor.class, "leftMotor");
         rightDrive = hardwareMap.get(DcMotor.class, "rightMotor");
         centreDrive = hardwareMap.get(DcMotor.class, "centreMotor");
-        elevadorDrive = hardwareMap.get(DcMotor.class, "motor");
-        cajasDrive = hardwareMap.get(CRServo.class, "servoCajas");
+        elevadorDrive = hardwareMap.get(DcMotor.class, "elevadorMotor");
+        eolicoDrive = hardwareMap.get(CRServo.class, "eolicoServo");
 
         leftDrive.setDirection(DcMotor.Direction.FORWARD);
         rightDrive.setDirection(DcMotor.Direction.REVERSE);
         centreDrive.setDirection(DcMotor.Direction.FORWARD);
+        elevadorDrive.setDirection(DcMotor.Direction.REVERSE);
 
         telemetry.addData("Status", "Initialized");
     }
@@ -80,9 +83,12 @@ public class OmniTriple extends OpMode
     }
 
     //Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
-    double cajasPower = 0;
+    double eolicoPower = 0;
     boolean presd = false;
+    double brazoPosition = 0;
     boolean presd1 = false;
+    double manoPosition = 0;
+    boolean presd2 = false;
 
     @Override
     public void loop() {
@@ -97,10 +103,6 @@ public class OmniTriple extends OpMode
         leftPower    = Range.clip(drive + turn, -1.0, 1.0);
         rightPower   = Range.clip(drive - turn, -1.0, 1.0);
         centrePower = gamepad1.right_stick_x;
-
-        // Tank Mode uses one stick to control each wheel.
-        /*leftPower = -gamepad1.left_stick_y;
-        rightPower = -gamepad1.left_stick_x ;*/
 
         // Control power of wheels.
         if (gamepad1.right_trigger>0) {
@@ -122,25 +124,40 @@ public class OmniTriple extends OpMode
           elevadorPower = 0;
         }
 
-        // Activate the movement of the mechanism to pick boxes.
-        if (gamepad1.left_bumper) {
+        // Activate the movement of the mechanism to move the air turbine
+        if (gamepad1.a) {
           presd = true;
-        } else if(gamepad1.right_bumper) {
-          presd1 = true;
-        } else if (!gamepad1.left_bumper && presd) {
-          if (cajasPower == 0) {
-            cajasPower = -1;
+        } else if (!gamepad1.a && presd) {
+          if (eolicoPower == 0) {
+            eolicoPower = -1;
           } else {
-            cajasPower = 0;
+            eolicoPower = 0;
           }
           presd = false;
-        } else if (!gamepad1.right_bumper && presd1) {
-          if (cajasPower == 0) {
-            cajasPower = 1;
+        }
+
+        //Move the arm for solar panels
+        if (gamepad1.left_bumper) {
+          presd1 = true;
+        } else if (!gamepad1.left_bumper && presd1) {
+          if (brazoPosition == 0) {
+            brazoPosition = 0.5;
           } else {
-            cajasPower = 0;
+            brazoPosition = 0;
           }
           presd1 = false;
+        }
+
+        //Grab or left the solar panel
+        if (gamepad1.right_bumper) {
+          presd2 = true;
+        } else if (!gamepad1.right_bumper && presd2) {
+          if (manoPosition == 0) {
+            manoPosition = 0.5;
+          } else {
+            manoPosition = 0;
+          }
+          presd2 = false;
         }
 
         // Send calculated power to wheels
@@ -148,7 +165,9 @@ public class OmniTriple extends OpMode
         rightDrive.setPower(rightPower);
         centreDrive.setPower(centrePower);
         elevadorDrive.setPower(elevadorPower);
-        cajasDrive.setPower(cajasPower);
+        eolicoDrive.setPower(eolicoPower);
+        brazoServo.setPosition(brazoPosition);
+        manoPosition.setPosition(manoPosition);
 
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
