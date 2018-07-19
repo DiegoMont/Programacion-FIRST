@@ -117,9 +117,9 @@ public class ChasisPID extends OpMode
           rightPower = rightPower * 0.75;
           centrePower = centrePower * 0.75;
         } else if(gamepad1.left_trigger>0){
-          leftPower = leftPower * 0.5 + leftPower * 0.5*(1-gamepad1.left_trigger);
-          rightPower = rightPower * 0.5 + rightPower * 0.5*(1-gamepad1.left_trigger);
-          centrePower = centrePower * 0.5 + centrePower * 0.5*(1-gamepad1.left_trigger);
+          leftPower = leftPower * 0.5 + leftPower * 0.5 * (1-gamepad1.left_trigger);
+          rightPower = rightPower * 0.5 + rightPower * 0.5 * (1-gamepad1.left_trigger);
+          centrePower = centrePower * 0.5 + centrePower * 0.5 * (1-gamepad1.left_trigger);
         }
 
         // Send calculated power to wheels
