@@ -30,7 +30,9 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -38,7 +40,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-@TeleOp(name="RoboPro", group="Iterative Opmode")
+@TeleOp(name="RoboGuapo", group="Iterative Opmode")
 
 public class OmniTriple extends OpMode
 {
@@ -62,6 +64,8 @@ public class OmniTriple extends OpMode
         centreDrive = hardwareMap.get(DcMotor.class, "centreMotor");
         elevadorDrive = hardwareMap.get(DcMotor.class, "elevadorMotor");
         eolicoDrive = hardwareMap.get(CRServo.class, "eolicoServo");
+        brazoServo = hardwareMap.get(Servo.class, "brazoServo");
+        manoServo = hardwareMap.get(Servo.class, "manoServo");
 
         leftDrive.setDirection(DcMotor.Direction.FORWARD);
         rightDrive.setDirection(DcMotor.Direction.REVERSE);
@@ -85,9 +89,9 @@ public class OmniTriple extends OpMode
     //Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
     double eolicoPower = 0;
     boolean presd = false;
-    double brazoPosition = 0;
+    double brazoPosition = 1;
     boolean presd1 = false;
-    double manoPosition = 0;
+    double manoPosition = 1;
     boolean presd2 = false;
 
     @Override
@@ -129,7 +133,7 @@ public class OmniTriple extends OpMode
           presd = true;
         } else if (!gamepad1.a && presd) {
           if (eolicoPower == 0) {
-            eolicoPower = -1;
+            eolicoPower = 1;
           } else {
             eolicoPower = 0;
           }
@@ -141,7 +145,7 @@ public class OmniTriple extends OpMode
           presd1 = true;
         } else if (!gamepad1.left_bumper && presd1) {
           if (brazoPosition == 0) {
-            brazoPosition = 0.5;
+            brazoPosition = 1;
           } else {
             brazoPosition = 0;
           }
@@ -167,11 +171,11 @@ public class OmniTriple extends OpMode
         elevadorDrive.setPower(elevadorPower);
         eolicoDrive.setPower(eolicoPower);
         brazoServo.setPosition(brazoPosition);
-        manoPosition.setPosition(manoPosition);
+        manoServo.setPosition(manoPosition);
 
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
-        telemetry.addData("Motors", "left (%f), right (%f)", leftPower, rightPower);
+        telemetry.addData("Motors", rightPower);
     }
 
     //Code to run ONCE after the driver hits STOP
