@@ -32,7 +32,6 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -53,6 +52,8 @@ public class OmniTriple extends OpMode
     private CRServo eolicoDrive = null;
     private Servo brazoServo = null;
     private Servo manoServo = null;
+    private DcMotor cajasRDrive = null;
+    private DcMotor cajasLDrive = null;
 
     //Code to run ONCE when the driver hits INIT
     @Override
@@ -64,13 +65,16 @@ public class OmniTriple extends OpMode
         centreDrive = hardwareMap.get(DcMotor.class, "centreMotor");
         elevadorDrive = hardwareMap.get(DcMotor.class, "elevadorMotor");
         eolicoDrive = hardwareMap.get(CRServo.class, "eolicoServo");
-        brazoServo = hardwareMap.get(Servo.class, "brazoServo");
-        manoServo = hardwareMap.get(Servo.class, "manoServo");
+        //brazoServo = hardwareMap.get(Servo.class, "brazoServo");
+        //manoServo = hardwareMap.get(Servo.class, "manoServo");
+        cajasLDrive = hardwareMap.get(DcMotor.class, "cajasleft");
+        cajasRDrive = hardwareMap.get(DcMotor.class, "cajasright");
 
         leftDrive.setDirection(DcMotor.Direction.FORWARD);
         rightDrive.setDirection(DcMotor.Direction.REVERSE);
         centreDrive.setDirection(DcMotor.Direction.FORWARD);
         elevadorDrive.setDirection(DcMotor.Direction.REVERSE);
+        cajasRDrive.setDirection(DcMotor.Direction.REVERSE);
 
         telemetry.addData("Status", "Initialized");
     }
@@ -93,6 +97,9 @@ public class OmniTriple extends OpMode
     boolean presd1 = false;
     double manoPosition = 1;
     boolean presd2 = false;
+    boolean presd3 = false;
+    double Power = 0;
+    int s = 1;
 
     @Override
     public void loop() {
@@ -109,14 +116,14 @@ public class OmniTriple extends OpMode
         centrePower = gamepad1.right_stick_x;
 
         // Control power of wheels.
-        if (gamepad1.right_trigger>0) {
+        if (gamepad1.right_trigger > 0) {
           leftPower = leftPower * 0.75;
           rightPower = rightPower * 0.75;
           centrePower = centrePower * 0.75;
         } else if(gamepad1.left_trigger>0){
-          leftPower = leftPower * 0.5 + leftPower * 0.5*(1-gamepad1.left_trigger);
-          rightPower = rightPower * 0.5 + rightPower * 0.5*(1-gamepad1.left_trigger);
-          centrePower = centrePower * 0.5 + centrePower * 0.5*(1-gamepad1.left_trigger);
+          leftPower = leftPower * 0.5 + leftPower * 0.5 *(1 - gamepad1.left_trigger);
+          rightPower = rightPower * 0.5 + rightPower * 0.5 *(1 - gamepad1.left_trigger);
+          centrePower = centrePower * 0.5 + centrePower * 0.5 *(1 - gamepad1.left_trigger);
         }
 
         // Move the lift.
@@ -129,9 +136,9 @@ public class OmniTriple extends OpMode
         }
 
         // Activate the movement of the mechanism to move the air turbine
-        if (gamepad1.a) {
+        if (gamepad1.y) {
           presd = true;
-        } else if (!gamepad1.a && presd) {
+        } else if (!gamepad1.y && presd) {
           if (eolicoPower == 0) {
             eolicoPower = 1;
           } else {
@@ -141,7 +148,7 @@ public class OmniTriple extends OpMode
         }
 
         //Move the arm for solar panels
-        if (gamepad1.left_bumper) {
+        /*if (gamepad1.left_bumper) {
           presd1 = true;
         } else if (!gamepad1.left_bumper && presd1) {
           if (brazoPosition == 0) {
@@ -152,7 +159,7 @@ public class OmniTriple extends OpMode
           presd1 = false;
         }
 
-        //Grab or left the solar panel
+        //Grab or leave the solar panel
         if (gamepad1.right_bumper) {
           presd2 = true;
         } else if (!gamepad1.right_bumper && presd2) {
@@ -162,6 +169,24 @@ public class OmniTriple extends OpMode
             manoPosition = 0;
           }
           presd2 = false;
+        }*/
+
+        //Mechanism to pick boxes
+        if (gamepad1.a) {
+          presd3 = true;
+        } else if (!gamepad1.a && presd3) {
+            if(s > 4){
+              s = 1;
+            }
+            switch(s) {
+                case 1: Power = 1; break;
+                case 2: Power = 0; break;
+                case 3: Power = -1; break;
+                case 4: Power = 0; break;
+                default: Power = 0;
+            }
+            s++;
+            presd3 = false;
         }
 
         // Send calculated power to wheels
@@ -170,8 +195,10 @@ public class OmniTriple extends OpMode
         centreDrive.setPower(centrePower);
         elevadorDrive.setPower(elevadorPower);
         eolicoDrive.setPower(eolicoPower);
-        brazoServo.setPosition(brazoPosition);
-        manoServo.setPosition(manoPosition);
+        //brazoServo.setPosition(brazoPosition);
+        //manoServo.setPosition(manoPosition);
+        cajasLDrive.setPower(Power);
+        cajasRDrive.setPower(Power);
 
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
