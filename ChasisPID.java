@@ -97,6 +97,7 @@ public class ChasisPID extends OpMode
 
     @Override
     public void loop() {
+      double tiempoActual = runtime.seconds();
         double drive = -gamepad1.left_stick_y;
         double turn  =  gamepad1.left_stick_x;
         double leftDeseado = Range.clip(drive + turn, -1.0, 1.0);
@@ -104,11 +105,11 @@ public class ChasisPID extends OpMode
         double centreDeseado = gamepad1.right_stick_x;
 
         //Acceleration control
-        if (runtime.seconds() >= tiempo + 0.01) {
+        if (tiempoActual >= tiempo + 0.01) {
           leftPower = Range.clip(controlP(leftPower,leftDeseado), -1, +1);
           rightPower = Range.clip(controlP(rightPower,rightDeseado), -1, +1);
           centrePower = Range.clip(controlP(centrePower,centreDeseado), -1, +1);
-          tiempo = runtime.seconds();
+          tiempo = tiempoActual;
         }
 
         // Control power of wheels.
@@ -128,7 +129,7 @@ public class ChasisPID extends OpMode
         centreDrive.setPower(centrePower);
 
         // Show the elapsed game time and wheel power.
-        telemetry.addData("Status", "Run Time: " + runtime.toString());
+        telemetry.addData("Status", tiempoActual);
         telemetry.addData("Left", "Deseado: (%.2f), Actual: (%.2f)", leftDeseado, leftPower);
         telemetry.addData("Right", "Deseado: (%.2f), Actual: (%.2f)", rightDeseado, rightPower);
         telemetry.addData("Centre", "Deseado: (%.2f), Actual: (%.2f)", centreDeseado, centrePower);
