@@ -97,8 +97,9 @@ public class OmniTriple extends OpMode
     boolean presd1 = false;
     double manoPosition = 1;
     boolean presd2 = false;
+    double cajasPower = 0;
     boolean presd3 = false;
-    double Power = 0;
+    boolean presd4 = false;
     int s = 1;
 
     @Override
@@ -121,9 +122,9 @@ public class OmniTriple extends OpMode
           rightPower = rightPower * 0.75;
           centrePower = centrePower * 0.75;
         } else if(gamepad1.left_trigger>0){
-          leftPower = leftPower * 0.5 + leftPower * 0.5 *(1 - gamepad1.left_trigger);
-          rightPower = rightPower * 0.5 + rightPower * 0.5 *(1 - gamepad1.left_trigger);
-          centrePower = centrePower * 0.5 + centrePower * 0.5 *(1 - gamepad1.left_trigger);
+          leftPower = leftPower * 0.25 + leftPower * 0.5 * (1 - gamepad1.left_trigger);
+          rightPower = rightPower * 0.25 + rightPower * 0.5 * (1 - gamepad1.left_trigger);
+          centrePower = centrePower * 0.25 + centrePower * 0.5 * (1 - gamepad1.left_trigger);
         }
 
         // Move the lift.
@@ -172,22 +173,71 @@ public class OmniTriple extends OpMode
         }*/
 
         //Mechanism to pick boxes
-        if (gamepad1.a) {
+        //Version 1 clicks a
+        /*if (gamepad1.a) {
           presd3 = true;
         } else if (!gamepad1.a && presd3) {
             if(s > 4){
               s = 1;
             }
             switch(s) {
-                case 1: Power = 1; break;
-                case 2: Power = 0; break;
-                case 3: Power = -1; break;
-                case 4: Power = 0; break;
-                default: Power = 0;
+                case 1: cajasPower = 1; break;
+                case 2: cajasPower = 0; break;
+                case 3: cajasPower = -1; break;
+                case 4: cajasPower = 0; break;
+                default: cajasPower = 0;
             }
             s++;
             presd3 = false;
-        }
+        }*/
+
+        //Version 2 click a y click b
+        /*if (gamepad1.a) {
+          presd3 = true;
+        } else if(gamepad1.b) {
+          presd4 = true;
+        } else if (!gamepad1.a && presd3) {
+          if (cajasPower == 0) {
+            cajasPower = 1;
+          } else {
+            cajasPower = 0;
+          }
+          presd3 = false;
+        } else if (!gamepad1.b && presd4) {
+          if (cajasPower == 0) {
+            cajasPower = -1;
+          } else {
+            cajasPower = 0;
+          }
+          presd4 = false;
+        }*/
+
+        //Version 3 presionar a y click b
+        /*if (gamepad1.a) {
+          presd3 = true;
+          cajasPower = 1;
+        } else if(gamepad1.b) {
+          presd4 = true;
+        } else if (!gamepad1.b && presd4) {
+          if (cajasPower == 0) {
+            cajasPower = -1;
+          } else {
+            cajasPower = 0;
+          }
+          presd4 = false;
+        } else if (!gamepad1.a && presd3) {
+          cajasPower = 0;
+          presd3 = false;
+        }*/
+
+        //Version 4 presionar a y b
+        /*if (gamepad1.a) {
+          cajasPower = 1;
+        } else if (gamepad1.b) {
+          cajasPower = -1;
+        } else {
+          cajasPower = 0;
+        }*/
 
         // Send calculated power to wheels
         leftDrive.setPower(leftPower);
@@ -197,8 +247,8 @@ public class OmniTriple extends OpMode
         eolicoDrive.setPower(eolicoPower);
         //brazoServo.setPosition(brazoPosition);
         //manoServo.setPosition(manoPosition);
-        cajasLDrive.setPower(Power);
-        cajasRDrive.setPower(Power);
+        cajasLDrive.setPower(cajasPower);
+        cajasRDrive.setPower(cajasPower);
 
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
