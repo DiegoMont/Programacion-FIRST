@@ -80,14 +80,16 @@ public class CuatroMotoresPID extends OpMode
     double tiempo = 0;
     double leftPower = 0;
     double rightPower = 0;
+    double rightVel = 0;
+    double leftVel = 0;
 
     public static double controlP(double pAct, double des) {
-      double dif = Math.abs(des-pAct);
+      double dif = Math.abs(des - pAct);
       if (dif > 0.3) {
         if (des > pAct) {
-          pAct = pAct + 0.1;
+          pAct += 0.1;
         } else if (des < pAct) {
-          pAct = pAct - 0.1;
+          pAct -= 0.1;
         }
       }  else {
         pAct = des;
@@ -98,8 +100,10 @@ public class CuatroMotoresPID extends OpMode
     @Override
     public void loop() {
         double tiempoActual = runtime.milliseconds();
-        double leftDeseado = -gamepad1.left_stick_y;
-        double rightDeseado  =  -gamepad1.right_stick_y;
+        double drive = -gamepad1.left_stick_y;
+        double turn = gamepad1.right_stick_x;
+        double leftDeseado = Range.clip(drive + turn, -1.0, 1.0);
+        double rightDeseado = Range.clip(drive - turn, -1.0, 1.0);
 
         //Acceleration control
         if (tiempoActual >= tiempo + 40) {
@@ -110,35 +114,29 @@ public class CuatroMotoresPID extends OpMode
 
         // Control power of wheels.
         if (gamepad1.right_trigger > 0) {
-          leftPower = leftPower * 0.75;
-          rightPower = rightPower * 0.75;
-        } else if(gamepad1.left_trigger>0){
-          leftPower = leftPower * 0.25 + leftPower * 0.5 * (1 - gamepad1.left_trigger);
-          rightPower = rightPower * 0.25 + rightPower * 0.5 * (1 - gamepad1.left_trigger);
+          leftVel = leftPower * 0.75;
+          rightVel = rightPower * 0.75;
+        } else if(gamepad1.left_trigger > 0){
+          leftVel = leftPower * 0.5 * (1 - gamepad1.left_trigger) + leftPower * 0.25;
+          rightVel = rightPower * 0.5 * (1 - gamepad1.left_trigger) + rightPower * 0.25;
+        } else {
+          leftVel = leftPower;
+          rightVel = rightPower;
         }
 
         // Send calculated power to wheels
-        leftBDrive.setPower(leftPower);
-        rightFDrive.setPower(rightPower);
-        leftFDrive.setPower(leftPower);
-        rightBDrive.setPower(rightPower);
-        
-        if(gamepad1.right_bumper){
-          leftBDrive.setPower(leftDeseado);
-          rightFDrive.setPower(rightDeseado);
-          leftFDrive.setPower(leftDeseado);
-          rightBDrive.setPower(rightDeseado);
-        }
+        leftBDrive.setPower(leftVel);
+        rightFDrive.setPower(rightVel);
+        leftFDrive.setPower(leftVel);
+        rightBDrive.setPower(rightVel);
 
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", tiempoActual);
-        telemetry.addData("Left", "Deseado: (%.2f), Actual: (%.2f)", leftDeseado, leftPower);
-        telemetry.addData("Right", "Deseado: (%.2f), Actual: (%.2f)", rightDeseado, rightPower);
     }
 
     //Code to run ONCE after the driver hits STOP
     @Override
     public void stop() {
     }
-    
+
   }
