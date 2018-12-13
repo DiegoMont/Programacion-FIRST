@@ -93,7 +93,7 @@ public class Robbit extends OpMode {
 
     double extensionPosition = 0;
     double manoPosition = 0;
-    double pinzaPosition = 0.15;
+    double pinzaPosition = 0.2;
      //Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
     @Override
     public void loop() {
@@ -110,24 +110,24 @@ public class Robbit extends OpMode {
             elevadorPosition = 0.0;
           }
 
-        if(gamepad2.dpad_left){
+        if(gamepad1.dpad_left){
             pinzaPosition += 0.01;
-        } else if(gamepad2.dpad_right){
+        } else if(gamepad1.dpad_right){
             pinzaPosition -= 0.01;
         }
 
-        if(gamepad2.left_bumper){
+        if(gamepad1.left_bumper){
             extensionPosition += 0.01;
-        } else if(gamepad2.right_bumper){
+        } else if(gamepad1.right_bumper){
             extensionPosition -= 0.01;
         }
 
-        if(gamepad2.left_trigger > 0){
+        if(gamepad1.left_trigger > 0){
             manoPosition += 0.01;
-        } else if(gamepad2.right_trigger > 0){
+        } else if(gamepad1.right_trigger > 0){
             manoPosition -= 0.01;
         }
-        pinzaPosition = Range.clip(pinzaPosition,0,1.15);
+        pinzaPosition = Range.clip(pinzaPosition,0,0.8);
         extensionPosition = Range.clip(extensionPosition,0,1);
         manoPosition = Range.clip(manoPosition,0,1);
         if(gamepad1.dpad_up){

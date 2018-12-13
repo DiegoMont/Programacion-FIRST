@@ -62,6 +62,8 @@ public class Naubots extends OpMode {
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
     private DcMotor barredora = null;
+    private DcMotor elevador1 = null;
+    private DcMotor elevador2 = null;
     private Servo mechanismServo = null;
     private ColorSensor sensorColor = null;
 
@@ -75,6 +77,8 @@ public class Naubots extends OpMode {
         leftDrive  = hardwareMap.get(DcMotor.class, "leftDrive");
         rightDrive = hardwareMap.get(DcMotor.class, "rightDrive");
         barredora = hardwareMap.get(DcMotor.class, "barredora");
+        elevador1 = hardwareMap.get(DcMotor.class, "motor2");
+        elevador2 = hardwareMap.get(DcMotor.class, "motor1");
         //mechanismServo = hardwareMap.get(Servo.class, "position_servo");
 
         leftDrive.setDirection(DcMotor.Direction.REVERSE);
@@ -103,11 +107,13 @@ public class Naubots extends OpMode {
         double rightPower;
         double servoPosition;
         double barredoraPower;
+        double elevador1Power;
+        double elevador2Power;
 
         if(gamepad1.right_trigger > 0){
-            barredoraPower = 0.5;
+            barredoraPower = 1;
         } else if (gamepad1.left_trigger > 0){
-            barredoraPower = -0.5;
+            barredoraPower = -1;
         } else {
             barredoraPower = 0;
         }
@@ -125,7 +131,7 @@ public class Naubots extends OpMode {
 
         if(modoDriver){
             double drive = -gamepad1.left_stick_y;
-            double turn  =  gamepad1.right_stick_x;
+            double turn  =  gamepad1.right_stick_x * 1.5;
             leftPower    = Range.clip(drive + turn, -1.0, 1.0);
             rightPower   = Range.clip(drive - turn, -1.0, 1.0);
         } else {
@@ -133,10 +139,22 @@ public class Naubots extends OpMode {
             rightPower = -gamepad1.right_stick_y;
         }
 
+        if(gamepad1.dpad_up){
+            elevador1Power = 0.3;
+            elevador2Power = -0.3;
+        } else if(gamepad1.dpad_down){
+            elevador1Power = -0.3;
+            elevador2Power = 0.3;
+        } else {
+            elevador1Power = 0;
+            elevador2Power = 0;
+        }
+
         leftDrive.setPower(leftPower);
         rightDrive.setPower(rightPower);
         barredora.setPower(barredoraPower);
-
+        elevador1.setPower(elevador1Power);
+        elevador2.setPower(elevador2Power);
 
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         /*telemetry.addData("Color R: ", sensorColor.red());
