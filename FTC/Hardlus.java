@@ -29,7 +29,6 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -40,7 +39,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name="Hardlus", group="Iterative Opmode")
-//@Disabled
 public class Hardlus extends OpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -48,6 +46,7 @@ public class Hardlus extends OpMode {
     private DcMotor rightDrive = null;
     private DcMotor lanzador = null;
     private DcMotor elevador = null;
+    private DcMotor elevadorGrande = null;
     private Servo servo1 = null;
     private Servo servo2 = null;
 
@@ -60,12 +59,18 @@ public class Hardlus extends OpMode {
         leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
         elevador = hardwareMap.get(DcMotor.class, "elevador");
+        elevadorGrande = hardwareMap.get(DcMotor.class, "elevador1");
         lanzador = hardwareMap.get(DcMotor.class, "lanzador");
         servo1 = hardwareMap.get(Servo.class,"servo1" );
         servo2 = hardwareMap.get(Servo.class,"servo2" );
 
         leftDrive.setDirection(DcMotor.Direction.FORWARD);
         rightDrive.setDirection(DcMotor.Direction.REVERSE);
+        elevadorGrande.setDirection(DcMotor.Direction.REVERSE);
+        leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         telemetry.addData("Status", "Initialized");
     }
@@ -79,6 +84,8 @@ public class Hardlus extends OpMode {
     @Override
     public void start() {
         runtime.reset();
+        elevadorGrande.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        elevadorGrande.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     double servo1Position = 0;
@@ -91,6 +98,7 @@ public class Hardlus extends OpMode {
         double rightPower;
         double lanzadorPower;
         double elevadorPower;
+        double elevadorGrandePower;
 
         // POV Mode uses left stick to go forward, and right stick to turn.
         double drive = -gamepad1.left_stick_y;
@@ -99,9 +107,9 @@ public class Hardlus extends OpMode {
         rightPower   = Range.clip(drive - turn, -1.0, 1.0) ;
 
         if (gamepad1.left_trigger > 0) {
-            lanzadorPower = 0.25;
+            lanzadorPower = 0.5;
         } else if (gamepad1.right_trigger > 0) {
-            lanzadorPower = 1.0;
+            lanzadorPower = -0.8;
         } else {
             lanzadorPower = 0.0;
         }
@@ -112,22 +120,29 @@ public class Hardlus extends OpMode {
             servo2Position = 1;
         } else if (gamepad1.left_bumper){
             elevadorPower = -0.3;
-            //servo1Position += 0.05;
-            //servo2Position -= 0.05;
         } else {
             elevadorPower = 0;
+        }
+
+        if(gamepad1.dpad_up){
+            elevadorGrandePower = 0.3;
+        } else if (gamepad1.dpad_down){
+            elevadorGrandePower = -0.3;
+        } else {
+            elevadorGrandePower = 0;
         }
 
         if(gamepad1.y){
             servo1Position += 0.025;
             servo2Position -= 0.025;
-            servo1Position = Range.clip(servo1Position,0,0.4);
-            servo2Position = Range.clip(servo2Position,0.6,1);
+            servo1Position = Range.clip(servo1Position,0,0.57);
+            servo2Position = Range.clip(servo2Position,0.63,1);
         }
 
         leftDrive.setPower(leftPower);
         rightDrive.setPower(rightPower);
         elevador.setPower(elevadorPower);
+        elevadorGrande.setPower(elevadorGrandePower);
         lanzador.setPower(lanzadorPower);
         servo1.setPosition(servo1Position);
         servo2.setPosition(servo2Position);
@@ -136,6 +151,9 @@ public class Hardlus extends OpMode {
         telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
         telemetry.addData("Servo1: ",servo1.getPosition());
         telemetry.addData("Servo2: ",servo2.getPosition());
+        telemetry.addData("Encoders left:", leftDrive.getCurrentPosition());
+        telemetry.addData("Encoders right:", rightDrive.getCurrentPosition());
+        telemetry.addData("Elevador: ", elevadorGrande.getCurrentPosition());
     }
 
      //Code to run ONCE after the driver hits STOP
