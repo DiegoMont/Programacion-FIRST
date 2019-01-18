@@ -36,133 +36,152 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name="Robbit", group="Iterative Opmode")
-//@Disabled
 public class Robbit extends OpMode {
-    // Declare OpMode members.
+
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
     private DcMotor centreDrive = null;
     private DcMotor elevador = null;
     private DcMotor brazo = null;
+    private DcMotor extencion=null;
     private Servo mano = null;
-    private Servo extension = null;
     private Servo pinza = null;
+    private Servo teamMarker = null;
 
-    //Code to run ONCE when the driver hits INIT
     @Override
     public void init() {
         telemetry.addData("Status", "Initialized");
 
-        // Initialize the hardware variables. Note that the strings used here as parameters
         leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
         rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
         centreDrive = hardwareMap.get(DcMotor.class, "centre_drive");
         elevador = hardwareMap.get(DcMotor.class, "elevador");
         brazo = hardwareMap.get(DcMotor.class, "brazo");
-        extension = hardwareMap.get(Servo.class, "extension");
+        extencion = hardwareMap.get(DcMotor.class,"extencion");
         mano = hardwareMap.get(Servo.class, "mano");
-        pinza = hardwareMap.get(Servo.class, "dedos");
+        pinza = hardwareMap.get(Servo.class, "garra");
+        teamMarker = hardwareMap.get(Servo.class, "catapulta");
 
         leftDrive.setDirection(DcMotor.Direction.FORWARD);
         rightDrive.setDirection(DcMotor.Direction.REVERSE);
+        teamMarker.setPosition(1);
 
         telemetry.addData("Status", "Initialized");
     }
 
-     //Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
+    double manoPosition = 0;
+    double pinzaPosition = 0.9;
+
+
     @Override
     public void init_loop() {
+        mano.setPosition(manoPosition);
+        pinza.setPosition(pinzaPosition);
     }
 
-     //Code to run ONCE when the driver hits PLAY
     @Override
     public void start() {
         runtime.reset();
         elevador.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        brazo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         elevador.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        brazo.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
     }
 
-    double extensionPosition = 0;
-    double manoPosition = 0;
-    double pinzaPosition = 0.2;
-     //Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
+    boolean modoDriver = true;
+    boolean click = false;
+
     @Override
     public void loop() {
         double leftPower;
         double rightPower;
-        double elevadorPosition;
-        double brazoPosition;
+        double elevadorPower;
+        double extensionPower;
+        double teamMarkerPosition;
 
-        if (gamepad1.a /*&& elevador.getCurrentPosition() <= 0*/) {
-            elevadorPosition = 0.5;
-          } else if (gamepad1.b /*&& elevador.getCurrentPosition() >= -2500*/) {
-            elevadorPosition = -0.5;
+        if(gamepad1.start){
+            click = true;
+        } else if (click && !gamepad1.start){
+            modoDriver = (modoDriver)?false:true;
+            click=false;
+        }
+
+        if(modoDriver){
+            double drive = -gamepad1.left_stick_y;
+            double turn  =  gamepad1.right_stick_x;
+            leftPower    = Range.clip(drive + turn, -1.0, 1.0) ;
+            rightPower   = Range.clip(drive - turn, -1.0, 1.0) ;
+        } else {
+            leftPower = -gamepad1.left_stick_y;
+            rightPower = -gamepad1.right_stick_y;
+        }
+
+        if (gamepad2.x) {
+            elevadorPower = 0.5;
+          } else if (gamepad2.y) {
+            elevadorPower = -0.5;
           } else {
-            elevadorPosition = 0.0;
+            elevadorPower = 0.0;
           }
 
-        if(gamepad1.dpad_left){
-            pinzaPosition += 0.01;
-        } else if(gamepad1.dpad_right){
+        if(gamepad2.left_trigger > 0){
+            pinzaPosition+=0.01;
+        } else if(gamepad2.right_trigger > 0){
             pinzaPosition -= 0.01;
         }
 
-        if(gamepad1.left_bumper){
-            extensionPosition += 0.01;
-        } else if(gamepad1.right_bumper){
-            extensionPosition -= 0.01;
+        if(gamepad2.a){
+            extensionPower = 0.5;
+        } else if(gamepad2.b){
+            extensionPower = -0.5;
+        } else {
+            extensionPower = 0;
         }
 
-        if(gamepad1.left_trigger > 0){
-            manoPosition += 0.01;
-        } else if(gamepad1.right_trigger > 0){
+        if (gamepad2.right_bumper) {
+            manoPosition +=0.01;
+        } else if (gamepad2.left_bumper) {
             manoPosition -= 0.01;
         }
-        pinzaPosition = Range.clip(pinzaPosition,0,0.8);
-        extensionPosition = Range.clip(extensionPosition,0,1);
-        manoPosition = Range.clip(manoPosition,0,1);
-        if(gamepad1.dpad_up){
-            brazoPosition = 0.3;
-        } else if(gamepad1.dpad_down/* && brazo.getCurrentPosition() <= 0*/){
-            brazoPosition = -0.2;
+
+
+        if (gamepad2.dpad_left){
+            brazo.setPower(1);
+        } else if (gamepad2.dpad_right){
+            brazo.setPower(-1);
         } else {
-            brazoPosition = 0;
+            brazo.setPower(0);
         }
 
-        // POV Mode uses left stick to go forward, and right stick to turn.
-        double drive = -gamepad1.left_stick_y;
-        double turn  =  gamepad1.right_stick_x;
-        leftPower    = Range.clip(drive + turn, -1.0, 1.0) ;
-        rightPower   = Range.clip(drive - turn, -1.0, 1.0) ;
+        if(gamepad2.left_stick_x < 0){
+            teamMarker.setPosition(0.65);
+        } else if(gamepad2.left_stick_x > 0){
+            teamMarker.setPosition(1);
+        }
+
+        manoPosition = Range.clip(manoPosition, 0, 1);
+        pinzaPosition = Range.clip(pinzaPosition, 0.65, 1);
 
         leftDrive.setPower(leftPower);
         rightDrive.setPower(rightPower);
         centreDrive.setPower(gamepad1.left_stick_x);
-        elevador.setPower(elevadorPosition);
-        brazo.setPower(brazoPosition);
-        extension.setPosition(extensionPosition);
+        elevador.setPower(elevadorPower);
         mano.setPosition(manoPosition);
         pinza.setPosition(pinzaPosition);
+        extencion.setPower(extensionPower);
 
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
         telemetry.addData("Elevador position", elevador.getCurrentPosition());
-        telemetry.addData("Brazo position", brazo.getCurrentPosition());
-        telemetry.addData("Pinza: ", pinzaPosition);
+        telemetry.addData("Modo driver: ", (modoDriver)?"POV":"Tanque");
         telemetry.addData("Mano: ", manoPosition);
-        telemetry.addData("Extension: ", extensionPosition);
+        telemetry.addData("Pinza: ", pinzaPosition);
+        telemetry.addData("Brazo: ",brazo.getCurrentPosition());
     }
 
-     //Code to run ONCE after the driver hits STOP
     @Override
     public void stop() {
     }
