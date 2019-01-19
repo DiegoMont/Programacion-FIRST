@@ -29,104 +29,82 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
-import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-/**
- * This file contains an example of an iterative (Non-Linear) "OpMode".
- * An OpMode is a 'program' that runs in either the autonomous or the teleop period of an FTC match.
- * The names of OpModes appear on the menu of the FTC Driver Station.
- * When an selection is made from the menu, the corresponding OpMode
- * class is instantiated on the Robot Controller and executed.
- *
- * This particular OpMode just executes a basic Tank Drive Teleop for a two wheeled robot
- * It includes all the skeletal structure that all iterative OpModes contain.
- *
- * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
- */
 
 @TeleOp(name="Naubots", group="Iterative Opmode")
 
 public class Naubots extends OpMode {
-    // Declare OpMode members.
+
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
+    private DcMotor brazo1 = null;
+    private DcMotor brazo2 = null;
+    private DcMotor elevador = null;
+    private DcMotor polea = null;
+    private Servo teamMarker = null;
     private DcMotor barredora = null;
-    private DcMotor elevador1 = null;
-    private DcMotor elevador2 = null;
-    private Servo mechanismServo = null;
-    private ColorSensor sensorColor = null;
 
-    //Code to run ONCE when the driver hits INIT
     @Override
     public void init() {
         telemetry.addData("Status", "Initialized");
 
-        // Initialize the hardware variables. Note that the strings used here as parameters
-        //sensorColor = hardwareMap.get(ColorSensor.class, "sensor_color");
         leftDrive  = hardwareMap.get(DcMotor.class, "leftDrive");
         rightDrive = hardwareMap.get(DcMotor.class, "rightDrive");
+        elevador = hardwareMap.get(DcMotor.class, "elevador");
+        brazo1 = hardwareMap.get(DcMotor.class, "brazo1");
+        brazo2 = hardwareMap.get(DcMotor.class, "brazo2");
+        teamMarker = hardwareMap.get(Servo.class, "catapulta");
+        polea = hardwareMap.get(DcMotor.class, "polea");
         barredora = hardwareMap.get(DcMotor.class, "barredora");
-        elevador1 = hardwareMap.get(DcMotor.class, "motor2");
-        elevador2 = hardwareMap.get(DcMotor.class, "motor1");
-        //mechanismServo = hardwareMap.get(Servo.class, "position_servo");
 
         leftDrive.setDirection(DcMotor.Direction.REVERSE);
         rightDrive.setDirection(DcMotor.Direction.FORWARD);
-        barredora.setDirection(DcMotor.Direction.FORWARD);
+        teamMarker.setPosition(0.5);
 
         telemetry.addData("Status", "Initialized");
     }
 
-     //Code to run REPEATEDLY after the driver hits INIT, but before they hit PLAY
     @Override
     public void init_loop() {
     }
 
-     //Code to run ONCE when the driver hits PLAY
     @Override
     public void start() {
         runtime.reset();
+        elevador.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        elevador.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        brazo1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        brazo1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        brazo2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        brazo2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
+
     boolean modoDriver = true;
     boolean click = false;
-     //Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
+    boolean click2 = false;
+    double servoPosition = 0.5;
+
     @Override
     public void loop() {
         double leftPower;
         double rightPower;
-        double servoPosition;
         double barredoraPower;
-        double elevador1Power;
-        double elevador2Power;
-
-        if(gamepad1.right_trigger > 0){
-            barredoraPower = 1;
-        } else if (gamepad1.left_trigger > 0){
-            barredoraPower = -1;
-        } else {
-            barredoraPower = 0;
-        }
+        double elevadorPower;
+        double brazoPower;
+        double poleaPower;
 
         if(gamepad1.start){
             click = true;
         } else if ( !gamepad1.start && click){
-            if (modoDriver){
-                modoDriver = false;
-            } else {
-                modoDriver = true;
-            }
-            click = false;
+           modoDriver = (modoDriver)?false:true;
+           click = false;
         }
 
         if(modoDriver){
@@ -139,30 +117,52 @@ public class Naubots extends OpMode {
             rightPower = -gamepad1.right_stick_y;
         }
 
-        if(gamepad1.dpad_up){
-            elevador1Power = 0.3;
-            elevador2Power = -0.3;
-        } else if(gamepad1.dpad_down){
-            elevador1Power = -0.3;
-            elevador2Power = 0.3;
+        if(gamepad1.right_trigger > 0){
+            barredoraPower = 1;
+        } else if (gamepad1.left_trigger > 0){
+            barredoraPower = -1;
         } else {
-            elevador1Power = 0;
-            elevador2Power = 0;
+            barredoraPower = 0;
+        }
+
+        if(gamepad2.right_trigger > 0){
+            brazoPower = 0.5;
+        } else if (gamepad2.left_trigger > 0){
+            brazoPower = -0.5;
+        } else {
+            brazoPower = 0;
+        }
+
+        if(gamepad2.dpad_up){
+            elevadorPower = 1;
+        } else if(gamepad2.dpad_down){
+            elevadorPower = -1;
+        } else {
+            elevadorPower = 0;
+        }
+
+        if(gamepad2.y){
+            poleaPower = 0.3;
+        } else if(gamepad2.a){
+            poleaPower = -0.3;
+        } else {
+            poleaPower = 0;
         }
 
         leftDrive.setPower(leftPower);
         rightDrive.setPower(rightPower);
+        elevador.setPower(elevadorPower);
+        brazo2.setPower(brazoPower);
+        brazo1.setPower(brazoPower);
+        polea.setPower(poleaPower);
+        teamMarker.setPosition(servoPosition);
         barredora.setPower(barredoraPower);
-        elevador1.setPower(elevador1Power);
-        elevador2.setPower(elevador2Power);
 
         telemetry.addData("Status", "Run Time: " + runtime.toString());
-        /*telemetry.addData("Color R: ", sensorColor.red());
-        telemetry.addData("Color G: ", sensorColor.green());
-        telemetry.addData("Color B: ", sensorColor.blue());*/
+        telemetry.addData("Modo driver: ", (modoDriver)?"POV":"Tanque");
+        telemetry.addData("Elevador: ", elevador.getCurrentPosition());
     }
 
-     //Code to run ONCE after the driver hits STOP
     @Override
     public void stop() {
     }
