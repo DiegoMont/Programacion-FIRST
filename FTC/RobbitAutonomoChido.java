@@ -107,7 +107,7 @@ public class AutonomoChido extends LinearOpMode{
         leftDrive.setDirection(DcMotor.Direction.FORWARD);
         rightDrive.setDirection(DcMotor.Direction.REVERSE);
         servoMinerales.setPosition(0);
-        teamMarker.setPosition(1);
+        teamMarker.setPosition(0.75);
         pinza.setPosition(0.95);
         mano.setPosition(0);
 
@@ -130,6 +130,7 @@ public class AutonomoChido extends LinearOpMode{
         elevador.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         waitForStart();
 
+        runtime.reset();
         //Landing
         while (opModeIsActive()&&elevador.isBusy()){
             elevador.setPower(1);
@@ -151,7 +152,7 @@ public class AutonomoChido extends LinearOpMode{
             }
             boolean findMineral =false;
             int platasVistas = 0;
-            while (opModeIsActive() && !findMineral) {
+            while (opModeIsActive() && !findMineral && runtime.milliseconds() < 25000) {
                 if (tfod != null) {
                     List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
                     if (updatedRecognitions != null) {
@@ -195,19 +196,6 @@ public class AutonomoChido extends LinearOpMode{
         sleep(550);
         servoMinerales.setPosition(0);
         desplazamiento(2,2,1);
-
-        //Identificar orientacion en la cancha
-        /*while (opModeIsActive() && !targetVisible) {
-            targetVisible = false;
-            for (VuforiaTrackable trackable : allTrackables) {
-                if (((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible()) {
-                    telemetry.addData("Visible Target", trackable.getName());
-                    targetVisible = true;
-                    break;
-                }
-            }
-        }*/
-
     }
 
     private void initVuforia() {

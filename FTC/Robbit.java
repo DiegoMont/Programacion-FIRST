@@ -69,7 +69,7 @@ public class Robbit extends OpMode {
 
         leftDrive.setDirection(DcMotor.Direction.FORWARD);
         rightDrive.setDirection(DcMotor.Direction.REVERSE);
-        teamMarker.setPosition(1);
+        teamMarker.setPosition(0.75);
 
         telemetry.addData("Status", "Initialized");
     }
@@ -119,6 +119,11 @@ public class Robbit extends OpMode {
             rightPower = -gamepad1.right_stick_y;
         }
 
+        if(gamepad1.right_trigger > 0){
+            leftPower *= 0.5;
+            rightPower *= 0.5;
+        }
+
         if (gamepad2.x) {
             elevadorPower = 0.5;
           } else if (gamepad2.y) {
@@ -157,7 +162,7 @@ public class Robbit extends OpMode {
         }
 
         if(gamepad2.left_stick_x < 0){
-            teamMarker.setPosition(0.65);
+            teamMarker.setPosition(0.4);
         } else if(gamepad2.left_stick_x > 0){
             teamMarker.setPosition(1);
         }
@@ -165,8 +170,8 @@ public class Robbit extends OpMode {
         manoPosition = Range.clip(manoPosition, 0, 1);
         pinzaPosition = Range.clip(pinzaPosition, 0.65, 1);
 
-        leftDrive.setPower(leftPower);
-        rightDrive.setPower(rightPower);
+        leftDrive.setPower(leftPower*0.8);
+        rightDrive.setPower(rightPower*0.8);
         centreDrive.setPower(gamepad1.left_stick_x);
         elevador.setPower(elevadorPower);
         mano.setPosition(manoPosition);

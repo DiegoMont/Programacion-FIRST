@@ -44,10 +44,7 @@ public class Naubots extends OpMode {
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
-    private DcMotor brazo1 = null;
-    private DcMotor brazo2 = null;
     private DcMotor elevador = null;
-    private DcMotor polea = null;
     private Servo teamMarker = null;
     private DcMotor barredora = null;
 
@@ -58,10 +55,7 @@ public class Naubots extends OpMode {
         leftDrive  = hardwareMap.get(DcMotor.class, "leftDrive");
         rightDrive = hardwareMap.get(DcMotor.class, "rightDrive");
         elevador = hardwareMap.get(DcMotor.class, "elevador");
-        brazo1 = hardwareMap.get(DcMotor.class, "brazo1");
-        brazo2 = hardwareMap.get(DcMotor.class, "brazo2");
         teamMarker = hardwareMap.get(Servo.class, "catapulta");
-        polea = hardwareMap.get(DcMotor.class, "polea");
         barredora = hardwareMap.get(DcMotor.class, "barredora");
 
         leftDrive.setDirection(DcMotor.Direction.REVERSE);
@@ -80,15 +74,10 @@ public class Naubots extends OpMode {
         runtime.reset();
         elevador.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         elevador.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        brazo1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        brazo1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        brazo2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        brazo2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     boolean modoDriver = true;
     boolean click = false;
-    boolean click2 = false;
     double servoPosition = 0.5;
 
     @Override
@@ -97,8 +86,6 @@ public class Naubots extends OpMode {
         double rightPower;
         double barredoraPower;
         double elevadorPower;
-        double brazoPower;
-        double poleaPower;
 
         if(gamepad1.start){
             click = true;
@@ -125,14 +112,6 @@ public class Naubots extends OpMode {
             barredoraPower = 0;
         }
 
-        if(gamepad2.right_trigger > 0){
-            brazoPower = 0.5;
-        } else if (gamepad2.left_trigger > 0){
-            brazoPower = -0.5;
-        } else {
-            brazoPower = 0;
-        }
-
         if(gamepad2.dpad_up){
             elevadorPower = 1;
         } else if(gamepad2.dpad_down){
@@ -142,19 +121,14 @@ public class Naubots extends OpMode {
         }
 
         if(gamepad2.y){
-            poleaPower = 0.3;
+            servoPosition = 0;
         } else if(gamepad2.a){
-            poleaPower = -0.3;
-        } else {
-            poleaPower = 0;
+            servoPosition = 0.5;
         }
 
         leftDrive.setPower(leftPower);
         rightDrive.setPower(rightPower);
         elevador.setPower(elevadorPower);
-        brazo2.setPower(brazoPower);
-        brazo1.setPower(brazoPower);
-        polea.setPower(poleaPower);
         teamMarker.setPosition(servoPosition);
         barredora.setPower(barredoraPower);
 
