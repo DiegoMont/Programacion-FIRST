@@ -29,181 +29,177 @@
 
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.robotcore.external.Func;
-import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.robotcore.external.navigation.Position;
-import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
-
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
-import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
-
-import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
-import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
-import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
-import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
-import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
-import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.FRONT;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import java.util.Locale;
-
-@Autonomous(name = "Autonomo", group = "Linear OpMode")
+  @Autonomous(name="Autonomo", group="Linear Opmode")
 public class NaubotsAutonomo extends LinearOpMode {
-    BNO055IMU imu;
 
-    Orientation angles;
-    Acceleration gravity;
+    private ElapsedTime runtime = new ElapsedTime();
+    private DcMotor leftDrive = null;
+    private DcMotor rightDrive = null;
+    private DcMotor elevador1 = null;
+    private DcMotor elevador2 = null;
+    private DcMotor barredora = null;
+    private Servo catapulta = null;
 
-    private static final String VUFORIA_KEY = "ATjrkEL/////AAABmfR2/BPftkOFvL9kl5ElbHswfU6Tuno4QSB4aHpVUmWaWqKdEUps2CsnGbmjoGqMAfOjyPlhrew8njlemEsarH9XKySF9i0egaUhOiT2fE0MivatYaT037ZwPe1bOkI1GGmd2CsWL8GeupcT91XQkGhRcMyTS3ZfmDYu1/HmcRxCy4zxwbiyPVcoHtsh+KPfjI29mv9YfMStiB4/o8FgefPbTGtX6L9zeoyUemNIMN1WcaMi6wSM7rB7kF3VnUJCrXAca6YmFNEr6GEdJX4G7JhO5EiD6K/e1+wZ0fLtWiQDWe09Bgxxpp2n+qHeccA06zA8nNTo2F07UORoM40ZK29vMj4eh0GjyNMAOmWcuQeI";
-    private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
-    VuforiaLocalizer vuforia;
-    private boolean targetVisible = false;
+    @Override
+    public void runOpMode() {
+        telemetry.addData("Status", "Initialized");
+        telemetry.update();
 
-    @Override public void runOpMode() {
+        leftDrive  = hardwareMap.get(DcMotor.class, "leftDrive");
+        rightDrive = hardwareMap.get(DcMotor.class, "rightDrive");
+        elevador1 = hardwareMap.get(DcMotor.class, "elevador1");
+        elevador2 = hardwareMap.get(DcMotor.class, "elevador2");
+        barredora = hardwareMap.get(DcMotor.class, "barredora");
+        catapulta = hardwareMap.get(Servo.class, "catapulta");
 
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
-        parameters.loggingEnabled      = true;
-        parameters.loggingTag          = "IMU";
-        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+        leftDrive.setDirection(DcMotor.Direction.FORWARD);
+        rightDrive.setDirection(DcMotor.Direction.REVERSE);
 
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
-        imu.initialize(parameters);
-
-        composeTelemetry();
-
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        VuforiaLocalizer.Parameters parameters1 = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
-
-        parameters1.vuforiaLicenseKey = VUFORIA_KEY ;
-        parameters1.cameraDirection   = CAMERA_CHOICE;
-
-        vuforia = ClassFactory.getInstance().createVuforia(parameters1);
-
-        VuforiaTrackables targetsRoverRuckus = this.vuforia.loadTrackablesFromAsset("RoverRuckus");
-        VuforiaTrackable blueRover = targetsRoverRuckus.get(0);
-        blueRover.setName("Blue-Rover");
-        VuforiaTrackable redFootprint = targetsRoverRuckus.get(1);
-        redFootprint.setName("Red-Footprint");
-        VuforiaTrackable frontCraters = targetsRoverRuckus.get(2);
-        frontCraters.setName("Front-Craters");
-        VuforiaTrackable backSpace = targetsRoverRuckus.get(3);
-        backSpace.setName("Back-Space");
-
-        List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
-        allTrackables.addAll(targetsRoverRuckus);
+        elevador1.setTargetPosition(0);
+        elevador1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        elevador2.setTargetPosition(0);
+        elevador2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        catapulta.setPosition(1);
 
         waitForStart();
+        elevador1.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        elevador1.setTargetPosition(-935);
+        elevador1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        elevador2.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        elevador2.setTargetPosition(-935);
+        elevador2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        runtime.reset();
+        double currentTime;
 
-        targetsRoverRuckus.activate();
-
-        imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
-
-        while (opModeIsActive()) {
-            targetVisible = false;
-            for (VuforiaTrackable trackable : allTrackables) {
-                if (((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible()) {
-                    telemetry.addData("Visible Target", trackable.getName());
-                    targetVisible = true;
-                    break;
-                }
-            }
+        /*while (opModeIsActive() && elevador1.isBusy()&&elevador2.isBusy()) {
+            elevador1.setPower(0.4);
+            elevador2.setPower(0.4);
+            telemetry.addData("Status", "Run Time: " + runtime.toString());
+            telemetry.addData("Elevador: ", elevador1.getCurrentPosition());
             telemetry.update();
         }
-    }
+        currentTime = runtime.milliseconds();
+        while(opModeIsActive() && currentTime +500 > runtime.milliseconds()){
+            leftDrive.setPower(0);
+            rightDrive.setPower(0);
+        }
+        leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftDrive.setTargetPosition(160);
+        rightDrive.setTargetPosition(-160);
+        leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-    void composeTelemetry() {
+        while (opModeIsActive() && rightDrive.isBusy() && leftDrive.isBusy()) {
+            leftDrive.setPower(1);
+            rightDrive.setPower(1);
+            telemetry.addData("Status", "Run Time: " + runtime.toString());
+            telemetry.addData("Left encoder: ", leftDrive.getCurrentPosition());
+            telemetry.addData("Right encoder: ", rightDrive.getCurrentPosition());
+            telemetry.update();
+        }
 
-        // At the beginning of each telemetry update, grab a bunch of data
-        // from the IMU that we will then display in separate lines.
-        telemetry.addAction(new Runnable() { @Override public void run()
-                {
-                // Acquiring the angles is relatively expensive; we don't want
-                // to do that in each of the three items that need that info, as that's
-                // three times the necessary expense.
-                angles   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-                gravity  = imu.getGravity();
-                }
-            });
+        currentTime = runtime.milliseconds();
+        while(opModeIsActive() && currentTime +500 > runtime.milliseconds()){
+            leftDrive.setPower(0);
+            rightDrive.setPower(0);
+        }
+        leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftDrive.setTargetPosition(-160);
+        rightDrive.setTargetPosition(+160);
+        leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        telemetry.addLine()
-            .addData("status", new Func<String>() {
-                @Override public String value() {
-                    return imu.getSystemStatus().toShortString();
-                    }
-                })
-            .addData("calib", new Func<String>() {
-                @Override public String value() {
-                    return imu.getCalibrationStatus().toString();
-                    }
-                });
+        while (opModeIsActive() && rightDrive.isBusy() && leftDrive.isBusy()) {
+            leftDrive.setPower(1);
+            rightDrive.setPower(1);
+            telemetry.addData("Status", "Run Time: " + runtime.toString());
+            telemetry.addData("Left encoder: ", leftDrive.getCurrentPosition());
+            telemetry.addData("Right encoder: ", rightDrive.getCurrentPosition());
+            telemetry.update();
+        }
 
-        telemetry.addLine()
-            .addData("heading", new Func<String>() {
-                @Override public String value() {
-                    return formatAngle(angles.angleUnit, angles.firstAngle);
-                    }
-                })
-            .addData("roll", new Func<String>() {
-                @Override public String value() {
-                    return formatAngle(angles.angleUnit, angles.secondAngle);
-                    }
-                })
-            .addData("pitch", new Func<String>() {
-                @Override public String value() {
-                    return formatAngle(angles.angleUnit, angles.thirdAngle);
-                    }
-                });
+        currentTime = runtime.milliseconds();
+        while(opModeIsActive() && currentTime +500 > runtime.milliseconds()){
+            leftDrive.setPower(0);
+            rightDrive.setPower(0);
+        }*/
+        leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftDrive.setTargetPosition((int)(-288*3.5));
+        rightDrive.setTargetPosition((int)(-288*3.5));
+        leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        telemetry.addLine()
-            .addData("grvty", new Func<String>() {
-                @Override public String value() {
-                    return gravity.toString();
-                    }
-                })
-            .addData("mag", new Func<String>() {
-                @Override public String value() {
-                    return String.format(Locale.getDefault(), "%.3f",
-                            Math.sqrt(gravity.xAccel*gravity.xAccel
-                                    + gravity.yAccel*gravity.yAccel
-                                    + gravity.zAccel*gravity.zAccel));
-                    }
-                });
-    }
+        while (opModeIsActive() && rightDrive.isBusy() && leftDrive.isBusy()) {
+            leftDrive.setPower(0.85);
+            rightDrive.setPower(0.85);
+            telemetry.addData("Status", "Run Time: " + runtime.toString());
+            telemetry.addData("Left encoder: ", leftDrive.getCurrentPosition());
+            telemetry.addData("Right encoder: ", rightDrive.getCurrentPosition());
+            telemetry.update();
+        }
+        /*
+        currentTime = runtime.milliseconds();
+        while(opModeIsActive() && currentTime +1000 > runtime.milliseconds()){
+            catapulta.setPosition(0.5);
+            barredora.setPower(-0.5);
 
-    //----------------------------------------------------------------------------------------------
-    // Formatting
-    //----------------------------------------------------------------------------------------------
+        }
+        catapulta.setPosition(1);
 
-    String formatAngle(AngleUnit angleUnit, double angle) {
-        return formatDegrees(AngleUnit.DEGREES.fromUnit(angleUnit, angle));
-    }
+        //dar vuelta
+        currentTime = runtime.milliseconds();
+        while(opModeIsActive() && currentTime +500 > runtime.milliseconds()){
+            leftDrive.setPower(0);
+            rightDrive.setPower(0);
+        }
+        leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftDrive.setTargetPosition(200);
+        rightDrive.setTargetPosition(-200);
+        leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-    String formatDegrees(double degrees){
-        return String.format(Locale.getDefault(), "%.1f", AngleUnit.DEGREES.normalize(degrees));
+        while (opModeIsActive() && rightDrive.isBusy() && leftDrive.isBusy()) {
+            leftDrive.setPower(1);
+            rightDrive.setPower(1);
+            telemetry.addData("Status", "Run Time: " + runtime.toString());
+            telemetry.addData("Left encoder: ", leftDrive.getCurrentPosition());
+            telemetry.addData("Right encoder: ", rightDrive.getCurrentPosition());
+            telemetry.update();
+        }
+
+        //crater
+        currentTime = runtime.milliseconds();
+        while(opModeIsActive() && currentTime +500 > runtime.milliseconds()){
+            leftDrive.setPower(0);
+            rightDrive.setPower(0);
+        }
+        leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftDrive.setTargetPosition((int)(-288*6));
+        rightDrive.setTargetPosition((int)(-288*6));
+        leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        while (opModeIsActive() && rightDrive.isBusy() && leftDrive.isBusy()) {
+            leftDrive.setPower(1);
+            rightDrive.setPower(1);
+            telemetry.addData("Status", "Run Time: " + runtime.toString());
+            telemetry.addData("Left encoder: ", leftDrive.getCurrentPosition());
+            telemetry.addData("Right encoder: ", rightDrive.getCurrentPosition());
+            telemetry.update();
+        }*/
     }
 }
