@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <title>Scouting</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="estilos.css">
+    <script src="interactividad.js" charset="utf-8" defer></script>
+    <script src="comprobar.js" charset="utf-8" defer></script>
+  </head>
+  <body>
+    <div class="centre">
+      <form action="Guardar.html" method="post" onsubmit="return verificar()">
+        <h1>Scouting</h1>
+        <div id="fix-info">
+          <div>
+            <label for="Team-Number"># Equipo</label>
+            <input type="number" name="nombre-equipo" id="Team-Number" class="input-numero"placeholder="4010">
+          </div>
+          <div>
+            <label for="Match-Number"># Match</label>
+            <input type="number" name="numero-match" id="Match-Number" class="input-numero"placeholder="40">
+          </div>
+        </div>
+        <h3 style="margin-top: 10px;">Habitat inicial</h3>
+        <div class="habitats">
+          <label class="niv-2 niv-left habs-inl" for="hs-2">Nivel 2</label>
+          <label class="niv-3 habs-inl" for="hs-3">Nivel 3</label>
+          <label class="niv-2 niv-right habs-inl" for="hs-2">Nivel 2</label>
+          <label class="niv-1 habs-inl" for="hs-1">Nivel 1</label>
+          <input type="radio" name="hab-start" value="3" class="btn-radio"id="hs-3">
+          <input type="radio" name="hab-start" value="2" class="btn-radio"id="hs-2">
+          <input type="radio" name="hab-start" value="1" class="btn-radio"id="hs-1">
+        </div>
+        <div class="seleccion-sandstorm">
+          <h3>¿Qu&eacute; hace el robot durante el Sandstorm?</h3>
+          <div class="opciones-sandstorm">
+            <label class="opc-sand" for="hatch-panel"><img src="../../../../Pictures/HatchPanel.jpg" alt="Hatch Panel"></label>
+            <label class="opc-sand" for="cargo"><img src="../../../../Pictures/Cargo.jpg" alt="Cargo"></label>
+            <label class="opc-sand" for="nada"><img src="../../../../Pictures/Nada.jpg" alt="No hace nada"></label>
+            <input type="radio" name="sandstorm" value="hatch" class="btn-radio" id="hatch-panel">
+            <input type="radio" name="sandstorm" value="cargo" class="btn-radio" id="cargo">
+            <input type="radio" name="sandstorm" value="nothing" class="btn-radio" id="nada">
+          </div>
+        </div>
+        <h3>Cargos colocados</h3>
+        <div class="contador">
+          <h2 class="sumar" id="sub-cargo">-</h2>
+          <h2 id="num-cargos">0</h2>
+          <h2 class="restar" id="sum-cargo">+</h2>
+        </div>
+        <input type="hidden" name="cargos" id="Cargo-Number">
+        <h3>Hatch Panels colocados</h3>
+        <div class="contador">
+          <h2 class="sumar" id="sub-hatch">-</h2>
+          <h2 id="num-hatch">0</h2>
+          <h2 class="restar" id="sum-hatch">+</h2>
+        </div>
+        <input type="hidden" name="panels" id="Hatches-Number">
+        <h3>Habitat final</h3>
+        <div class="habitats">
+          <label class="niv-2 niv-left habs-fnl" for="hf-2">Nivel 2</label>
+          <label class="niv-3 habs-fnl" for="hf-3">Nivel 3</label>
+          <label class="niv-2 niv-right habs-fnl" for="hf-2">Nivel 2</label>
+          <label class="niv-1 habs-fnl" for="hf-1">Nivel 1</label>
+          <label class="niv-0 habs-fnl" for="hf-0">Nivel 0</label>
+          <input type="radio" name="hab-final" value="3" class="btn-radio"id="hf-3">
+          <input type="radio" name="hab-final" value="2" class="btn-radio"id="hf-2">
+          <input type="radio" name="hab-final" value="1" class="btn-radio"id="hf-1">
+          <input type="radio" name="hab-final" value="0" class="btn-radio"id="hf-0">
+        </div>
+        <h3>Comentarios</h3>
+        <textarea name="comentarios" rows="7" ></textarea>
+        <p class="error ocultar">*Falta el n&uacute;mero de equipo</p>
+        <p class="error ocultar">*Falta n&uacute;mero de match</p>
+        <p class="error ocultar">*Falta especificar el habitat donde comenz&oacute;</p>
+        <p class="error ocultar">*Falta especificar que hace en el Sandstorm</p>
+        <p class="error ocultar">*Falta especificar en donde termina el match</p>
+        <input type="submit" value="Enviar" id="btn-submit">
+      </form>
+    </div>
+  </body>
+</html>
