@@ -43,6 +43,12 @@ function verificar() {
     comprobados[4] = true;
   }
 
+  document.getElementById("Cargo-Number").value = Number(document.getElementById("num-cargos").innerHTML);
+  console.log(document.getElementById("Cargo-Number"));
+
+  document.getElementById("Hatches-Number").value = Number(document.getElementById("num-hatch").innerHTML);
+  console.log(document.getElementById("Hatches-Number"));
+
   return comprobados.every(function(test){
     return test;
   });

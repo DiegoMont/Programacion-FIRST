@@ -1,39 +1,3 @@
-/*
-amarillo: #foe332
-negro: #040000
-gris: #b4b3b3
-corbel, arial, sans-serif
-border level 2: outset
-*/
-
-* {
-  margin: 0;
-  padding: 0;
-  color: #b4b3b3;
-  text-decoration: none;
-  font-family: Corbel, Arial, sans-serif;
-}
-
-html {
-  font-size: 20px;
-}
-
-body {
-  background-color: #000;
-}
-
-form {
-
-}
-
-h1 {
-  text-align: center;
-}
-
-img {
-  width: 100%;
-}
-
 h2 {
   font-size: 4rem;
   font-family: Arial, sans-serif;
@@ -159,22 +123,6 @@ textarea {
   width: 100%;
   max-width: 500px;
   height: 2rem;
-}
-
-#btn-reenviar {
-  text-align: center;
-  font-size: 1.2rem;
-  font-weight: bold;
-  border: 1px solid #b4b3b3;
-  padding: 1rem 2rem;
-  margin: 10px auto;
-  width: 6rem;
-  display: block;
-}
-
-#btn-reenviar:hover {
-  color: #000;
-  background-color: #b4b3b3;
 }
 
 @media screen and (max-width: 640px) {

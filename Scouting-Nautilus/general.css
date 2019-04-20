@@ -1,0 +1,31 @@
+/*
+amarillo: #foe332
+negro: #040000
+gris: #b4b3b3
+corbel, arial, sans-serif
+border level 2: outset
+*/
+
+* {
+  margin: 0;
+  padding: 0;
+  color: #b4b3b3;
+  text-decoration: none;
+  font-family: Corbel, Arial, sans-serif;
+}
+
+html {
+  font-size: 20px;
+}
+
+body {
+  background-color: #000;
+}
+
+h1 {
+  text-align: center;
+}
+
+img {
+  width: 100%;
+}
