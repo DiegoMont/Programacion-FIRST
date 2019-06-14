@@ -37,25 +37,15 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import java.util.ArrayList;
 import java.util.List;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 
-@TeleOp(name="Probar con Expansion Hub", group="Linear Opmode")
+@TeleOp(name="Para celulares", group="Linear Opmode")
 public class TestCode extends LinearOpMode {
 
-    //Colocar el nombre que se le asignaron a los componentes en la configuracion.
-    private String nombreMotor = "";
-    private String nombreServo = "";
-
-
     private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor dcDrive = null;
-    private Servo servomotor = null;
     private static final String VUFORIA_KEY = "ATjrkEL/////AAABmfR2/BPftkOFvL9kl5ElbHswfU6Tuno4QSB4aHpVUmWaWqKdEUps2CsnGbmjoGqMAfOjyPlhrew8njlemEsarH9XKySF9i0egaUhOiT2fE0MivatYaT037ZwPe1bOkI1GGmd2CsWL8GeupcT91XQkGhRcMyTS3ZfmDYu1/HmcRxCy4zxwbiyPVcoHtsh+KPfjI29mv9YfMStiB4/o8FgefPbTGtX6L9zeoyUemNIMN1WcaMi6wSM7rB7kF3VnUJCrXAca6YmFNEr6GEdJX4G7JhO5EiD6K/e1+wZ0fLtWiQDWe09Bgxxpp2n+qHeccA06zA8nNTo2F07UORoM40ZK29vMj4eh0GjyNMAOmWcuQeI";
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
     VuforiaLocalizer vuforia;
@@ -64,9 +54,6 @@ public class TestCode extends LinearOpMode {
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
-
-        dcDrive  = hardwareMap.get(DcMotor.class, nombreMotor);
-        servomotor = hardwareMap.get(Servo.class, nombreServo);
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
@@ -96,7 +83,6 @@ public class TestCode extends LinearOpMode {
         targetsRoverRuckus.activate();
 
         while (opModeIsActive()) {
-            dcDrive.setPower(-gamepad1.left_stick_y);
 
             String targetName = "none";
             boolean targetVisible = false;
@@ -107,20 +93,8 @@ public class TestCode extends LinearOpMode {
                     break;
                 }
             }
-            if(targetVisible){
-            telemetry.addData("Visible Target", targetName);
-            switch(targetName){
-                case "Blue-Rover": servomotor.setPosition(0); break;
-                case "Red-Footprint": servomotor.setPosition(0.25); break;
-                case "Front-Craters": servomotor.setPosition(0.75); break;
-                case "Back-Space": servomotor.setPosition(1); break;
-                }
-            } else {
-            telemetry.addData("Visible Target", "none");
-            servomotor.setPosition(0.5);
-            }
+            telemetry.addData("Visible Target", targetVisible?targetName:"none");
             telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.addData("Rotaciones", dcDrive.getCurrentPosition());
             telemetry.update();
         }
     }
