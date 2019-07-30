@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../../../Programas/Reset.css">
+    <link rel="stylesheet" type="text/css" href="css/general.css">
+    <link rel="stylesheet" type="text/css" href="css/estiloEncuesta.css">
+    <script src="js/interactividad.js" charset="utf-8" defer></script>
+    <title>Copiar y pegar</title>
+  </head>
+  <body>
+
+    <!-- Botones radio con imagenes -->
+    <h6>Pregunta</h6>
+    <div class="radio-imagenes">
+      <!-- Ajustar en .radio-imagenes filas y columnas del grid-->
+      <label class="img-opc">
+        <img src="" alt="">
+        <input type="radio" name="" value="" class="ocultar">
+      </label>
+      <label class="img-opc">
+        <img src="" alt="">
+        <input type="radio" name="" value="" class="ocultar">
+      </label>
+      <label class="img-opc">
+        <img src="" alt="">
+        <input type="radio" name="" value="" class="ocultar">
+      </label>
+    </div>
+
+    <!-- Contador numerico -->
+    <h6>Pregunta</h6>
+    <div class="flexbox">
+      <img src="img/minus.svg" class="btn restar" id="">
+      <input type="number" name="" id="" value="0" class="cifra-contador">
+      <img src="img/add.svg" class="btn aumentar" id="">
+    </div>
+
+    <!-- Seleccion de hab para Deep Space -->
+    <h6>Pregunta</h6>
+    <div class="habitats">
+      <!-- Los primeros dos labels de div.habitats deben ser los del Nivel 2 -->
+      <label class="habitat-niv-2 habitat-niv-left btn" for="">Nivel 2</label>
+      <label class="habitat-niv-2 habitat-niv-right btn" for="">Nivel 2</label>
+      <label class="habitat-niv-3 btn" for="">Nivel 3</label>
+      <label class="habitat-niv-1 btn" for="">Nivel 1</label>
+      <!-- Eliminar label para Nivel 0 y su input si no se debe mostrar -->
+      <label class="habitat-niv-0 btn" for="">Nivel 0</label>
+      <input type="radio" name="" value="3" class="ocultar" id="">
+      <input type="radio" name="" value="2" class="ocultar" id="">
+      <input type="radio" name="" value="1" class="ocultar" id="">
+      <input type="radio" name="" value="0" class="ocultar" id="">
+    </div>
+
+    
+
+  </body>
+</html>

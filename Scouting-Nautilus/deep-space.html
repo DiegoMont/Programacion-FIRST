@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <title>Scouting | Deep Space</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="js/comprobar.js" charset="utf-8" defer></script>
+    <style>
+    * {
+  margin: 0;
+  padding: 0;
+  color: #b4b3b3;
+  text-decoration: none;
+  font-family: Corbel, Arial, sans-serif;
+}
+
+html {
+  font-size: 20px;
+}
+
+body {
+  background-color: #000;
+}
+
+h1 {
+  text-align: center;
+}
+
+img {
+  width: 100%;
+}
+    h2 {
+      font-size: 4rem;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      color: #fff;
+      background-color: #b4b3b3;
+    }
+
+    textarea {
+      font-size: 0.8rem;
+      color: #000;
+      width: 100%;
+    }
+
+    .btn-radio {
+      display: none;
+    }
+
+    .centre {
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .opacar {
+      opacity: 0.5;
+      /*background-blend-mode: darken;*/
+    }
+
+    .input-numero {
+      font-family: Arial, sans-serif;
+      font-size: 0.8rem;
+      color: #000;
+      height: 1.05rem;
+      width: 6rem;
+    }
+
+    .habitats {
+      padding: 0 0.5rem;
+      display: grid;
+      grid-template: repeat(5, 1fr) / repeat(3, 1fr);
+    }
+
+    .niv-1 {
+      background-color: rgb(233, 176, 1);
+      grid-area: 3 / 1 / span 2 / span 3;
+    }
+
+    .niv-2 {
+      background-color: rgb(112, 219, 1);
+    }
+
+    .niv-left {
+      grid-area: 2 / 1 / span 1 / span 1;
+    }
+
+    .niv-right {
+      grid-area: 2 / 3 / span 1 / span 1;
+    }
+
+    .niv-3 {
+      background-color: rgb(1, 207, 207);
+      grid-area: 1 / 2 / span 2 / span 1;
+    }
+
+    .niv-0 {
+      background-color: #999;
+      grid-area: 5 / 1 / span 1 / span 3;
+    }
+
+    .opciones-sandstorm {
+      display: grid;
+      grid-template: 1fr / repeat(3, 1fr);
+      grid-gap: 10px;
+    }
+
+    .contador {
+      display: grid;
+      grid-template: 1fr / repeat(3, 1fr);
+      grid-gap: 10px;
+    }
+
+    .sumar, .restar {
+      width: 50%;
+      border-radius: 100%;
+      background-color: #3fa674;
+      justify-self: center;
+    }
+
+    .sumar:hover, .restar:hover {
+      cursor: pointer;
+    }
+
+    .error {
+      color: #f00;
+    }
+
+    .ocultar {
+      display: none;
+    }
+
+    .habitats label {
+      color: #fff;
+      text-align: center;
+    }
+
+    #fix-info {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      z-index: 20;
+      top: 0;
+      background-color: #000;
+      width: 100%;
+    }
+
+    #btn-submit {
+      font-size: 1.5rem;
+      color: #040000;
+      background-color: #f0e332;
+      display: block;
+      margin: 10px auto 50px;
+      border-radius: 5px;
+      width: 100%;
+      max-width: 500px;
+      height: 2rem;
+    }
+
+    @media screen and (max-width: 640px) {
+      .centre {
+        padding: 0 7px;
+      }
+    }
+
+    </style>
+  </head>
+  <body>
+    <div class="centre">
+      <form action="Guardar.php" method="post" onsubmit="return verificar()">
+        <h1>Scouting</h1>
+        <div id="fix-info">
+          <div>
+            <label for="Team-Number"># Equipo</label>
+            <input type="number" name="nombre-equipo" id="Team-Number" class="input-numero"placeholder="4010">
+          </div>
+          <div>
+            <label for="Match-Number"># Match</label>
+            <input type="number" name="numero-match" id="Match-Number" class="input-numero"placeholder="40">
+          </div>
+        </div>
+        <h3 style="margin-top: 10px;">Habitat inicial</h3>
+        <div class="habitats">
+          <label class="niv-2 niv-left habs-inl" for="hs-2">Nivel 2</label>
+          <label class="niv-3 habs-inl" for="hs-3">Nivel 3</label>
+          <label class="niv-2 niv-right habs-inl" for="hs-2">Nivel 2</label>
+          <label class="niv-1 habs-inl" for="hs-1">Nivel 1</label>
+          <input type="radio" name="hab-start" value="3" class="btn-radio"id="hs-3">
+          <input type="radio" name="hab-start" value="2" class="btn-radio"id="hs-2">
+          <input type="radio" name="hab-start" value="1" class="btn-radio"id="hs-1">
+        </div>
+        <div class="seleccion-sandstorm">
+          <h3>¿Qu&eacute; hace el robot durante el Sandstorm?</h3>
+          <div class="opciones-sandstorm">
+            <label class="opc-sand" for="hatch-panel"><img src="../../../../Pictures/HatchPanel.jpg" alt="Hatch Panel"></label>
+            <label class="opc-sand" for="cargo"><img src="../../../../Pictures/Cargo.jpg" alt="Cargo"></label>
+            <label class="opc-sand" for="nada"><img src="../../../../Pictures/Nada.jpg" alt="No hace nada"></label>
+            <input type="radio" name="sandstorm" value="Hatch panel" class="btn-radio" id="hatch-panel">
+            <input type="radio" name="sandstorm" value="Cargo" class="btn-radio" id="cargo">
+            <input type="radio" name="sandstorm" value="Nada" class="btn-radio" id="nada">
+          </div>
+        </div>
+        <h3>Cargos colocados</h3>
+        <div class="contador">
+          <h2 class="sumar" id="sub-cargo">-</h2>
+          <h2 id="num-cargos">0</h2>
+          <h2 class="restar" id="sum-cargo">+</h2>
+        </div>
+        <input type="hidden" name="cargos" id="Cargo-Number">
+        <h3>Hatch Panels colocados</h3>
+        <div class="contador">
+          <h2 class="sumar" id="sub-hatch">-</h2>
+          <h2 id="num-hatch">0</h2>
+          <h2 class="restar" id="sum-hatch">+</h2>
+        </div>
+        <input type="hidden" name="panels" id="Hatches-Number">
+        <h3>Habitat final</h3>
+        <div class="habitats">
+          <label class="niv-2 niv-left habs-fnl" for="hf-2">Nivel 2</label>
+          <label class="niv-3 habs-fnl" for="hf-3">Nivel 3</label>
+          <label class="niv-2 niv-right habs-fnl" for="hf-2">Nivel 2</label>
+          <label class="niv-1 habs-fnl" for="hf-1">Nivel 1</label>
+          <label class="niv-0 habs-fnl" for="hf-0">Nivel 0</label>
+          <input type="radio" name="hab-final" value="3" class="btn-radio"id="hf-3">
+          <input type="radio" name="hab-final" value="2" class="btn-radio"id="hf-2">
+          <input type="radio" name="hab-final" value="1" class="btn-radio"id="hf-1">
+          <input type="radio" name="hab-final" value="0" class="btn-radio"id="hf-0">
+        </div>
+        <h3>Comentarios</h3>
+        <textarea name="comentarios" rows="7" ></textarea>
+        <p class="error ocultar">*Falta el n&uacute;mero de equipo</p>
+        <p class="error ocultar">*Falta n&uacute;mero de match</p>
+        <p class="error ocultar">*Falta especificar el habitat donde comenz&oacute;</p>
+        <p class="error ocultar">*Falta especificar que hace en el Sandstorm</p>
+        <p class="error ocultar">*Falta especificar en donde termina el match</p>
+        <input type="submit" value="Enviar" id="btn-submit">
+      </form>
+    </div>
+    <script type="text/javascript">
+    /*window.onscroll = function(){
+      if (document.body.scrollTop > 55 || document.documentElement.scrollTop > 55) {
+        document.getElementById("fix-info").style.position = "fixed";
+        document.querySelector("form").style.position="relative";
+        document.querySelector("form").style.top="47px";
+      } else {
+        document.getElementById("fix-info").style.position = "static";
+        document.querySelector("form").style.position = "static";
+      }
+    }
+    */
+
+    let opcHabInl = document.getElementsByClassName("habs-inl");
+    let opcHabFnl = document.getElementsByClassName("habs-fnl");
+    let opcSand = document.getElementsByClassName("opc-sand");
+    let numCargos = document.getElementById("num-cargos");
+    let numHatches = document.getElementById("num-hatch");
+
+    function agregarOpacar(arregloElementos) {
+      for (let i = 0; i < arregloElementos.length; i++) {
+        arregloElementos[i].classList.add("opacar");
+      }
+    }
+
+    for (let i = 0; i < opcHabInl.length; i++) {
+      opcHabInl[i].onclick = function (){
+        agregarOpacar(opcHabInl);
+        opcHabInl[i].classList.remove("opacar");
+      };
+    }
+    agregarOpacar(opcHabInl);
+
+    for (let i = 0; i < opcHabFnl.length; i++) {
+      opcHabFnl[i].onclick = function (){
+        agregarOpacar(opcHabFnl);
+        opcHabFnl[i].classList.remove("opacar");
+      };
+    }
+    agregarOpacar(opcHabFnl);
+
+    for (let i = 0; i < opcSand.length; i++) {
+      opcSand[i].onclick = function (){
+        agregarOpacar(opcSand);
+        opcSand[i].classList.remove("opacar");
+      };
+    }
+    agregarOpacar(opcSand);
+
+    document.getElementById("sub-cargo").onclick = function(){
+      let valor = Number(numCargos.innerHTML);
+      valor--;
+      numCargos.innerHTML = valor;
+    }
+
+    document.getElementById("sum-cargo").onclick = function(){
+      let valor = Number(numCargos.innerHTML);
+      valor++;
+      numCargos.innerHTML = valor;
+    }
+
+    document.getElementById("sub-hatch").onclick = function(){
+      let valor = Number(numHatches.innerHTML);
+      valor--;
+      numHatches.innerHTML = valor;
+    }
+
+    document.getElementById("sum-hatch").onclick = function(){
+      let valor = Number(numHatches.innerHTML);
+      valor++;
+      numHatches.innerHTML = valor;
+    }
+
+    </script>
+  </body>
+</html>

@@ -7,15 +7,8 @@ border level 2: outset
 */
 
 * {
-  margin: 0;
-  padding: 0;
   color: #b4b3b3;
-  text-decoration: none;
-  font-family: Corbel, Arial, sans-serif;
-}
-
-html {
-  font-size: 20px;
+  font-family: Helvetica, Arial, sans-serif;
 }
 
 body {
@@ -23,9 +16,9 @@ body {
 }
 
 h1 {
-  text-align: center;
+  margin: 1.2rem 0;
 }
 
-img {
-  width: 100%;
+#Team-Number, #Match-Number {
+  width: 5rem;
 }
