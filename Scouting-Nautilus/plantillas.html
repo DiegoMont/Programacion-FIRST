@@ -15,15 +15,15 @@
     <h6>Pregunta</h6>
     <div class="radio-imagenes">
       <!-- Ajustar en .radio-imagenes filas y columnas del grid-->
-      <label class="img-opc">
+      <label class="img-opc btn">
         <img src="" alt="">
         <input type="radio" name="" value="" class="ocultar">
       </label>
-      <label class="img-opc">
+      <label class="img-opc btn">
         <img src="" alt="">
         <input type="radio" name="" value="" class="ocultar">
       </label>
-      <label class="img-opc">
+      <label class="img-opc btn">
         <img src="" alt="">
         <input type="radio" name="" value="" class="ocultar">
       </label>
@@ -32,9 +32,9 @@
     <!-- Contador numerico -->
     <h6>Pregunta</h6>
     <div class="flexbox">
-      <img src="img/minus.svg" class="btn restar" id="">
+      <img src="img/minus.svg" class="btn restar btn-simbol" id="">
       <input type="number" name="" id="" value="0" class="cifra-contador">
-      <img src="img/add.svg" class="btn aumentar" id="">
+      <img src="img/add.svg" class="btn aumentar btn-simbol" id="">
     </div>
 
     <!-- Seleccion de hab para Deep Space -->
@@ -53,7 +53,31 @@
       <input type="radio" name="" value="0" class="ocultar" id="">
     </div>
 
-    
+    <!-- Checkbox con imagenes en opciones -->
+    <h6>Pregunta</h6>
+    <div class="checkbox-imagenes flexbox">
+      <label class="img-check btn">
+        <img src="" alt="">
+        <input type="checkbox" name="" value="" class="ocultar">
+      </label>
+      <label class="img-check btn">
+        <img src="" alt="">
+        <input type="checkbox" name="" value="" class="ocultar">
+      </label>
+    </div>
+
+    <!-- Pregunta con botones true/false -->
+    <h6>Pregunta</h6>
+    <div class="btn-bool flexbox">
+      <label class="btn" style="width: 25%; max-width: 7rem;">
+        <img src="img/tick.svg" alt="Si"  class="btn-simbol"  style="background-color: #148f12;">
+        <input type="radio" name="" value="" class="ocultar">
+      </label>
+      <label class="btn" style="width: 25%; max-width: 7rem;">
+        <img src="img/cancel.svg" alt="No" class="btn-simbol"  style="background-color: #e11610;">
+        <input type="radio" name="" value="" class="ocultar">
+      </label>
+    </div>
 
   </body>
 </html>
