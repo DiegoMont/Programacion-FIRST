@@ -4,7 +4,6 @@ let labelRadioImg = document.getElementsByClassName("img-opc");
 let divsSeleccionHabitats = document.getElementsByClassName("habitats");
 let labelImgCheckbox = document.getElementsByClassName("img-check");
 let divBtnBool = document.getElementsByClassName("btn-bool");
-let contadoresColumna = document.getElementsByClassName("cifra-col-ctr");
 
 //Funciones
 function agregarOpacar(arregloElementos) {
@@ -104,17 +103,5 @@ if (divBtnBool.length > 0) {
         destacarLabelsSiChecked(labelsBotones);
       });
     }
-  }
-}
-
-//Funcionamiento para contadores en columna
-if (contadoresColumna.length > 0) {
-  for (let i = 0; i < contadoresColumna.length; i++) {
-    contadoresColumna[i].addEventListener("click", function() {
-      modificarValueInput(contadoresColumna[i]);
-    });
-    contadoresColumna[i].addEventListener("dblclick", function() {
-      modificarValueInput(contadoresColumna[i], -3);
-    });
   }
 }
