@@ -30,7 +30,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import java.util.Set;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -60,8 +59,6 @@ public class Pinguinita extends LinearOpMode {
 
     waitForStart();
     runtime.reset();
-    int rightTarget;
-    int leftTarget;
     boolean click = false;
     boolean click1 = false;
     boolean click2 = false;
@@ -70,7 +67,7 @@ public class Pinguinita extends LinearOpMode {
     while (opModeIsActive()) {
       double leftPower;
       double rightPower;
-      int ticksToTurn = 200;
+      final int TICKS_TO_TURN = 200;
 
       if(gamepad1.back){
         click = true;
@@ -89,27 +86,27 @@ public class Pinguinita extends LinearOpMode {
         rightPower = -gamepad1.right_stick_y;
       }
 
-      if(gamepad1.left_trigger>0 && !click1){
-        leftTarget=leftDrive.getCurrentPosition()- ticksToTurn;
+      if(gamepad1.left_trigger > 0 && !click1){
+        int leftTarget = leftDrive.getCurrentPosition() - TICKS_TO_TURN;
         leftDrive.setTargetPosition(leftTarget);
         leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightTarget=rightDrive.getCurrentPosition()+ ticksToTurn;
+        int rightTarget = rightDrive.getCurrentPosition() + TICKS_TO_TURN;
         rightDrive.setTargetPosition(rightTarget);
         rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         click1 = true;
-      } else if(gamepad1.left_trigger==0 && click1){
+      } else if(gamepad1.left_trigger == 0 && click1){
         click1 = false;
       }
 
-      if(gamepad1.right_trigger>0 && !click2){
-        leftTarget=leftDrive.getCurrentPosition()+ticksToTurn;
+      if(gamepad1.right_trigger > 0 && !click2){
+        int leftTarget = leftDrive.getCurrentPosition() + TICKS_TO_TURN;
         leftDrive.setTargetPosition(leftTarget);
         leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightTarget=rightDrive.getCurrentPosition()-ticksToTurn;
+        int rightTarget = rightDrive.getCurrentPosition() - TICKS_TO_TURN;
         rightDrive.setTargetPosition(rightTarget);
         rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         click2 = true;
-      } else if(gamepad1.right_trigger==0 && click2){
+      } else if(gamepad1.right_trigger == 0 && click2){
         click2 = false;
       }
 
