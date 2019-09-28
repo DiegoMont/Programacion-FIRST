@@ -65,15 +65,25 @@ public class Pinguinita extends LinearOpMode {
         rightPower = -gamepad1.right_stick_y;
       }
 
+      if(gamepad1.right_bumper){
+        leftPower *= 0.75;
+        rightPower *= 0.75;
+      }
+
+      if(gamepad1.left_bumper){
+        leftPower *= 0.5;
+        rightPower *= 0.5;
+      }
+
       if(gamepad1.left_trigger > 0 && !click1){
-        naubot.setGiroDeNoventaGrados(-1);
+        naubot.setGiroDeNoventaGrados("left");
         click1 = true;
       } else if(gamepad1.left_trigger == 0 && click1){
         click1 = false;
       }
 
       if(gamepad1.right_trigger > 0 && !click2){
-        naubot.setGiroDeNoventaGrados(1);
+        naubot.setGiroDeNoventaGrados("right");
         click2 = true;
       } else if(gamepad1.right_trigger == 0 && click2){
         click2 = false;
