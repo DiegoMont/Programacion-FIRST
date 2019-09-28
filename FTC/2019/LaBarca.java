@@ -18,17 +18,24 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 @Disabled
-public class LaNaveDelOlvido {
+public class LaBarca {
 
   //Inicializar variables para motores y sensores del robot
   public DcMotor leftDrive = null;
   public DcMotor rightDrive = null;
   public DistanceSensor distanceSensor = null;
+  private LinearOpMode programa;
+
+  public LaBarca(LineaOpMode programa){
+    this.programa = programa;
+  }
 
   //Metodo para buscar motores y servomotores del Expansion y asignarlos a las variables
   public void getHardware(HardwareMap hwMap){
@@ -36,13 +43,25 @@ public class LaNaveDelOlvido {
       rightDrive = hwMap.get(DcMotor.class, "m.derecho");
   }
 
+  public void resetEncoders(){
+    leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    defaultRunmode();
+  }
+
+  public void defaultRunmode(){
+    rightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    leftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+  }
+
   /* Metodos para programacion autonoma */
 
-  //Este metodo movera al robot en linea recta dependiendo de las rotaciones que reciba en su parametro
-  public void moverDistanciaRecta(int rotaciones){
-
+  //Este metodo movera al robot en linea recta la distancia que se especifique
+  public void moverDistanciaRecta(double distancia){
+    if(!programa.opModeIsActive()) return;
       //Convertir rotaciones a ticks del encoder del Core Hex
-      int counts = rotaciones * 288;
+      //9cm de llanta con engrane de 72 y uno de 125 en el motor
+      int counts = (int) Math.round(2304d * distancia / 125d / Math.PI);
 
       //Establecer la posicion actual del encoder como nuestro cero
       leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -55,8 +74,27 @@ public class LaNaveDelOlvido {
       rightDrive.setPower(1);
 
       //Cambiar el modo del motor para comenzar movimiento automatico
-      leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-      rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+      while(programa.opModeIsActive()){
+        leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        if(!(leftDrive.isBusy() && rightDrive.isBusy())){
+          leftDrive.setPower(0);
+          rightDrive.setPower(0);
+          break;
+        }
+      }
+
+      defaultRunmode();
+  }
+
+  public void setGiroDeNoventaGrados(int direccion){
+    final int TICKS_TO_TURN = 184;
+    int leftTarget = leftDrive.getCurrentPosition() + (direccion * TICKS_TO_TURN);
+    int rightTarget = rightDrive.getCurrentPosition() - (direccion * TICKS_TO_TURN);
+    leftDrive.setTargetPosition(leftTarget);
+    rightDrive.setTargetPosition(rightTarget);
+    leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
   }
 
 }
