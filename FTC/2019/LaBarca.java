@@ -33,14 +33,17 @@ public class LaBarca {
   public DistanceSensor distanceSensor = null;
   private LinearOpMode programa;
 
-  public LaBarca(LineaOpMode programa){
+  public LaBarca(LinearOpMode programa){
     this.programa = programa;
   }
 
   //Metodo para buscar motores y servomotores del Expansion y asignarlos a las variables
   public void getHardware(HardwareMap hwMap){
-      leftDrive = hwMap.get(DcMotor.class, "m.izquierdo");
-      rightDrive = hwMap.get(DcMotor.class, "m.derecho");
+      leftDrive = hwMap.get(DcMotor.class, "motor_left");
+      rightDrive = hwMap.get(DcMotor.class, "motor_right");
+
+      leftDrive.setDirection(DcMotor.Direction.REVERSE);
+      rightDrive.setDirection(DcMotor.Direction.FORWARD);
   }
 
   public void resetEncoders(){
@@ -64,22 +67,24 @@ public class LaBarca {
       int counts = (int) Math.round(2304d * distancia / 125d / Math.PI);
 
       //Establecer la posicion actual del encoder como nuestro cero
-      leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-      rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+      resetEncoders();
 
       //Establecer a que posicion y velocidad se debe mover el robot
       leftDrive.setTargetPosition(counts);
       rightDrive.setTargetPosition(counts);
-      leftDrive.setPower(1);
-      rightDrive.setPower(1);
+      leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+      rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+      leftDrive.setPower(0.5);
+      rightDrive.setPower(0.5);
 
       //Cambiar el modo del motor para comenzar movimiento automatico
       while(programa.opModeIsActive()){
-        leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        programa.telemetry.addData("Right encoder:", rightDrive.getCurrentPosition());
+        programa.telemetry.addData("Left encoder:", leftDrive.getCurrentPosition());
+        programa.telemetry.addData("Target:", counts);
+        programa.telemetry.update();
         if(!(leftDrive.isBusy() && rightDrive.isBusy())){
-          leftDrive.setPower(0);
-          rightDrive.setPower(0);
+          frenar();
           break;
         }
       }
@@ -87,7 +92,8 @@ public class LaBarca {
       defaultRunmode();
   }
 
-  public void setGiroDeNoventaGrados(int direccion){
+  public void setGiroDeNoventaGrados(String direction){
+    int direccion = direction.equals("right") ? 1: -1;
     final int TICKS_TO_TURN = 184;
     int leftTarget = leftDrive.getCurrentPosition() + (direccion * TICKS_TO_TURN);
     int rightTarget = rightDrive.getCurrentPosition() - (direccion * TICKS_TO_TURN);
@@ -95,6 +101,11 @@ public class LaBarca {
     rightDrive.setTargetPosition(rightTarget);
     leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+  }
+
+  public void frenar(){
+    leftDrive.setPower(0);
+    rightDrive.setPower(0);
   }
 
 }
