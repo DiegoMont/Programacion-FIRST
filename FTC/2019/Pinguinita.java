@@ -44,9 +44,10 @@ public class Pinguinita extends LinearOpMode {
     boolean click1 = false;
     boolean click2 = false;
     boolean modoDriver = true;
+    double desiredPosition = 0;
 
     while (opModeIsActive()) {
-      double leftPower, rightPower;
+      double leftPower, rightPower, desviacion = naubot.getDesviacion();
 
       if(gamepad1.back){
         click = true;
@@ -57,13 +58,31 @@ public class Pinguinita extends LinearOpMode {
 
       if(modoDriver){
         double drive = -gamepad1.left_stick_y;
-        double turn  =  gamepad1.left_stick_x;
+        double turn  =  gamepad1.right_stick_x;
         leftPower    = Range.clip(drive + turn, -1.0, 1.0);
         rightPower   = Range.clip(drive - turn, -1.0, 1.0);
+        if(turn != 0) desiredPosition = desviacion;
       } else {
         leftPower = -gamepad1.left_stick_y;
         rightPower = -gamepad1.right_stick_y;
+        desiredPosition = desviacion;
       }
+
+      double error = desiredPosition - desviacion;
+      final double PROPORTIONAL = 0.2;
+      if (error > 0 ) {
+        double errorRelativo;
+        try {errorRelativo = error / desiredPosition;} catch(ArithmeticException e){errorRelativo = 100;}
+        leftPower -= leftPower * errorRelativo * PROPORTIONAL;
+        rightPower += rightPower * errorRelativo * PROPORTIONAL;
+      } else if (error < 0) {
+        double errorRelativo;
+        try {errorRelativo = error / desiredPosition;} catch(ArithmeticException e){errorRelativo = 100;}
+        leftPower += leftPower * errorRelativo * PROPORTIONAL;
+        rightPower -= rightPower * errorRelativo * PROPORTIONAL;
+      }
+      leftPower = Range.clip(leftPower, -1.0, 1.0);
+      rightPower = Range.clip(rightPower, -1.0, 1.0);
 
       if(gamepad1.right_bumper){
         leftPower *= 0.75;
@@ -98,8 +117,10 @@ public class Pinguinita extends LinearOpMode {
       naubot.rightDrive.setPower(rightPower);
 
       telemetry.addData("Status", "Run Time: " + runtime.toString());
+      telemetry.addData("Modo conduccion:", modoDriver ? "POV" : "Tanque");
       telemetry.addData("Velocidad motor izquierdo:", leftPower);
       telemetry.addData("Velocidad motor derecho:", rightPower);
+      telemetry.addData("Desviacion:", desviacion);
       telemetry.update();
     }
   }

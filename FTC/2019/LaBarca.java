@@ -18,11 +18,20 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import com.qualcomm.hardware.bosch.BNO055IMU;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
+import org.firstinspires.ftc.robotcore.external.navigation.Position;
+import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
 @Disabled
 public class LaBarca {
@@ -32,6 +41,10 @@ public class LaBarca {
   public DcMotor rightDrive = null;
   public DistanceSensor distanceSensor = null;
   private LinearOpMode programa;
+
+  private BNO055IMU imu;
+  private Orientation angles;
+  private Acceleration gravity;
 
   public LaBarca(LinearOpMode programa){
     this.programa = programa;
@@ -44,6 +57,23 @@ public class LaBarca {
 
       leftDrive.setDirection(DcMotor.Direction.REVERSE);
       rightDrive.setDirection(DcMotor.Direction.FORWARD);
+
+      BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+      parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
+      parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+      parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
+      parameters.loggingEnabled      = true;
+      parameters.loggingTag          = "IMU";
+      parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+
+      imu = hwMap.get(BNO055IMU.class, "imu");
+      imu.initialize(parameters);
+      imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
+  }
+
+  public void frenar(){
+    leftDrive.setPower(0);
+    rightDrive.setPower(0);
   }
 
   public void resetEncoders(){
@@ -55,6 +85,12 @@ public class LaBarca {
   public void defaultRunmode(){
     rightDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     leftDrive.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+  }
+
+  public double getDesviacion(){
+    angles   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+    gravity  = imu.getGravity();
+    return angles.firstAngle;
   }
 
   /* Metodos para programacion autonoma */
@@ -88,7 +124,6 @@ public class LaBarca {
           break;
         }
       }
-
       defaultRunmode();
   }
 
@@ -101,11 +136,6 @@ public class LaBarca {
     rightDrive.setTargetPosition(rightTarget);
     leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-  }
-
-  public void frenar(){
-    leftDrive.setPower(0);
-    rightDrive.setPower(0);
   }
 
 }
