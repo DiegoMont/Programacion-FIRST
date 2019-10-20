@@ -29,6 +29,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
@@ -39,6 +40,8 @@ public class LaBarca {
   //Inicializar variables para motores y sensores del robot
   public DcMotor leftDrive = null;
   public DcMotor rightDrive = null;
+  public CRServo intakeDerecho = null;
+  public CRServo intakeIzquierdo = null;
   public DistanceSensor distanceSensor = null;
   private LinearOpMode programa;
 
@@ -54,6 +57,8 @@ public class LaBarca {
   public void getHardware(HardwareMap hwMap){
       leftDrive = hwMap.get(DcMotor.class, "motor_left");
       rightDrive = hwMap.get(DcMotor.class, "motor_right");
+      intakeIzquierdo = hwMap.get(CRServo.class, "servo1");
+      intakeDerecho = hwMap.get(CRServo.class, "servo2");
 
       leftDrive.setDirection(DcMotor.Direction.REVERSE);
       rightDrive.setDirection(DcMotor.Direction.FORWARD);

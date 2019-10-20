@@ -45,9 +45,12 @@ public class Pinguinita extends LinearOpMode {
     boolean click2 = false;
     boolean modoDriver = true;
     double desiredPosition = 0;
+    String direccionGiro = null;
+    final double reduccionVelocidad = -100/9375/0.13;
 
     while (opModeIsActive()) {
       double leftPower, rightPower, desviacion = naubot.getDesviacion();
+      double servoPower = 0;
 
       if(gamepad1.back){
         click = true;
@@ -94,27 +97,41 @@ public class Pinguinita extends LinearOpMode {
         rightPower *= 0.5;
       }
 
+      if(gamepad1.a){
+        servoPower = -1;
+      } else if(gamepad1.b){
+        servoPower = 1;
+      }
+
       if(gamepad1.left_trigger > 0 && !click1){
-        naubot.setGiroDeNoventaGrados("left");
+        direccionGiro = "left";
+        naubot.setGiroDeNoventaGrados(direccionGiro);
+        desiredPosition = desviacion + 90;
         click1 = true;
       } else if(gamepad1.left_trigger == 0 && click1){
         click1 = false;
       }
 
       if(gamepad1.right_trigger > 0 && !click2){
-        naubot.setGiroDeNoventaGrados("right");
+        direccionGiro = "right";
+        naubot.setGiroDeNoventaGrados(direccionGiro);
+        desiredPosition = desviacion - 90;
         click2 = true;
       } else if(gamepad1.right_trigger == 0 && click2){
         click2 = false;
       }
 
       if(naubot.leftDrive.isBusy() && naubot.rightDrive.isBusy()){
-        leftPower = 1;
-        rightPower = 1;
+        if ((direccionGiro.equals("left") && desiredPosition > desviacion) || (direccionGiro.equals("right") && desiredPosition < desviacion)){
+          leftPower = 1;
+          rightPower = 1;
+        }
       } else naubot.defaultRunmode();
 
       naubot.leftDrive.setPower(leftPower);
       naubot.rightDrive.setPower(rightPower);
+      naubot.intakeIzquierdo.setPower(-servoPower);
+      naubot.intakeDerecho.setPower(servoPower);
 
       telemetry.addData("Status", "Run Time: " + runtime.toString());
       telemetry.addData("Modo conduccion:", modoDriver ? "POV" : "Tanque");
