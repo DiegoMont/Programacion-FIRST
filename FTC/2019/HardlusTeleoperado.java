@@ -17,71 +17,43 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 */
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-@TeleOp(name="Hardlus", group="Linear Opmode")
-public class TeleoperadoHardlus extends OpMode {
-    private ElapsedTime runtime = new ElapsedTime();
-    private NaveDelOlvido hardbot = new NaveDelOlvido(this);
+@TeleOp(name="Teleoperado", group="Linear Opmode")
+public class HardlusTeleoperado extends LinearOpMode {
+  private ElapsedTime runtime = new ElapsedTime();
+  private NaveDelOlvido hardbot = new NaveDelOlvido(this);
 
-    @Override
-    public void init() {
-        telemetry.addData("Status", "Initialized");
+  @Override
+  public void runOpMode() {
+    telemetry.addData("Status", "Initialized");
+    telemetry.update();
 
-        hardbot.getHardware(hardwareMap);
+    hardbot.getHardware(hardwareMap);
 
-        hardbot.resetEncoders();
+    waitForStart();
+    runtime.reset();
+    double periodo = runtime.milliseconds();
+    double power = 0;
+    while (opModeIsActive()) {
+        double actual = runtime.milliseconds();
+        if(periodo + 1500 > actual){
+            if(gamepad1.a){
+                power+=0.05;
+            } else if(gamepad1.b){
+                power -= 0.05;
+            }
+            periodo = actual;
+        }
+        power = Range.clip(power, 0.0, 1.0);
+        hardbot.servo.setPosition(power);
+        telemetry.addData("servo: ", power);
+      telemetry.update();
     }
-
-    @Override
-    public void init_loop() {
-    }
-
-    @Override
-    public void start() {
-      runtime.reset();
-    }
-
-    double desiredPosition;
-    @Override
-    public void loop() {
-      double frontLeftPower, frontRightPower, backLeftPower, backLeftPower, desviacion = hardbot.getDesviacion();
-
-      double drive = -gamepad1.left_stick_y;
-      double lateral = gamepad1.left_stick_x;
-      double turn = gamepad11.right_stick_x;
-      frontLeftPower = Range.clip(drive + lateral + turn, -1.0, 1.0);
-      frontRightPower = Range.clip(drive - lateral -turn, -1.0, 1.0);
-      backLeftPower = Range.clip(drive - lateral + turn, -1.0, 1.0);
-      backRightPower = Range.clip(drive + lateral - turn, -1.0, 1.0);
-
-      if(gamepad1.right_bumper){
-        leftPower *= 0.75;
-        rightPower *= 0.75;
-      }
-
-      if(gamepad1.left_bumper){
-        leftPower *= 0.5;
-        rightPower *= 0.5;
-      }
-
-      hardbot.frontLeft.setPower(frontLeftPower);
-      hardbot.frontRight.setPower(frontRightPower);
-      hardbot.backLeft.setPower(backLeftPower);
-      hardbot.backRight.setPower(backRightPower);
-
-      telemetry.addData("Status", "Run Time: " + runtime.toString());
-      telemetry.addData("Desviacion:", desviacion);
-    }
-
-    @Override
-    public void stop() {
-
-    }
+  }
 }

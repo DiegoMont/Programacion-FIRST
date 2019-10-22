@@ -62,6 +62,7 @@ public class LaBarca {
 
       leftDrive.setDirection(DcMotor.Direction.REVERSE);
       rightDrive.setDirection(DcMotor.Direction.FORWARD);
+      intakeDerecho.setDirection(DcMotor.Direction.REVERSE);
 
       BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
       parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
@@ -141,6 +142,19 @@ public class LaBarca {
     rightDrive.setTargetPosition(rightTarget);
     leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+  }
+
+  public void activarIntake(double power){
+    if(power > 0){
+      intakeIzquierdo.setPower(1);
+      intakeDerecho.setPower(1);
+    } else if(power < 0){
+      intakeIzquierdo.setPower(-1);
+      intakeDerecho.setPower(-1);
+    } else {
+      intakeIzquierdo.setPower(0);
+      intakeDerecho.setPower(0);
+    }
   }
 
 }

@@ -43,14 +43,13 @@ public class Pinguinita extends LinearOpMode {
     boolean click = false;
     boolean click1 = false;
     boolean click2 = false;
-    boolean modoDriver = true;
-    double desiredPosition = 0;
+    boolean modoDriver = false;
+    double desiredPosition = naubot.getDesviacion();
     String direccionGiro = null;
     final double reduccionVelocidad = -100/9375/0.13;
 
     while (opModeIsActive()) {
-      double leftPower, rightPower, desviacion = naubot.getDesviacion();
-      double servoPower = 0;
+      double leftPower, rightPower, intakePower, desviacion = naubot.getDesviacion();
 
       if(gamepad1.back){
         click = true;
@@ -72,7 +71,7 @@ public class Pinguinita extends LinearOpMode {
       }
 
       double error = desiredPosition - desviacion;
-      final double PROPORTIONAL = 0.2;
+      /*final double PROPORTIONAL = 0.2;
       if (error > 0 ) {
         double errorRelativo;
         try {errorRelativo = error / desiredPosition;} catch(ArithmeticException e){errorRelativo = 100;}
@@ -83,24 +82,24 @@ public class Pinguinita extends LinearOpMode {
         try {errorRelativo = error / desiredPosition;} catch(ArithmeticException e){errorRelativo = 100;}
         leftPower += leftPower * errorRelativo * PROPORTIONAL;
         rightPower -= rightPower * errorRelativo * PROPORTIONAL;
-      }
+      }*/
       leftPower = Range.clip(leftPower, -1.0, 1.0);
       rightPower = Range.clip(rightPower, -1.0, 1.0);
 
-      if(gamepad1.right_bumper){
+      if(gamepad1.left_bumper){
         leftPower *= 0.75;
         rightPower *= 0.75;
-      }
-
-      if(gamepad1.left_bumper){
+      } else if(!gamepad1.right_bumper){
         leftPower *= 0.5;
         rightPower *= 0.5;
       }
 
       if(gamepad1.a){
-        servoPower = -1;
+        intakePower = -1;
       } else if(gamepad1.b){
-        servoPower = 1;
+        intakePower = 1;
+      } else {
+        intakePower = 0;
       }
 
       if(gamepad1.left_trigger > 0 && !click1){
@@ -123,21 +122,21 @@ public class Pinguinita extends LinearOpMode {
 
       if(naubot.leftDrive.isBusy() && naubot.rightDrive.isBusy()){
         if ((direccionGiro.equals("left") && desiredPosition > desviacion) || (direccionGiro.equals("right") && desiredPosition < desviacion)){
-          leftPower = 1;
-          rightPower = 1;
+          leftPower = 0.3;
+          rightPower = 0.3;
         }
       } else naubot.defaultRunmode();
 
       naubot.leftDrive.setPower(leftPower);
       naubot.rightDrive.setPower(rightPower);
-      naubot.intakeIzquierdo.setPower(-servoPower);
-      naubot.intakeDerecho.setPower(servoPower);
+      naubot.activarIntake(intakePower);
 
       telemetry.addData("Status", "Run Time: " + runtime.toString());
       telemetry.addData("Modo conduccion:", modoDriver ? "POV" : "Tanque");
       telemetry.addData("Velocidad motor izquierdo:", leftPower);
       telemetry.addData("Velocidad motor derecho:", rightPower);
       telemetry.addData("Desviacion:", desviacion);
+      telemetry.addData("Desired Position: ", desiredPosition);
       telemetry.update();
     }
   }

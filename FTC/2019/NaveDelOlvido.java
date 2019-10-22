@@ -18,6 +18,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -40,6 +41,7 @@ public class NaveDelOlvido {
   public DcMotor frontRight = null;
   public DcMotor backLeft = null;
   public DcMotor backRight = null;
+  public Servo servo = null;
 
   private LinearOpMode programa;
   private BNO055IMU imu;
@@ -52,7 +54,7 @@ public class NaveDelOlvido {
 
   //Metodo para buscar motores y servomotores del Expansion y asignarlos a las variables
   public void getHardware(HardwareMap hwMap){
-      frontLeft = hwMap.get(DcMotor.class, "front_left_motor");
+      /*frontLeft = hwMap.get(DcMotor.class, "front_left_motor");
       frontRight = hwMap.get(DcMotor.class, "front_right_motor");
       backLeft = hwMap.get(DcMotor.class, "back_left_motor");
       backRight = hwMap.get(DcMotor.class, "back_right_motor");
@@ -60,7 +62,9 @@ public class NaveDelOlvido {
       frontLeft.setDirection(DcMotor.Direction.FORWARD);
       frontRight.setDirection(DcMotor.Direction.FORWARD);
       backLeft.setDirection(DcMotor.Direction.FORWARD);
-      backRight.setDirection(DcMotor.Direction.FORWARD);
+      backRight.setDirection(DcMotor.Direction.FORWARD);*/
+
+      servo = hwMap.get(Servo.class, "servo");
 
       BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
       parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
