@@ -106,7 +106,7 @@ public class LaBarca {
     if(!programa.opModeIsActive()) return;
       //Convertir rotaciones a ticks del encoder del Core Hex
       //9cm de llanta con engrane de 72 y uno de 125 en el motor
-      int counts = (int) Math.round(2304d * distancia / 125d / Math.PI);
+      int counts = (int) Math.round(560d * distancia / 9d / Math.PI);
 
       //Establecer la posicion actual del encoder como nuestro cero
       resetEncoders();
@@ -116,8 +116,8 @@ public class LaBarca {
       rightDrive.setTargetPosition(counts);
       leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
       rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-      leftDrive.setPower(0.5);
-      rightDrive.setPower(0.5);
+      leftDrive.setPower(1);
+      rightDrive.setPower(1);
 
       //Cambiar el modo del motor para comenzar movimiento automatico
       while(programa.opModeIsActive()){
@@ -133,15 +133,8 @@ public class LaBarca {
       defaultRunmode();
   }
 
-  public void setGiroDeNoventaGrados(String direction){
-    int direccion = direction.equals("right") ? 1: -1;
-    final int TICKS_TO_TURN = 184;
-    int leftTarget = leftDrive.getCurrentPosition() + (direccion * TICKS_TO_TURN);
-    int rightTarget = rightDrive.getCurrentPosition() - (direccion * TICKS_TO_TURN);
-    leftDrive.setTargetPosition(leftTarget);
-    rightDrive.setTargetPosition(rightTarget);
-    leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-    rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+  public void setGiroDeNoventaGrados(int desiredPosition){
+
   }
 
   public void activarIntake(double power){

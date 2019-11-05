@@ -46,7 +46,7 @@ public class Pinguinita extends LinearOpMode {
     boolean modoDriver = false;
     double desiredPosition = naubot.getDesviacion();
     String direccionGiro = null;
-    final double reduccionVelocidad = -100/9375/0.13;
+    boolean bloquearGiro = false;
 
     while (opModeIsActive()) {
       double leftPower, rightPower, intakePower, desviacion = naubot.getDesviacion();
@@ -63,7 +63,7 @@ public class Pinguinita extends LinearOpMode {
         double turn  =  gamepad1.right_stick_x;
         leftPower    = Range.clip(drive + turn, -1.0, 1.0);
         rightPower   = Range.clip(drive - turn, -1.0, 1.0);
-        if(turn != 0) desiredPosition = desviacion;
+        if(turn != 0 && !bloquearGiro) desiredPosition = desviacion;
       } else {
         leftPower = -gamepad1.left_stick_y;
         rightPower = -gamepad1.right_stick_y;
@@ -103,29 +103,20 @@ public class Pinguinita extends LinearOpMode {
       }
 
       if(gamepad1.left_trigger > 0 && !click1){
-        direccionGiro = "left";
-        naubot.setGiroDeNoventaGrados(direccionGiro);
-        desiredPosition = desviacion + 90;
+        desiredPosition = desviacion - 90;
+        bloquearGiro = true;
         click1 = true;
       } else if(gamepad1.left_trigger == 0 && click1){
         click1 = false;
       }
 
       if(gamepad1.right_trigger > 0 && !click2){
-        direccionGiro = "right";
-        naubot.setGiroDeNoventaGrados(direccionGiro);
         desiredPosition = desviacion - 90;
+        bloquearGiro = true;
         click2 = true;
       } else if(gamepad1.right_trigger == 0 && click2){
         click2 = false;
       }
-
-      if(naubot.leftDrive.isBusy() && naubot.rightDrive.isBusy()){
-        if ((direccionGiro.equals("left") && desiredPosition > desviacion) || (direccionGiro.equals("right") && desiredPosition < desviacion)){
-          leftPower = 0.3;
-          rightPower = 0.3;
-        }
-      } else naubot.defaultRunmode();
 
       naubot.leftDrive.setPower(leftPower);
       naubot.rightDrive.setPower(rightPower);
