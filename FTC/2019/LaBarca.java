@@ -29,7 +29,6 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
@@ -40,10 +39,14 @@ public class LaBarca {
   //Inicializar variables para motores y sensores del robot
   public DcMotor leftDrive = null;
   public DcMotor rightDrive = null;
-  public CRServo intakeDerecho = null;
-  public CRServo intakeIzquierdo = null;
   public DistanceSensor distanceSensor = null;
   private LinearOpMode programa;
+  public DcMotor intakeLeft = null;
+  public DcMotor intakeRight = null;
+  public DcMotor elevadorLeft = null;
+  public DcMotor elevadorRight = null;
+  public DcMotor foundationLeft = null;
+  public DcMotor foundationRight = null;
 
   private BNO055IMU imu;
   private Orientation angles;
@@ -57,12 +60,19 @@ public class LaBarca {
   public void getHardware(HardwareMap hwMap){
       leftDrive = hwMap.get(DcMotor.class, "motor_left");
       rightDrive = hwMap.get(DcMotor.class, "motor_right");
-      intakeIzquierdo = hwMap.get(CRServo.class, "servo1");
-      intakeDerecho = hwMap.get(CRServo.class, "servo2");
+      intakeLeft = hwMap.get(DcMotor.class, "intake1");
+      intakeRight = hwMap.get(DcMotor.class, "intake2");
+      elevadorLeft = hwMap.get(DcMotor.class, "elevador1");
+      elevadorRight = hwMap.get(DcMotor.class, "elevador2");
+      foundationLeft = hwMap.get(DcMotor.class, "foundation1");
+      foundationRight = hwMap.get(DcMotor.class, "foundation2");
 
       leftDrive.setDirection(DcMotor.Direction.REVERSE);
       rightDrive.setDirection(DcMotor.Direction.FORWARD);
-      intakeDerecho.setDirection(DcMotor.Direction.REVERSE);
+      intakeLeft.setDirection(DcMotor.Direction.REVERSE);
+
+      //intakeLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+      //intakeRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
       BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
       parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
@@ -139,14 +149,14 @@ public class LaBarca {
 
   public void activarIntake(double power){
     if(power > 0){
-      intakeIzquierdo.setPower(1);
-      intakeDerecho.setPower(1);
+      intakeLeft.setPower(0.2);
+      intakeRight.setPower(0.2);
     } else if(power < 0){
-      intakeIzquierdo.setPower(-1);
-      intakeDerecho.setPower(-1);
+      intakeRight.setPower(-0.2);
+      intakeLeft.setPower(-0.2);
     } else {
-      intakeIzquierdo.setPower(0);
-      intakeDerecho.setPower(0);
+      intakeRight.setPower(0);
+      intakeLeft.setPower(0);
     }
   }
 
