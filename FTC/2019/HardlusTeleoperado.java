@@ -16,86 +16,63 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name="Hardlus", group="Linear Opmode")
-public class TeleoperadoHardlus extends OpMode {
+public class HardlusTeleoperado extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     private NaveDelOlvido hardbot = new NaveDelOlvido(this);
 
     @Override
-    public void init() {
-        telemetry.addData("Status", "Initialized");
+    public void runOpMode() {
+      telemetry.addData("Status", "Initialized");
+      telemetry.update();
 
-        hardbot.getHardware(hardwareMap);
+      hardbot.getHardware(hardwareMap);
 
-        hardbot.resetEncoders();
-    }
+      hardbot.resetEncoders();
 
-    @Override
-    public void init_loop() {
-    }
+      waitForStart();
 
-    private double periodo;
-    @Override
-    public void start() {
       runtime.reset();
-      periodo = runtime.milliseconds();
-    }
 
-    double desiredPosition;
+      double desiredPosition;
+      while(opModeIsActive()) {
+        double frontLeftPower, frontRightPower, backLeftPower, backRightPower, desviacion = hardbot.getDesviacion();
 
-    @Override
-    public void loop() {
-      double frontLeftPower, frontRightPower, backLeftPower, backRightPower, desviacion = hardbot.getDesviacion();
-      double servoPower = 0;
-      double tiempoActual = runtime.milliseconds();
+        double drive = -gamepad1.left_stick_y;
+        double lateral = gamepad1.left_stick_x;
+        double turn = gamepad1.right_stick_x;
+        frontLeftPower = Range.clip(drive + lateral + turn, -1.0, 1.0);
+        frontRightPower = Range.clip(drive - lateral -turn, -1.0, 1.0);
+        backLeftPower = Range.clip(drive - lateral + turn, -1.0, 1.0);
+        backRightPower = Range.clip(drive + lateral - turn, -1.0, 1.0);
 
-      double drive = -gamepad1.left_stick_y;
-      double lateral = gamepad1.left_stick_x;
-      double turn = gamepad11.right_stick_x;
-      frontLeftPower = Range.clip(drive + lateral + turn, -1.0, 1.0);
-      frontRightPower = Range.clip(drive - lateral -turn, -1.0, 1.0);
-      backLeftPower = Range.clip(drive - lateral + turn, -1.0, 1.0);
-      backRightPower = Range.clip(drive + lateral - turn, -1.0, 1.0);
-
-      if(gamepad1.right_bumper){
-        leftPower *= 0.75;
-        rightPower *= 0.75;
-      }
-
-      if(gamepad1.left_bumper){
-        leftPower *= 0.5;
-        rightPower *= 0.5;
-      }
-
-      if(periodo + 1500 > tiempoActual){
-            if(gamepad1.a){
-                servoPower+=0.05;
-            } else if(gamepad1.b){
-                servoPower -= 0.05;
-            }
-            periodo = tiempoActual;
+        if(gamepad1.right_bumper){
+          frontLeftPower *= 0.75;
+          frontRightPower *= 0.75;
+          backLeftPower *= 0.75;
+          backRightPower *= 0.75;
         }
-        servoPower = Range.clip(power, 0.0, 1.0);
-        hardbot.servo.setPosition(servoPower);
-        telemetry.addData("servo: ", servoPower);
 
-      /*hardbot.frontLeft.setPower(frontLeftPower);
-      hardbot.frontRight.setPower(frontRightPower);
-      hardbot.backLeft.setPower(backLeftPower);
-      hardbot.backRight.setPower(backRightPower);*/
+        if(gamepad1.left_bumper){
+          frontLeftPower *= 0.5;
+          frontRightPower *= 0.5;
+          backLeftPower *= 0.5;
+          backRightPower *= 0.5;
+        }
 
-      telemetry.addData("Status", "Run Time: " + runtime.toString());
-      telemetry.addData("Desviacion:", desviacion);
-    }
+        hardbot.frontLeft.setPower(frontLeftPower);
+        hardbot.frontRight.setPower(frontRightPower);
+        hardbot.backLeft.setPower(backLeftPower);
+        hardbot.backRight.setPower(backRightPower);
 
-    @Override
-    public void stop() {
-
+        telemetry.addData("Status", "Run Time: " + runtime.toString());
+        telemetry.addData("Desviacion:", desviacion);
+        telemetry.update();
+      }
     }
 }

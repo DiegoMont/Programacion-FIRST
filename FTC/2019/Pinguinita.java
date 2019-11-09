@@ -20,7 +20,6 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -94,12 +93,30 @@ public class Pinguinita extends LinearOpMode {
         rightPower *= 0.5;
       }
 
-      if(gamepad1.a){
+      if(gamepad2.right_trigger > 0){
         intakePower = -1;
-      } else if(gamepad1.b){
+      } else if(gamepad2.left_trigger > 0){
         intakePower = 1;
       } else {
         intakePower = 0;
+      }
+
+      double elevadorPower;
+      if(gamepad2.dpad_up) {
+        elevadorPower = 1;
+      } else if(gamepad2.dpad_down) {
+        elevadorPower = -1;
+      } else {
+        elevadorPower = 0;
+      }
+
+      double foundationPower;
+      if(gamepad2.b) {
+        foundationPower = 1;
+      } else if(gamepad2.a) {
+        foundationPower = -1;
+      } else {
+        foundationPower = 0;
       }
 
       if(gamepad1.left_trigger > 0 && !click1){
@@ -121,6 +138,8 @@ public class Pinguinita extends LinearOpMode {
       naubot.leftDrive.setPower(leftPower);
       naubot.rightDrive.setPower(rightPower);
       naubot.activarIntake(intakePower);
+      naubot.activarElevador(elevadorPower);
+      naubot.activarFoundation(foundationPower);
 
       telemetry.addData("Status", "Run Time: " + runtime.toString());
       telemetry.addData("Modo conduccion:", modoDriver ? "POV" : "Tanque");

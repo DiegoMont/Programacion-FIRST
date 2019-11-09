@@ -18,6 +18,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -40,6 +41,7 @@ public class LaBarca {
   public DcMotor leftDrive = null;
   public DcMotor rightDrive = null;
   public DistanceSensor distanceSensor = null;
+  public TouchSensor boton = null;
   private LinearOpMode programa;
   public DcMotor intakeLeft = null;
   public DcMotor intakeRight = null;
@@ -66,10 +68,13 @@ public class LaBarca {
       elevadorRight = hwMap.get(DcMotor.class, "elevador2");
       foundationLeft = hwMap.get(DcMotor.class, "foundation1");
       foundationRight = hwMap.get(DcMotor.class, "foundation2");
+      boton = hwMap.get(TouchSensor.class, "boton");
 
       leftDrive.setDirection(DcMotor.Direction.REVERSE);
       rightDrive.setDirection(DcMotor.Direction.FORWARD);
-      intakeLeft.setDirection(DcMotor.Direction.REVERSE);
+      intakeRight.setDirection(DcMotor.Direction.REVERSE);
+      elevadorRight.setDirection(DcMotor.Direction.REVERSE);
+      foundationLeft.setDirection(DcMotor.Direction.REVERSE);
 
       //intakeLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
       //intakeRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -147,17 +152,46 @@ public class LaBarca {
 
   }
 
-  public void activarIntake(double power){
+  public void activarElevador(double power) {
+    final double velocidadSubida = 0.5;
+    final double velocidadBajada = 0.5;
     if(power > 0){
-      intakeLeft.setPower(0.2);
-      intakeRight.setPower(0.2);
+      elevadorRight.setPower(velocidadSubida);
+      elevadorLeft.setPower(velocidadSubida);
+    } else if (power < 0){
+      elevadorRight.setPower(-velocidadBajada);
+      elevadorLeft.setPower(-velocidadBajada);
+    } else {
+      elevadorRight.setPower(0);
+      elevadorLeft.setPower(0);
+    }
+  }
+
+  public void activarIntake(double power){
+      final double velocidad = 0.4;
+    if(power > 0 && !boton.isPressed()){
+      intakeLeft.setPower(velocidad);
+      intakeRight.setPower(velocidad);
     } else if(power < 0){
-      intakeRight.setPower(-0.2);
-      intakeLeft.setPower(-0.2);
+      intakeRight.setPower(-velocidad);
+      intakeLeft.setPower(-velocidad);
     } else {
       intakeRight.setPower(0);
       intakeLeft.setPower(0);
     }
   }
 
+  public void activarFoundation(double power) {
+    final double velocidad = 0.4;
+    if(power > 0 && foundationLeft.getCurrentPosition() < 144 && foundationRight.getCurrentPosition() < 144) {
+      foundationLeft.setPower(velocidad);
+      foundationRight.setPower(velocidad);
+    } else if(power < 0 && foundationLeft.getCurrentPosition() >= 0 && foundationRight.getCurrentPosition() >= 0) {
+      foundationLeft.setPower(-velocidad);
+      foundationRight.setPower(-velocidad);
+    } else {
+      foundationLeft.setPower(0);
+      foundationRight.setPower(0);
+    }
+  }
 }

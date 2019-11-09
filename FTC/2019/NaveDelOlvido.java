@@ -26,7 +26,6 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
@@ -41,7 +40,6 @@ public class NaveDelOlvido {
   public DcMotor frontRight = null;
   public DcMotor backLeft = null;
   public DcMotor backRight = null;
-  public Servo servo = null;
 
   private LinearOpMode programa;
   private BNO055IMU imu;
@@ -54,17 +52,15 @@ public class NaveDelOlvido {
 
   //Metodo para buscar motores y servomotores del Expansion y asignarlos a las variables
   public void getHardware(HardwareMap hwMap){
-      /*frontLeft = hwMap.get(DcMotor.class, "front_left_motor");
-      frontRight = hwMap.get(DcMotor.class, "front_right_motor");
-      backLeft = hwMap.get(DcMotor.class, "back_left_motor");
-      backRight = hwMap.get(DcMotor.class, "back_right_motor");
+      frontLeft = hwMap.get(DcMotor.class, "left_front_drive");
+      frontRight = hwMap.get(DcMotor.class, "right_front_drive");
+      backLeft = hwMap.get(DcMotor.class, "left_back_drive");
+      backRight = hwMap.get(DcMotor.class, "right_back_drive");
 
-      frontLeft.setDirection(DcMotor.Direction.FORWARD);
+      frontLeft.setDirection(DcMotor.Direction.REVERSE);
       frontRight.setDirection(DcMotor.Direction.FORWARD);
-      backLeft.setDirection(DcMotor.Direction.FORWARD);
-      backRight.setDirection(DcMotor.Direction.FORWARD);*/
-
-      servo = hwMap.get(Servo.class, "servo");
+      backLeft.setDirection(DcMotor.Direction.REVERSE);
+      backRight.setDirection(DcMotor.Direction.FORWARD);
 
       BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
       parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
@@ -111,8 +107,24 @@ public class NaveDelOlvido {
 
   //Este metodo movera al robot en linea recta la distancia que se especifique
   public void moverDistanciaRecta(double distancia){
-    if(!programa.opModeIsActive()) return;
-
+    final int counts = (int)Math.round(distancia * 1631 / 10.16 / Math.PI);
+    resetEncoders();
+    backLeft.setTargetPosition(counts);
+    backRight.setTargetPosition(counts);
+    frontLeft.setTargetPosition(counts);
+    frontRight.setTargetPosition(counts);
+    backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    while (programa.opModeIsActive() && backLeft.isBusy() && backRight.isBusy() && frontLeft.isBusy() && frontRight.isBusy()) {
+      double velocidad = 1;
+      backLeft.setPower(velocidad);
+      backRight.setPower(velocidad);
+      frontRight.setPower(velocidad);
+      frontLeft.setPower(velocidad);
+    }
+    frenar();
     defaultRunmode();
   }
 
