@@ -40,23 +40,9 @@ public class NaubotsAutonomo extends LinearOpMode {
 
 
         naubot.getHardware(hardwareMap);
-
+        naubot.resetEncoders();
         waitForStart();
-
-        naubot.moverDistanciaRecta(50.8);
-        naubot.setGiroDeNoventaGrados("right");
-        iniciarGiro();
-        naubot.moverDistanciaRecta(50.8);
-        naubot.setGiroDeNoventaGrados("left");
-        iniciarGiro();
-        naubot.moverDistanciaRecta(93.98);
-    }
-
-    private void iniciarGiro(){
-        while(opModeIsActive() && naubot.leftDrive.isBusy() && naubot.rightDrive.isBusy()){
-            naubot.leftDrive.setPower(0.5);
-            naubot.rightDrive.setPower(0.5);
-        }
-        naubot.frenar();
+        naubot.girarEnEje(-15);
+        naubot.moverDistanciaRecta(-100);
     }
 }

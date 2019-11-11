@@ -152,6 +152,35 @@ public class LaBarca {
 
   }
 
+  public void girarEnEje(double distancia) {
+    if(!programa.opModeIsActive()) return;
+      int counts = (int) Math.round(560d * distancia / 9d / Math.PI);
+
+      //Establecer la posicion actual del encoder como nuestro cero
+      resetEncoders();
+
+      //Establecer a que posicion y velocidad se debe mover el robot
+      leftDrive.setTargetPosition(-counts);
+      rightDrive.setTargetPosition(counts);
+      leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+      rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+      leftDrive.setPower(1);
+      rightDrive.setPower(1);
+
+      //Cambiar el modo del motor para comenzar movimiento automatico
+      while(programa.opModeIsActive()){
+        programa.telemetry.addData("Right encoder:", rightDrive.getCurrentPosition());
+        programa.telemetry.addData("Left encoder:", leftDrive.getCurrentPosition());
+        programa.telemetry.addData("Target:", counts);
+        programa.telemetry.update();
+        if(!(leftDrive.isBusy() && rightDrive.isBusy())){
+          frenar();
+          break;
+        }
+      }
+      defaultRunmode();
+  }
+
   public void activarElevador(double power) {
     final double velocidadSubida = 0.5;
     final double velocidadBajada = 0.5;
@@ -168,7 +197,7 @@ public class LaBarca {
   }
 
   public void activarIntake(double power){
-      final double velocidad = 0.4;
+      final double velocidad = 0.6;
     if(power > 0 && !boton.isPressed()){
       intakeLeft.setPower(velocidad);
       intakeRight.setPower(velocidad);
