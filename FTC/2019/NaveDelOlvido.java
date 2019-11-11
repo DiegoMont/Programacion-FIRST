@@ -40,6 +40,8 @@ public class NaveDelOlvido {
   public DcMotor frontRight = null;
   public DcMotor backLeft = null;
   public DcMotor backRight = null;
+  public DcMotor elevador = null;
+  public Servo brazo = null;
 
   private LinearOpMode programa;
   private BNO055IMU imu;
@@ -56,11 +58,16 @@ public class NaveDelOlvido {
       frontRight = hwMap.get(DcMotor.class, "right_front_drive");
       backLeft = hwMap.get(DcMotor.class, "left_back_drive");
       backRight = hwMap.get(DcMotor.class, "right_back_drive");
+      elevador = hwMap.get(DcMotor.class, "brazo");
+      brazo = hwMap.get(Servo.class, "garra");
+
 
       frontLeft.setDirection(DcMotor.Direction.REVERSE);
       frontRight.setDirection(DcMotor.Direction.FORWARD);
       backLeft.setDirection(DcMotor.Direction.REVERSE);
       backRight.setDirection(DcMotor.Direction.FORWARD);
+
+      //elevador.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
       BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
       parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
@@ -112,6 +119,28 @@ public class NaveDelOlvido {
     backLeft.setTargetPosition(counts);
     backRight.setTargetPosition(counts);
     frontLeft.setTargetPosition(counts);
+    frontRight.setTargetPosition(counts);
+    backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    while (programa.opModeIsActive() && backLeft.isBusy() && backRight.isBusy() && frontLeft.isBusy() && frontRight.isBusy()) {
+      double velocidad = 1;
+      backLeft.setPower(velocidad);
+      backRight.setPower(velocidad);
+      frontRight.setPower(velocidad);
+      frontLeft.setPower(velocidad);
+    }
+    frenar();
+    defaultRunmode();
+  }
+
+  public void movimientoLateral(double distancia){
+    final int counts = (int)Math.round(distancia * 1631 / 10.16 / Math.PI);
+    resetEncoders();
+    backLeft.setTargetPosition(counts);
+    backRight.setTargetPosition(-counts);
+    frontLeft.setTargetPosition(-counts);
     frontRight.setTargetPosition(counts);
     backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
