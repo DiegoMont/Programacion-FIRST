@@ -61,25 +61,22 @@ public class NaveDelOlvido {
       elevador = hwMap.get(DcMotor.class, "brazo");
       brazo = hwMap.get(Servo.class, "garra");
 
-
       frontLeft.setDirection(DcMotor.Direction.REVERSE);
       frontRight.setDirection(DcMotor.Direction.FORWARD);
       backLeft.setDirection(DcMotor.Direction.REVERSE);
       backRight.setDirection(DcMotor.Direction.FORWARD);
 
-      //elevador.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
       BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
       parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
       parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-      parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
+      parameters.calibrationDataFile = "BNO055IMUCalibration.json";
       parameters.loggingEnabled      = true;
       parameters.loggingTag          = "IMU";
       parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
       imu = hwMap.get(BNO055IMU.class, "imu");
       imu.initialize(parameters);
-      imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
+      //imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
   }
 
   public void frenar(){

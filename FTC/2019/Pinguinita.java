@@ -43,12 +43,10 @@ public class Pinguinita extends LinearOpMode {
     boolean click1 = false;
     boolean click2 = false;
     boolean modoDriver = false;
-    double desiredPosition = naubot.getDesviacion();
-    String direccionGiro = null;
-    boolean bloquearGiro = false;
+    double desiredPostion;
 
     while (opModeIsActive()) {
-      double leftPower, rightPower, intakePower, desviacion = naubot.getDesviacion();
+      double leftPower, rightPower, intakePower;
 
       if(gamepad1.back){
         click = true;
@@ -68,22 +66,6 @@ public class Pinguinita extends LinearOpMode {
         rightPower = -gamepad1.right_stick_y;
         desiredPosition = desviacion;
       }
-
-      double error = desiredPosition - desviacion;
-      /*final double PROPORTIONAL = 0.2;
-      if (error > 0 ) {
-        double errorRelativo;
-        try {errorRelativo = error / desiredPosition;} catch(ArithmeticException e){errorRelativo = 100;}
-        leftPower -= leftPower * errorRelativo * PROPORTIONAL;
-        rightPower += rightPower * errorRelativo * PROPORTIONAL;
-      } else if (error < 0) {
-        double errorRelativo;
-        try {errorRelativo = error / desiredPosition;} catch(ArithmeticException e){errorRelativo = 100;}
-        leftPower += leftPower * errorRelativo * PROPORTIONAL;
-        rightPower -= rightPower * errorRelativo * PROPORTIONAL;
-      }*/
-      leftPower = Range.clip(leftPower, -1.0, 1.0);
-      rightPower = Range.clip(rightPower, -1.0, 1.0);
 
       if(gamepad1.left_bumper){
         leftPower *= 0.75;
@@ -120,16 +102,14 @@ public class Pinguinita extends LinearOpMode {
       }
 
       if(gamepad1.left_trigger > 0 && !click1){
-        desiredPosition = desviacion - 90;
-        bloquearGiro = true;
+
         click1 = true;
       } else if(gamepad1.left_trigger == 0 && click1){
         click1 = false;
       }
 
       if(gamepad1.right_trigger > 0 && !click2){
-        desiredPosition = desviacion - 90;
-        bloquearGiro = true;
+
         click2 = true;
       } else if(gamepad1.right_trigger == 0 && click2){
         click2 = false;
@@ -145,8 +125,6 @@ public class Pinguinita extends LinearOpMode {
       telemetry.addData("Modo conduccion:", modoDriver ? "POV" : "Tanque");
       telemetry.addData("Velocidad motor izquierdo:", leftPower);
       telemetry.addData("Velocidad motor derecho:", rightPower);
-      telemetry.addData("Desviacion:", desviacion);
-      telemetry.addData("Desired Position: ", desiredPosition);
       telemetry.update();
     }
   }

@@ -82,14 +82,14 @@ public class LaBarca {
       BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
       parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
       parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-      parameters.calibrationDataFile = "BNO055IMUCalibration.json"; // see the calibration sample opmode
+      parameters.calibrationDataFile = "BNO055IMUCalibration.json";
       parameters.loggingEnabled      = true;
       parameters.loggingTag          = "IMU";
       parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
       imu = hwMap.get(BNO055IMU.class, "imu");
       imu.initialize(parameters);
-      imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
+      //imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
   }
 
   public void frenar(){
@@ -112,73 +112,6 @@ public class LaBarca {
     angles   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
     gravity  = imu.getGravity();
     return angles.firstAngle;
-  }
-
-  /* Metodos para programacion autonoma */
-
-  //Este metodo movera al robot en linea recta la distancia que se especifique
-  public void moverDistanciaRecta(double distancia){
-    if(!programa.opModeIsActive()) return;
-      //Convertir rotaciones a ticks del encoder del Core Hex
-      //9cm de llanta con engrane de 72 y uno de 125 en el motor
-      int counts = (int) Math.round(560d * distancia / 9d / Math.PI);
-
-      //Establecer la posicion actual del encoder como nuestro cero
-      resetEncoders();
-
-      //Establecer a que posicion y velocidad se debe mover el robot
-      leftDrive.setTargetPosition(counts);
-      rightDrive.setTargetPosition(counts);
-      leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-      rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-      leftDrive.setPower(1);
-      rightDrive.setPower(1);
-
-      //Cambiar el modo del motor para comenzar movimiento automatico
-      while(programa.opModeIsActive()){
-        programa.telemetry.addData("Right encoder:", rightDrive.getCurrentPosition());
-        programa.telemetry.addData("Left encoder:", leftDrive.getCurrentPosition());
-        programa.telemetry.addData("Target:", counts);
-        programa.telemetry.update();
-        if(!(leftDrive.isBusy() && rightDrive.isBusy())){
-          frenar();
-          break;
-        }
-      }
-      defaultRunmode();
-  }
-
-  public void setGiroDeNoventaGrados(int desiredPosition){
-
-  }
-
-  public void girarEnEje(double distancia) {
-    if(!programa.opModeIsActive()) return;
-      int counts = (int) Math.round(560d * distancia / 9d / Math.PI);
-
-      //Establecer la posicion actual del encoder como nuestro cero
-      resetEncoders();
-
-      //Establecer a que posicion y velocidad se debe mover el robot
-      leftDrive.setTargetPosition(-counts);
-      rightDrive.setTargetPosition(counts);
-      leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-      rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-      leftDrive.setPower(1);
-      rightDrive.setPower(1);
-
-      //Cambiar el modo del motor para comenzar movimiento automatico
-      while(programa.opModeIsActive()){
-        programa.telemetry.addData("Right encoder:", rightDrive.getCurrentPosition());
-        programa.telemetry.addData("Left encoder:", leftDrive.getCurrentPosition());
-        programa.telemetry.addData("Target:", counts);
-        programa.telemetry.update();
-        if(!(leftDrive.isBusy() && rightDrive.isBusy())){
-          frenar();
-          break;
-        }
-      }
-      defaultRunmode();
   }
 
   public void activarElevador(double power) {
@@ -223,4 +156,89 @@ public class LaBarca {
       foundationRight.setPower(0);
     }
   }
+
+  /* Metodos para programacion autonoma */
+
+  //Este metodo movera al robot en linea recta la distancia que se especifique
+  public void moverDistanciaRecta(double distancia){
+    if(!programa.opModeIsActive()) return;
+    double desiredPosition = getDesviacion();
+      //Convertir rotaciones a ticks del encoder del Core Hex
+      //9cm de llanta con engrane de 72 y uno de 125 en el motor
+      int counts = (int) Math.round(560d * distancia / 9d / Math.PI);
+
+      //Establecer la posicion actual del encoder como nuestro cero
+      resetEncoders();
+
+      //Establecer a que posicion y velocidad se debe mover el robot
+      leftDrive.setTargetPosition(counts);
+      rightDrive.setTargetPosition(counts);
+      leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+      rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+      //Cambiar el modo del motor para comenzar movimiento automatico
+      while(programa.opModeIsActive() && leftDrive.isBusy() && rightDrive.isBusy()) {
+        double desviacion = getDesviacion();
+        double errorRelativo;
+        try {errorRelativo = 1 - (desviacion/desiredPosition);} catch(ArithmeticException e){errorRelativo = 0;}
+        double leftPower = 1;
+        double rightPower = 1;
+        final double PROPORTIONAL = 0.125;
+        if (errorRelativo > 0 ) {
+          leftPower -= leftPower * errorRelativo * PROPORTIONAL;
+          rightPower += rightPower * errorRelativo * PROPORTIONAL;
+        } else if (errorRelativo < 0) {
+          leftPower += leftPower * errorRelativo * PROPORTIONAL;
+          rightPower -= rightPower * errorRelativo * PROPORTIONAL;
+        }
+        leftPower = Range.clip(leftPower, -1.0, 1.0);
+        rightPower = Range.clip(rightPower, -1.0, 1.0);
+
+        programa.telemetry.addData("Right encoder:", rightDrive.getCurrentPosition());
+        programa.telemetry.addData("Left encoder:", leftDrive.getCurrentPosition());
+        programa.telemetry.addData("Target:", counts);
+        programa.telemetry.addData("Left power: ", leftPower);
+        programa.telemetry.addData("Right power: ", rightPower);
+        programa.telemetry.update();
+
+        leftPower = 1;
+        rightPower = 1;
+
+        leftDrive.setPower(leftPower);
+        rightDrive.setPower(rightPower);
+      }
+      frenar();
+      defaultRunmode();
+  }
+
+  public void setGiroDeNoventaGrados(int desiredPosition){
+
+  }
+
+  public void girarEnEje(double distancia) {
+    if(!programa.opModeIsActive()) return;
+      int counts = (int) Math.round(560d * distancia / 9d / Math.PI);
+
+      //Establecer la posicion actual del encoder como nuestro cero
+      resetEncoders();
+
+      //Establecer a que posicion y velocidad se debe mover el robot
+      leftDrive.setTargetPosition(-counts);
+      rightDrive.setTargetPosition(counts);
+      leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+      rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+      leftDrive.setPower(1);
+      rightDrive.setPower(1);
+
+      //Cambiar el modo del motor para comenzar movimiento automatico
+      while(programa.opModeIsActive() && leftDrive.isBusy() && rightDrive.isBusy()) {
+        programa.telemetry.addData("Right encoder:", rightDrive.getCurrentPosition());
+        programa.telemetry.addData("Left encoder:", leftDrive.getCurrentPosition());
+        programa.telemetry.addData("Target:", counts);
+        programa.telemetry.update();
+      }
+      frenar();
+      defaultRunmode();
+  }
+
 }
