@@ -42,16 +42,19 @@ public class Pinguinita extends LinearOpMode {
     boolean click = false;
     boolean click1 = false;
     boolean click2 = false;
+    boolean click3 = false;
     boolean modoDriver = false;
-    double desiredPostion;
+    boolean foundation = true;
+    double desiredPosition = naubot.getDesviacion();
 
     while (opModeIsActive()) {
       double leftPower, rightPower, intakePower;
+      double desviacion = naubot.getDesviacion();
 
       if(gamepad1.back){
         click = true;
       } else if ( !gamepad1.back && click){
-        modoDriver = (modoDriver)?false:true;
+        modoDriver = !modoDriver;
         click = false;
       }
 
@@ -60,7 +63,6 @@ public class Pinguinita extends LinearOpMode {
         double turn  =  gamepad1.right_stick_x;
         leftPower    = Range.clip(drive + turn, -1.0, 1.0);
         rightPower   = Range.clip(drive - turn, -1.0, 1.0);
-        if(turn != 0 && !bloquearGiro) desiredPosition = desviacion;
       } else {
         leftPower = -gamepad1.left_stick_y;
         rightPower = -gamepad1.right_stick_y;
@@ -68,17 +70,17 @@ public class Pinguinita extends LinearOpMode {
       }
 
       if(gamepad1.left_bumper){
-        leftPower *= 0.75;
-        rightPower *= 0.75;
-      } else if(!gamepad1.right_bumper){
         leftPower *= 0.5;
         rightPower *= 0.5;
+      } else if(!gamepad1.right_bumper){
+        leftPower *= 0.75;
+        rightPower *= 0.75;
       }
 
       if(gamepad2.right_trigger > 0){
-        intakePower = -1;
-      } else if(gamepad2.left_trigger > 0){
         intakePower = 1;
+      } else if(gamepad2.left_trigger > 0){
+        intakePower = -1;
       } else {
         intakePower = 0;
       }
@@ -92,39 +94,46 @@ public class Pinguinita extends LinearOpMode {
         elevadorPower = 0;
       }
 
-      double foundationPower;
-      if(gamepad2.b) {
-        foundationPower = 1;
-      } else if(gamepad2.a) {
-        foundationPower = -1;
-      } else {
-        foundationPower = 0;
+      if(gamepad1.b){
+        click3 = true;
+      } else if ( !gamepad1.b && click3){
+        foundation = !foundation;
+        click3 = false;
       }
 
       if(gamepad1.left_trigger > 0 && !click1){
-
+        naubot.setGiroDeNoventaGrados(-1);
         click1 = true;
       } else if(gamepad1.left_trigger == 0 && click1){
         click1 = false;
       }
 
       if(gamepad1.right_trigger > 0 && !click2){
-
+        naubot.setGiroDeNoventaGrados(1);
         click2 = true;
       } else if(gamepad1.right_trigger == 0 && click2){
         click2 = false;
       }
 
+      if(naubot.leftDrive.isBusy() && naubot.rightDrive.isBusy()) {
+        leftPower = 1;
+        rightPower = 1;
+      } else naubot.defaultRunmode();
+
       naubot.leftDrive.setPower(leftPower);
       naubot.rightDrive.setPower(rightPower);
       naubot.activarIntake(intakePower);
       naubot.activarElevador(elevadorPower);
-      naubot.activarFoundation(foundationPower);
+      naubot.activarFoundation(foundation);
 
       telemetry.addData("Status", "Run Time: " + runtime.toString());
       telemetry.addData("Modo conduccion:", modoDriver ? "POV" : "Tanque");
       telemetry.addData("Velocidad motor izquierdo:", leftPower);
       telemetry.addData("Velocidad motor derecho:", rightPower);
+      //telemetry.addData("Boton: ", naubot.boton.isPressed());
+      //telemetry.addData("Encoders: ", naubot.leftDrive.getCurrentPosition() + ", " + naubot.rightDrive.getCurrentPosition());
+      //telemetry.addData("Color izquierdo:", naubot.color1.red() + ", " + naubot.color1.green() + ", " + naubot.color1.blue());
+      //telemetry.addData("Color derecho:", naubot.color2.red() + ", " + naubot.color2.green() + ", " + naubot.color2.blue());
       telemetry.update();
     }
   }

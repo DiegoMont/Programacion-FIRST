@@ -18,6 +18,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -28,7 +31,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
@@ -40,15 +42,16 @@ public class LaBarca {
   //Inicializar variables para motores y sensores del robot
   public DcMotor leftDrive = null;
   public DcMotor rightDrive = null;
-  public DistanceSensor distanceSensor = null;
+  public ColorSensor color1 = null;
+  public ColorSensor color2 = null;
   public TouchSensor boton = null;
   private LinearOpMode programa;
   public DcMotor intakeLeft = null;
   public DcMotor intakeRight = null;
   public DcMotor elevadorLeft = null;
   public DcMotor elevadorRight = null;
-  public DcMotor foundationLeft = null;
-  public DcMotor foundationRight = null;
+  public Servo foundationLeft = null;
+  public Servo foundationRight = null;
 
   private BNO055IMU imu;
   private Orientation angles;
@@ -66,15 +69,19 @@ public class LaBarca {
       intakeRight = hwMap.get(DcMotor.class, "intake2");
       elevadorLeft = hwMap.get(DcMotor.class, "elevador1");
       elevadorRight = hwMap.get(DcMotor.class, "elevador2");
-      foundationLeft = hwMap.get(DcMotor.class, "foundation1");
-      foundationRight = hwMap.get(DcMotor.class, "foundation2");
+      foundationLeft = hwMap.get(Servo.class, "foundationLeft");
+      foundationRight = hwMap.get(Servo.class, "foundationRight");
       boton = hwMap.get(TouchSensor.class, "boton");
+      color1 = hwMap.get(ColorSensor.class, "colorLeft");
+      color2 = hwMap.get(ColorSensor.class, "colorRight");
 
       leftDrive.setDirection(DcMotor.Direction.REVERSE);
       rightDrive.setDirection(DcMotor.Direction.FORWARD);
       intakeRight.setDirection(DcMotor.Direction.REVERSE);
       elevadorRight.setDirection(DcMotor.Direction.REVERSE);
-      foundationLeft.setDirection(DcMotor.Direction.REVERSE);
+
+      foundationLeft.setPosition(0.5);
+      foundationRight.setPosition(0.5);
 
       //intakeLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
       //intakeRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -111,12 +118,12 @@ public class LaBarca {
   public double getDesviacion(){
     angles   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
     gravity  = imu.getGravity();
-    return angles.firstAngle;
+    return -angles.firstAngle;
   }
 
   public void activarElevador(double power) {
     final double velocidadSubida = 0.5;
-    final double velocidadBajada = 0.5;
+    final double velocidadBajada = 1;
     if(power > 0){
       elevadorRight.setPower(velocidadSubida);
       elevadorLeft.setPower(velocidadSubida);
@@ -130,30 +137,25 @@ public class LaBarca {
   }
 
   public void activarIntake(double power){
-      final double velocidad = 0.6;
-    if(power > 0 && !boton.isPressed()){
-      intakeLeft.setPower(velocidad);
-      intakeRight.setPower(velocidad);
-    } else if(power < 0){
-      intakeRight.setPower(-velocidad);
-      intakeLeft.setPower(-velocidad);
+    if(power < 0){
+      intakeLeft.setPower(0.3);
+      intakeRight.setPower(0.3);
+    } else if(power > 0 && !boton.isPressed()){
+      intakeRight.setPower(-0.6);
+      intakeLeft.setPower(-0.6);
     } else {
       intakeRight.setPower(0);
       intakeLeft.setPower(0);
     }
   }
 
-  public void activarFoundation(double power) {
-    final double velocidad = 0.4;
-    if(power > 0 && foundationLeft.getCurrentPosition() < 144 && foundationRight.getCurrentPosition() < 144) {
-      foundationLeft.setPower(velocidad);
-      foundationRight.setPower(velocidad);
-    } else if(power < 0 && foundationLeft.getCurrentPosition() >= 0 && foundationRight.getCurrentPosition() >= 0) {
-      foundationLeft.setPower(-velocidad);
-      foundationRight.setPower(-velocidad);
+  public void activarFoundation(boolean power) {
+    if(power) {
+      foundationLeft.setPosition(0.5);
+      foundationRight.setPosition(0.5);
     } else {
-      foundationLeft.setPower(0);
-      foundationRight.setPower(0);
+      foundationLeft.setPosition(1);
+      foundationRight.setPosition(0);
     }
   }
 
@@ -180,16 +182,15 @@ public class LaBarca {
       while(programa.opModeIsActive() && leftDrive.isBusy() && rightDrive.isBusy()) {
         double desviacion = getDesviacion();
         double errorRelativo;
-        try {errorRelativo = 1 - (desviacion/desiredPosition);} catch(ArithmeticException e){errorRelativo = 0;}
-        double leftPower = 1;
-        double rightPower = 1;
-        final double PROPORTIONAL = 0.125;
-        if (errorRelativo > 0 ) {
+        try {errorRelativo = (desiredPosition-desviacion)/desiredPosition;} catch(Exception e){errorRelativo = 0;}
+        double velocidad = 1;
+        double leftPower = velocidad;
+        double rightPower = velocidad;
+        final double PROPORTIONAL = 0.0015;
+        if(errorRelativo != 0) {
           leftPower -= leftPower * errorRelativo * PROPORTIONAL;
           rightPower += rightPower * errorRelativo * PROPORTIONAL;
-        } else if (errorRelativo < 0) {
-          leftPower += leftPower * errorRelativo * PROPORTIONAL;
-          rightPower -= rightPower * errorRelativo * PROPORTIONAL;
+
         }
         leftPower = Range.clip(leftPower, -1.0, 1.0);
         rightPower = Range.clip(rightPower, -1.0, 1.0);
@@ -199,11 +200,10 @@ public class LaBarca {
         programa.telemetry.addData("Target:", counts);
         programa.telemetry.addData("Left power: ", leftPower);
         programa.telemetry.addData("Right power: ", rightPower);
+        programa.telemetry.addData("Error: ", errorRelativo);
+        programa.telemetry.addData("Desviacion: ", desviacion);
+        programa.telemetry.addData("Target ", desiredPosition);
         programa.telemetry.update();
-
-        leftPower = 1;
-        rightPower = 1;
-
         leftDrive.setPower(leftPower);
         rightDrive.setPower(rightPower);
       }
@@ -212,7 +212,11 @@ public class LaBarca {
   }
 
   public void setGiroDeNoventaGrados(int desiredPosition){
-
+    resetEncoders();
+    leftDrive.setTargetPosition(desiredPosition*1200);
+    rightDrive.setTargetPosition(-desiredPosition*1200);
+    leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
   }
 
   public void girarEnEje(double distancia) {
