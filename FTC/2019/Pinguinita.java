@@ -45,11 +45,9 @@ public class Pinguinita extends LinearOpMode {
     boolean click3 = false;
     boolean modoDriver = false;
     boolean foundation = true;
-    double desiredPosition = naubot.getDesviacion();
 
     while (opModeIsActive()) {
       double leftPower, rightPower, intakePower;
-      double desviacion = naubot.getDesviacion();
 
       if(gamepad1.back){
         click = true;
@@ -66,7 +64,6 @@ public class Pinguinita extends LinearOpMode {
       } else {
         leftPower = -gamepad1.left_stick_y;
         rightPower = -gamepad1.right_stick_y;
-        desiredPosition = desviacion;
       }
 
       if(gamepad1.left_bumper){

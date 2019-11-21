@@ -83,20 +83,22 @@ public class LaBarca {
       foundationLeft.setPosition(0.5);
       foundationRight.setPosition(0.5);
 
-      //intakeLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-      //intakeRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+  }
 
-      BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-      parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
-      parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-      parameters.calibrationDataFile = "BNO055IMUCalibration.json";
-      parameters.loggingEnabled      = true;
-      parameters.loggingTag          = "IMU";
-      parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+  public void iniciarAcelerometro(HardwareMap hwMap) {
+    programa.telemetry.addData("Calibrando ", "IMU");
+    programa.telemetry.update();
+    BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+    parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
+    parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+    parameters.calibrationDataFile = "BNO055IMUCalibration.json";
+    parameters.loggingEnabled      = true;
+    parameters.loggingTag          = "IMU";
+    parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
-      imu = hwMap.get(BNO055IMU.class, "imu");
-      imu.initialize(parameters);
-      //imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
+    imu = hwMap.get(BNO055IMU.class, "imu");
+    imu.initialize(parameters);
+    //imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
   }
 
   public void frenar(){
@@ -116,13 +118,16 @@ public class LaBarca {
   }
 
   public double getDesviacion(){
+    if(imu == null)
+      return 0;
     angles   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
     gravity  = imu.getGravity();
+    programa.sleep(50);
     return -angles.firstAngle;
   }
 
   public void activarElevador(double power) {
-    final double velocidadSubida = 0.5;
+    final double velocidadSubida = 1;
     final double velocidadBajada = 1;
     if(power > 0){
       elevadorRight.setPower(velocidadSubida);
@@ -165,6 +170,8 @@ public class LaBarca {
   public void moverDistanciaRecta(double distancia){
     if(!programa.opModeIsActive()) return;
     double desiredPosition = getDesviacion();
+    if(desiredPosition == 0)
+      desiredPosition = 0.0625;
       //Convertir rotaciones a ticks del encoder del Core Hex
       //9cm de llanta con engrane de 72 y uno de 125 en el motor
       int counts = (int) Math.round(560d * distancia / 9d / Math.PI);
@@ -181,16 +188,22 @@ public class LaBarca {
       //Cambiar el modo del motor para comenzar movimiento automatico
       while(programa.opModeIsActive() && leftDrive.isBusy() && rightDrive.isBusy()) {
         double desviacion = getDesviacion();
-        double errorRelativo;
-        try {errorRelativo = (desiredPosition-desviacion)/desiredPosition;} catch(Exception e){errorRelativo = 0;}
+        double errorRelativo = (desiredPosition-desviacion)/desiredPosition;
+        double leftPower = 0;
+        double rightPower = 0;
         double velocidad = 1;
-        double leftPower = velocidad;
-        double rightPower = velocidad;
         final double PROPORTIONAL = 0.0015;
-        if(errorRelativo != 0) {
+        if(distancia > 0) {
+          leftPower = velocidad;
+          rightPower = velocidad;
           leftPower -= leftPower * errorRelativo * PROPORTIONAL;
           rightPower += rightPower * errorRelativo * PROPORTIONAL;
-
+        } else if(distancia < 0) {
+          velocidad *= -1;
+          leftPower = velocidad;
+          rightPower = velocidad;
+          leftPower += leftPower * errorRelativo * PROPORTIONAL;
+          rightPower -= rightPower * errorRelativo * PROPORTIONAL;
         }
         leftPower = Range.clip(leftPower, -1.0, 1.0);
         rightPower = Range.clip(rightPower, -1.0, 1.0);

@@ -39,35 +39,8 @@ public class HardlusTeleoperado extends LinearOpMode {
 
       runtime.reset();
 
-      double desiredPosition;
-      double posicionServo = 0;
-      double periodo = runtime.milliseconds();
-      boolean modoDios = false;
-      boolean click = false;
-
       while(opModeIsActive()) {
-        double frontLeftPower, frontRightPower, backLeftPower, backRightPower, desviacion = hardbot.getDesviacion();
-        double actual = runtime.milliseconds();
-
-        if(gamepad1.back) {
-          click = true;
-        } else if(!gamepad1.back && click) {
-          modoDios = !modoDios;
-          click = false;
-        }
-
-        if(gamepad2.dpad_left || (modoDios && gamepad1.dpad_left)) {
-          if(periodo < actual) {
-            posicionServo += 0.05;
-            periodo = actual + 100;
-          }
-        } else if(gamepad2.dpad_right || (modoDios && gamepad1.dpad_right)) {
-          if(periodo < actual) {
-            posicionServo -= 0.05;
-            periodo = actual + 100;
-          }
-        }
-        posicionServo = Range.clip(posicionServo, 0, 1);
+        double frontLeftPower, frontRightPower, backLeftPower, backRightPower;
 
         double drive = -gamepad1.left_stick_y;
         double lateral = gamepad1.left_stick_x;
@@ -91,28 +64,12 @@ public class HardlusTeleoperado extends LinearOpMode {
           backRightPower *= 0.5;
         }
 
-        double elevadorPower;
-        if(gamepad2.dpad_up || (modoDios && gamepad1.dpad_up)) elevadorPower = -0.25;
-        else if(gamepad2.dpad_down || (modoDios && gamepad1.dpad_down)) elevadorPower = 0.25;
-        else elevadorPower = 0;
-        if(gamepad2.right_trigger > 0 && gamepad2.left_trigger > 0 || (modoDios && gamepad1.right_trigger > 0 && gamepad1.left_trigger > 0)) elevadorPower *= 4;
-
         hardbot.frontLeft.setPower(frontLeftPower);
         hardbot.frontRight.setPower(frontRightPower);
         hardbot.backLeft.setPower(backLeftPower);
         hardbot.backRight.setPower(backRightPower);
-        hardbot.elevador.setPower(elevadorPower);
-        hardbot.brazo.setPosition(posicionServo);
 
-        if(modoDios) {
-          telemetry.addData("M  M OOOO DDD  OOOO", "DDD  IIII OOOO SSSS");
-          telemetry.addData("MMMM O  O D  D O  O", "D  D   I  O  O S");
-          telemetry.addData("M  M O  O D  D O  O", "D  D   I  O  O  S");
-          telemetry.addData("M  M OOOO DDD  OOOO", "DDD  IIII OOOO ssss");
-        }else {
-          telemetry.addData("Status", "Run Time: " + actual);
-          telemetry.addData("Potencia:", posicionServo);
-        }
+        telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.update();
       }
     }
