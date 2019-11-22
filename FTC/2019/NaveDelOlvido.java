@@ -46,8 +46,8 @@ public class NaveDelOlvido {
   public DcMotor backLeft = null;
   public DcMotor backRight = null;
 
-  private VuforiaLocalizer vuforia;
-  private TFObjectDetector tfod;
+  public VuforiaLocalizer vuforia;
+  public TFObjectDetector tfod;
 
   private LinearOpMode programa;
   private BNO055IMU imu;
@@ -64,13 +64,11 @@ public class NaveDelOlvido {
       frontRight = hwMap.get(DcMotor.class, "right_front_drive");
       backLeft = hwMap.get(DcMotor.class, "left_back_drive");
       backRight = hwMap.get(DcMotor.class, "right_back_drive");
-      elevador = hwMap.get(DcMotor.class, "elevador");
 
       frontLeft.setDirection(DcMotor.Direction.REVERSE);
       frontRight.setDirection(DcMotor.Direction.FORWARD);
       backLeft.setDirection(DcMotor.Direction.REVERSE);
       backRight.setDirection(DcMotor.Direction.FORWARD);
-      elevador.setDirection(DcMotor.Direction.FORWARD);
 
   }
 
@@ -102,7 +100,6 @@ public class NaveDelOlvido {
     frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-    elevador.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     defaultRunmode();
   }
 
@@ -121,21 +118,21 @@ public class NaveDelOlvido {
     return angles.firstAngle;
   }
 
-  private void initVuforia() {
+  public void initVuforia() {
     VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
-
     parameters.vuforiaLicenseKey = "ATjrkEL/////AAABmfR2/BPftkOFvL9kl5ElbHswfU6Tuno4QSB4aHpVUmWaWqKdEUps2CsnGbmjoGqMAfOjyPlhrew8njlemEsarH9XKySF9i0egaUhOiT2fE0MivatYaT037ZwPe1bOkI1GGmd2CsWL8GeupcT91XQkGhRcMyTS3ZfmDYu1/HmcRxCy4zxwbiyPVcoHtsh+KPfjI29mv9YfMStiB4/o8FgefPbTGtX6L9zeoyUemNIMN1WcaMi6wSM7rB7kF3VnUJCrXAca6YmFNEr6GEdJX4G7JhO5EiD6K/e1+wZ0fLtWiQDWe09Bgxxpp2n+qHeccA06zA8nNTo2F07UORoM40ZK29vMj4eh0GjyNMAOmWcuQeI";
     parameters.cameraDirection = CameraDirection.BACK;
-
     vuforia = ClassFactory.getInstance().createVuforia(parameters);
   }
 
-  private void initTfod() {
+  public void initTfod() {
+    if(!ClassFactory.getInstance().canCreateTFObjectDetector()) return;
     int tfodMonitorViewId = programa.hardwareMap.appContext.getResources().getIdentifier("tfodMonitorViewId", "id", programa.hardwareMap.appContext.getPackageName());
     TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
     tfodParameters.minimumConfidence = 0.8;
     tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
     tfod.loadModelFromAsset("Skystone.tflite", "Stone", "Skystone");
+    tfod.activate();
   }
 
   /* Metodos para programacion autonoma */

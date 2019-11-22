@@ -115,7 +115,8 @@ public class Pinguinita extends LinearOpMode {
       if(naubot.leftDrive.isBusy() && naubot.rightDrive.isBusy()) {
         leftPower = 1;
         rightPower = 1;
-      } else naubot.defaultRunmode();
+      } else
+        naubot.defaultRunmode();
 
       naubot.leftDrive.setPower(leftPower);
       naubot.rightDrive.setPower(rightPower);
