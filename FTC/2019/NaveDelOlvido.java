@@ -182,6 +182,38 @@ public class NaveDelOlvido {
     defaultRunmode();
   }
 
+  public void movimientoDiagonalDerecha(double distancia) {
+    final int counts = (int)Math.round(distancia * 1631 / 10.16 / Math.PI);
+    resetEncoders();
+    backRight.setTargetPosition(counts);
+    frontLeft.setTargetPosition(counts);
+    frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    while (programa.opModeIsActive() && backRight.isBusy() && frontLeft.isBusy()) {
+      double velocidad = 1;
+      backRight.setPower(velocidad);
+      frontLeft.setPower(velocidad);
+    }
+    frenar();
+    defaultRunmode();
+  }
+
+  public void movimientoDiagonalIzquierda(double distancia) {
+    final int counts = (int)Math.round(distancia * 1631 / 10.16 / Math.PI);
+    resetEncoders();
+    frontRight.setTargetPosition(counts);
+    backLeft.setTargetPosition(counts);
+    backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    while (programa.opModeIsActive() && backLeft.isBusy() && frontRight.isBusy()) {
+      double velocidad = 1;
+      frontRight.setPower(velocidad);
+      backLeft.setPower(velocidad);
+    }
+    frenar();
+    defaultRunmode();
+  }
+
   public void setGiroDeNoventaGrados(String direction){
 
   }

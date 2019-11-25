@@ -44,7 +44,7 @@ public class Pinguinita extends LinearOpMode {
     boolean click2 = false;
     boolean click3 = false;
     boolean modoDriver = false;
-    boolean foundation = true;
+    boolean foundation = false;
 
     while (opModeIsActive()) {
       double leftPower, rightPower, intakePower;
@@ -126,8 +126,9 @@ public class Pinguinita extends LinearOpMode {
 
       telemetry.addData("Status", "Run Time: " + runtime.toString());
       telemetry.addData("Modo conduccion:", modoDriver ? "POV" : "Tanque");
-      telemetry.addData("Velocidad motor izquierdo:", leftPower);
-      telemetry.addData("Velocidad motor derecho:", rightPower);
+      telemetry.addData("Elevador: ", naubot.posicionElevador());
+      //telemetry.addData("Velocidad motor izquierdo:", leftPower);
+      //telemetry.addData("Velocidad motor derecho:", rightPower);
       //telemetry.addData("Boton: ", naubot.boton.isPressed());
       //telemetry.addData("Encoders: ", naubot.leftDrive.getCurrentPosition() + ", " + naubot.rightDrive.getCurrentPosition());
       //telemetry.addData("Color izquierdo:", naubot.color1.red() + ", " + naubot.color1.green() + ", " + naubot.color1.blue());

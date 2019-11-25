@@ -46,12 +46,12 @@ public class LaBarca {
   public ColorSensor color2 = null;
   public TouchSensor boton = null;
   private LinearOpMode programa;
-  public DcMotor intakeLeft = null;
-  public DcMotor intakeRight = null;
-  public DcMotor elevadorLeft = null;
-  public DcMotor elevadorRight = null;
-  public Servo foundationLeft = null;
-  public Servo foundationRight = null;
+  private DcMotor intakeLeft = null;
+  private DcMotor intakeRight = null;
+  private DcMotor elevadorLeft = null;
+  private DcMotor elevadorRight = null;
+  private Servo foundationLeft = null;
+  private Servo foundationRight = null;
 
   private BNO055IMU imu;
   private Orientation angles;
@@ -69,16 +69,24 @@ public class LaBarca {
       intakeRight = hwMap.get(DcMotor.class, "intake2");
       elevadorLeft = hwMap.get(DcMotor.class, "elevador1");
       elevadorRight = hwMap.get(DcMotor.class, "elevador2");
-      foundationLeft = hwMap.get(Servo.class, "foundationLeft");
-      foundationRight = hwMap.get(Servo.class, "foundationRight");
+      foundationLeft = hwMap.get(Servo.class, "foundationRight");
+      foundationRight = hwMap.get(Servo.class, "foundationLeft");
       boton = hwMap.get(TouchSensor.class, "boton");
-      color1 = hwMap.get(ColorSensor.class, "colorLeft");
-      color2 = hwMap.get(ColorSensor.class, "colorRight");
+      //color1 = hwMap.get(ColorSensor.class, "colorLeft");
+      //color2 = hwMap.get(ColorSensor.class, "colorRight");
 
       leftDrive.setDirection(DcMotor.Direction.REVERSE);
       rightDrive.setDirection(DcMotor.Direction.FORWARD);
       intakeRight.setDirection(DcMotor.Direction.REVERSE);
       elevadorRight.setDirection(DcMotor.Direction.REVERSE);
+
+      elevadorLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+      elevadorRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+      intakeLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+      intakeRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+      elevadorLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+      elevadorRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
       foundationLeft.setPosition(0.5);
       foundationRight.setPosition(0.5);
@@ -141,13 +149,20 @@ public class LaBarca {
     }
   }
 
+  public int posicionElevador() {
+    return (elevadorLeft.getCurrentPosition() + elevadorRight.getCurrentPosition()) / 2;
+  }
+
   public void activarIntake(double power){
-    if(power < 0){
+    if(power < 0 && !boton.isPressed()){
+      intakeLeft.setPower(0.6);
+      intakeRight.setPower(0.6);
+    } else if(power < 0 && posicionElevador() > 300) {
       intakeLeft.setPower(0.3);
       intakeRight.setPower(0.3);
-    } else if(power > 0 && !boton.isPressed()){
-      intakeRight.setPower(-0.6);
-      intakeLeft.setPower(-0.6);
+    } else if(power > 0){
+      intakeRight.setPower(-0.3);
+      intakeLeft.setPower(-0.3);
     } else {
       intakeRight.setPower(0);
       intakeLeft.setPower(0);
@@ -155,7 +170,7 @@ public class LaBarca {
   }
 
   public void activarFoundation(boolean power) {
-    if(power) {
+    if(!power) {
       foundationLeft.setPosition(0.5);
       foundationRight.setPosition(0.5);
     } else {

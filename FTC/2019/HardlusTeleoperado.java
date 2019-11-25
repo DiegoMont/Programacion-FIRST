@@ -43,8 +43,8 @@ public class HardlusTeleoperado extends LinearOpMode {
         double frontLeftPower, frontRightPower, backLeftPower, backRightPower;
 
         double drive = -gamepad1.left_stick_y;
-        double lateral = gamepad1.left_stick_x;
-        double turn = gamepad1.right_stick_x;
+        double lateral = gamepad1.right_stick_x;
+        double turn = -gamepad1.left_stick_x;
         frontLeftPower = Range.clip(drive + lateral + turn, -1.0, 1.0);
         frontRightPower = Range.clip(drive - lateral -turn, -1.0, 1.0);
         backLeftPower = Range.clip(drive - lateral + turn, -1.0, 1.0);
