@@ -45,6 +45,11 @@ public class NaveDelOlvido {
   public DcMotor frontRight = null;
   public DcMotor backLeft = null;
   public DcMotor backRight = null;
+  private DcMotor elevadorOne = null;
+  private DcMotor elevadorTwo = null;
+  public Servo servoUno = null;
+  public Servo servoDos = null;
+  private DcMotor extensionIntake = null;
 
   public VuforiaLocalizer vuforia;
   public TFObjectDetector tfod;
@@ -64,11 +69,20 @@ public class NaveDelOlvido {
       frontRight = hwMap.get(DcMotor.class, "right_front_drive");
       backLeft = hwMap.get(DcMotor.class, "left_back_drive");
       backRight = hwMap.get(DcMotor.class, "right_back_drive");
+      elevadorOne = hwMap.get(DcMotor.class, "elevador_derecha");
+      elevadorTwo = hwMap.get(DcMotor.class, "elevador_izquierda");
+      servoUno = hwMap.get(Servo.class, "servo_uno");
+      servoDos = hwMap.get(Servo.class, "servo_dos");
+      extensionIntake = hwMap.get(DcMotor.class, "tornillo");
 
-      frontLeft.setDirection(DcMotor.Direction.REVERSE);
-      frontRight.setDirection(DcMotor.Direction.FORWARD);
-      backLeft.setDirection(DcMotor.Direction.REVERSE);
-      backRight.setDirection(DcMotor.Direction.FORWARD);
+      frontLeft.setDirection(DcMotor.Direction.FORWARD);
+      frontRight.setDirection(DcMotor.Direction.REVERSE);
+      backLeft.setDirection(DcMotor.Direction.FORWARD);
+      backRight.setDirection(DcMotor.Direction.REVERSE);
+      elevadorOne.setDirection(DcMotor.Direction.REVERSE);
+      elevadorTwo.setDirection(DcMotor.Direction.FORWARD);
+
+      servoUno.setPosition(0.75);
 
   }
 
@@ -93,6 +107,31 @@ public class NaveDelOlvido {
     frontRight.setPower(0);
     backLeft.setPower(0);
     backRight.setPower(0);
+  }
+
+  public void activarElevador(double power) {
+    double velocidad = 0.2;
+    if(power > 0) {
+      elevadorOne.setPower(velocidad);
+      elevadorTwo.setPower(velocidad);
+    } else if(power < 0) {
+      elevadorOne.setPower(-velocidad);
+      elevadorTwo.setPower(-velocidad);
+    } else {
+      elevadorOne.setPower(0);
+      elevadorTwo.setPower(0);
+    }
+  }
+
+  public void activarExtension(double power) {
+    double velocidad = 0.5;
+    if(power > 0) {
+      extensionIntake.setPower(velocidad);
+    } else if(power < 0) {
+      extensionIntake.setPower(-velocidad);
+    } else {
+      extensionIntake.setPower(0);
+    }
   }
 
   public void resetEncoders(){

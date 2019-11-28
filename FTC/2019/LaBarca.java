@@ -52,6 +52,8 @@ public class LaBarca {
   private DcMotor elevadorRight = null;
   private Servo foundationLeft = null;
   private Servo foundationRight = null;
+  private DcMotor motor1 = null;
+  private DcMotor motor2 = null;
 
   private BNO055IMU imu;
   private Orientation angles;
@@ -72,6 +74,8 @@ public class LaBarca {
       foundationLeft = hwMap.get(Servo.class, "foundationRight");
       foundationRight = hwMap.get(Servo.class, "foundationLeft");
       boton = hwMap.get(TouchSensor.class, "boton");
+      motor1 = hwMap.get(DcMotor.class, "motor1");
+      motor2 = hwMap.get(DcMotor.class, "motor2");
       //color1 = hwMap.get(ColorSensor.class, "colorLeft");
       //color2 = hwMap.get(ColorSensor.class, "colorRight");
 
@@ -146,6 +150,20 @@ public class LaBarca {
     } else {
       elevadorRight.setPower(0);
       elevadorLeft.setPower(0);
+    }
+  }
+
+  public void activarExtension(double power) {
+    double velocidad = 0.25;
+    if(power > 0) {
+      motor1.setPower(velocidad);
+      motor2.setPower(-velocidad);
+    } else if(power < 0) {
+      motor1.setPower(-velocidad);
+      motor2.setPower(velocidad);
+    } else {
+      motor1.setPower(0);
+      motor2.setPower(0);
     }
   }
 

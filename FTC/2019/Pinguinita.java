@@ -118,11 +118,18 @@ public class Pinguinita extends LinearOpMode {
       } else
         naubot.defaultRunmode();
 
+      double extensionPower = 0;
+      if(gamepad2.y)
+        extensionPower = 1;
+      else if(gamepad2.a)
+        extensionPower = -1;
+
       naubot.leftDrive.setPower(leftPower);
       naubot.rightDrive.setPower(rightPower);
       naubot.activarIntake(intakePower);
       naubot.activarElevador(elevadorPower);
       naubot.activarFoundation(foundation);
+      naubot.activarExtension(extensionPower);
 
       telemetry.addData("Status", "Run Time: " + runtime.toString());
       telemetry.addData("Modo conduccion:", modoDriver ? "POV" : "Tanque");

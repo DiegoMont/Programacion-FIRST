@@ -38,13 +38,16 @@ public class HardlusTeleoperado extends LinearOpMode {
       waitForStart();
 
       runtime.reset();
-
+      double servoPositionUno = 0.75;
+      double servoDosPosition = 0;
+      double lastServoChange = runtime.milliseconds();
       while(opModeIsActive()) {
         double frontLeftPower, frontRightPower, backLeftPower, backRightPower;
 
         double drive = -gamepad1.left_stick_y;
         double lateral = gamepad1.right_stick_x;
-        double turn = -gamepad1.left_stick_x;
+        double turn = gamepad1.left_stick_x;
+        double elevadorPower = gamepad2.left_stick_y;
         frontLeftPower = Range.clip(drive + lateral + turn, -1.0, 1.0);
         frontRightPower = Range.clip(drive - lateral -turn, -1.0, 1.0);
         backLeftPower = Range.clip(drive - lateral + turn, -1.0, 1.0);
@@ -64,12 +67,50 @@ public class HardlusTeleoperado extends LinearOpMode {
           backRightPower *= 0.5;
         }
 
+        double intakePower = 0;
+        if(gamepad2.left_trigger > 0)
+          intakePower = 1;
+        else if (gamepad2.right_trigger > 0)
+          intakePower = -1;
+
+        //método para los servos
+        if(runtime.milliseconds() > 50 + lastServoChange) {
+          if(gamepad2.a) {
+            servoPositionUno += 0.02;
+            lastServoChange = runtime.milliseconds();
+          }
+          else if(gamepad2.b) {
+            servoPositionUno -= 0.02;
+            lastServoChange = runtime.milliseconds();
+          }
+
+          if(gamepad2.x) {
+            servoDosPosition += 0.04;
+            lastServoChange = runtime.milliseconds();
+          }
+          else if(gamepad2.y) {
+            servoDosPosition -= 0.04;
+            lastServoChange = runtime.milliseconds();
+          }
+        }
+
+        servoPositionUno = Range.clip(servoPositionUno, 0.3, 0.64);
+        servoDosPosition = Range.clip(servoDosPosition, 0, 0.65);
+
         hardbot.frontLeft.setPower(frontLeftPower);
         hardbot.frontRight.setPower(frontRightPower);
         hardbot.backLeft.setPower(backLeftPower);
         hardbot.backRight.setPower(backRightPower);
+        hardbot.activarElevador(elevadorPower);
+        hardbot.servoUno.setPosition(servoPositionUno);
+        hardbot.servoDos.setPosition(servoDosPosition);
+        hardbot.activarExtension(intakePower);
 
         telemetry.addData("Status", "Run Time: " + runtime.toString());
+        telemetry.addData("Servo Dos: ", servoDosPosition);
+        telemetry.addData("Servo Uno: ", servoPositionUno);
+        telemetry.addData("elevador: ", elevadorPower);
+        telemetry.addData("intake: ", intakePower);
         telemetry.update();
       }
     }
