@@ -45,11 +45,14 @@ public class NaveDelOlvido {
   public DcMotor frontRight = null;
   public DcMotor backLeft = null;
   public DcMotor backRight = null;
-  private DcMotor elevadorOne = null;
-  private DcMotor elevadorTwo = null;
+  public DcMotor elevadorOne = null;
+  public DcMotor elevadorTwo = null;
   public Servo servoUno = null;
   public Servo servoDos = null;
   private DcMotor extensionIntake = null;
+  //Servos para mover foundation
+  public Servo foundationDerecha = null;
+  public Servo foundationIzquierda = null;
 
   public VuforiaLocalizer vuforia;
   public TFObjectDetector tfod;
@@ -74,6 +77,13 @@ public class NaveDelOlvido {
       servoUno = hwMap.get(Servo.class, "servo_uno");
       servoDos = hwMap.get(Servo.class, "servo_dos");
       extensionIntake = hwMap.get(DcMotor.class, "tornillo");
+      foundationDerecha = hwMap.get(Servo.class, "foundation_derecha");
+      foundationIzquierda = hwMap.get(Servo.class, "foundation_izquierda");
+
+      frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+      frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+      backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+      backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
       frontLeft.setDirection(DcMotor.Direction.FORWARD);
       frontRight.setDirection(DcMotor.Direction.REVERSE);
@@ -82,7 +92,19 @@ public class NaveDelOlvido {
       elevadorOne.setDirection(DcMotor.Direction.REVERSE);
       elevadorTwo.setDirection(DcMotor.Direction.FORWARD);
 
-      servoUno.setPosition(0.75);
+      elevadorOne.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+      elevadorTwo.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+      extensionIntake.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+      elevadorOne.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+      elevadorTwo.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+      extensionIntake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+      servoDos.setPosition(0.75);
+      servoUno.setPosition(0);
+
+      foundationDerecha.setPosition(0.0);
+      foundationIzquierda.setPosition(0.0);
 
   }
 
@@ -102,6 +124,10 @@ public class NaveDelOlvido {
     //imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
   }
 
+  public int posicionElevador() {
+    return (elevadorOne.getCurrentPosition() + elevadorTwo.getCurrentPosition()) / 2;
+  }
+
   public void frenar(){
     frontLeft.setPower(0);
     frontRight.setPower(0);
@@ -110,7 +136,7 @@ public class NaveDelOlvido {
   }
 
   public void activarElevador(double power) {
-    double velocidad = 0.2;
+    double velocidad = 0.3;
     if(power > 0) {
       elevadorOne.setPower(velocidad);
       elevadorTwo.setPower(velocidad);
@@ -251,10 +277,6 @@ public class NaveDelOlvido {
     }
     frenar();
     defaultRunmode();
-  }
-
-  public void setGiroDeNoventaGrados(String direction){
-
   }
 
 }

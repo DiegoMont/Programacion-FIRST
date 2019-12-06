@@ -19,14 +19,17 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import java.util.List;
 
-@Autonomous(name="Autonomo2")
+@Autonomous(name="Estacionarse lado derecho")
 
 public class HardlusAutonomoDos extends LinearOpMode {
 
@@ -35,19 +38,37 @@ public class HardlusAutonomoDos extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-      telemetry.addData("Status", "Initialized");
-      telemetry.update();
 
       hardbot.getHardware(hardwareMap);
 
+      telemetry.addData("Status", "Initialized");
+      telemetry.update();
       waitForStart();
 
       runtime.reset();
 
       hardbot.resetEncoders();
-       hardbot.moverDistanciaRecta(130);
-       hardbot.movimientoLateral(-70);
-       hardbot.moverDistanciaRecta(-90);
-       hardbot.movimientoLateral(105);
+
+      hardbot.moverDistanciaRecta(5);
+      hardbot.servoUno.setPosition(0.6);
+      sleep(1000);
+      while(hardbot.posicionElevador() > -545) {
+        hardbot.activarElevador(-1);
+      }
+      hardbot.activarElevador(0);
+      /*
+      hardbot.movimientoDiagonalDerecha(10);
+      hardbot.movimientoLateral(-30);
+      hardbot.moverDistanciaRecta(-5);*/
+      /*hardbot.moverDistanciaRecta(-30);
+      sleep(23000);
+      hardbot.moverDistanciaRecta(50);
+      hardbot.movimientoDiagonalDerecha(20);*/
+      hardbot.movimientoLateral(20);
+      hardbot.moverDistanciaRecta(-30);
+      sleep(1000);
+      hardbot.moverDistanciaRecta(50);
+      hardbot.movimientoLateral(-20);
+      hardbot.movimientoDiagonalDerecha(20);
     }
 }

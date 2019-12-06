@@ -19,14 +19,17 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import java.util.List;
 
-@Autonomous(name="Autonomo")
+@Autonomous(name="Stones Blue Alliance")
 
 public class HardlusAutonomo extends LinearOpMode {
 
@@ -35,19 +38,28 @@ public class HardlusAutonomo extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-      telemetry.addData("Status", "Initialized");
-      telemetry.update();
 
       hardbot.getHardware(hardwareMap);
 
+      telemetry.addData("Status", "Initialized");
+      telemetry.update();
       waitForStart();
 
       runtime.reset();
 
       hardbot.resetEncoders();
-       hardbot.moverDistanciaRecta(130);
-       hardbot.movimientoLateral(70);
-       hardbot.moverDistanciaRecta(-90);
-       hardbot.movimientoLateral(-105);
+
+      double periodo = runtime.milliseconds() + 200;
+      while(opModeIsActive() && periodo > runtime.milliseconds())
+        hardbot.activarExtension(-9);
+      hardbot.activarExtension(0);
+
+      hardbot.servoDos.setPosition(0.44);
+      hardbot.servoUno.setPosition(0.7);
+
+      while(hardbot.posicionElevador() > -545) {
+        hardbot.activarElevador(-1);
+      }
+
     }
 }

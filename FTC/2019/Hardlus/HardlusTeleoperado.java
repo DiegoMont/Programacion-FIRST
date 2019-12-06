@@ -38,16 +38,19 @@ public class HardlusTeleoperado extends LinearOpMode {
       waitForStart();
 
       runtime.reset();
-      double servoPositionUno = 0.75;
-      double servoDosPosition = 0;
+      double servoPositionUno = 0;
+      double servoDosPosition = 0.75;
+      double foundationDerechaPosicion = 0.3;
+      double foundationIzquierdaPosicion = 0.5;
       double lastServoChange = runtime.milliseconds();
+      double lastFoundationChange = runtime.milliseconds();
       while(opModeIsActive()) {
         double frontLeftPower, frontRightPower, backLeftPower, backRightPower;
 
         double drive = -gamepad1.left_stick_y;
-        double lateral = gamepad1.right_stick_x;
+        double lateral = 1.28*gamepad1.right_stick_x;
         double turn = gamepad1.left_stick_x;
-        double elevadorPower = gamepad2.left_stick_y;
+        double elevadorPower = 0.35*gamepad2.left_stick_y;
         frontLeftPower = Range.clip(drive + lateral + turn, -1.0, 1.0);
         frontRightPower = Range.clip(drive - lateral -turn, -1.0, 1.0);
         backLeftPower = Range.clip(drive - lateral + turn, -1.0, 1.0);
@@ -65,6 +68,17 @@ public class HardlusTeleoperado extends LinearOpMode {
           frontRightPower *= 0.5;
           backLeftPower *= 0.5;
           backRightPower *= 0.5;
+        }
+
+        if(gamepad1.left_bumper && gamepad1.right_bumper){
+          frontLeftPower *= 0.4;
+          frontRightPower *= 0.4;
+          backLeftPower *= 0.4;
+          backRightPower *= 0.4;
+        }
+
+        if(gamepad2.left_bumper){
+          elevadorPower *= 0.33;
         }
 
         double intakePower = 0;
@@ -94,22 +108,50 @@ public class HardlusTeleoperado extends LinearOpMode {
           }
         }
 
-        servoPositionUno = Range.clip(servoPositionUno, 0.3, 0.64);
-        servoDosPosition = Range.clip(servoDosPosition, 0, 0.65);
+        servoPositionUno = Range.clip(servoPositionUno, 0, 1);
+        servoDosPosition = Range.clip(servoDosPosition, 0, 1);
+
+        //métodos para la foundation
+        if(runtime.milliseconds()> 100 + lastFoundationChange){
+          if((foundationIzquierdaPosicion < 0.8) & (foundationDerechaPosicion < 0.8)){
+            if(gamepad1.a){
+            foundationDerechaPosicion += 0.09;
+            foundationIzquierdaPosicion -= 0.09;
+            lastFoundationChange = runtime.milliseconds();
+            }
+
+            else if(gamepad1.b){
+            foundationDerechaPosicion -= 0.09;
+            foundationIzquierdaPosicion += 0.09;
+            lastFoundationChange = runtime.milliseconds();
+            }
+          }
+          /*((foundationDerechaPosicion > 0.8) & (foundationIzquierdaPosicion > 0.10)){
+            foundationDerechaPosicion = 0.65;
+            foundationIzquierdaPosicion = 0.65;
+            break;
+          }*/
+        }
+
+        foundationDerechaPosicion = Range.clip(foundationDerechaPosicion, 0, 1);
+        foundationIzquierdaPosicion = Range.clip(foundationIzquierdaPosicion, 0, 1);
 
         hardbot.frontLeft.setPower(frontLeftPower);
         hardbot.frontRight.setPower(frontRightPower);
         hardbot.backLeft.setPower(backLeftPower);
         hardbot.backRight.setPower(backRightPower);
-        hardbot.activarElevador(elevadorPower);
+        hardbot.elevadorOne.setPower(elevadorPower);
+        hardbot.elevadorTwo.setPower(elevadorPower);
         hardbot.servoUno.setPosition(servoPositionUno);
         hardbot.servoDos.setPosition(servoDosPosition);
         hardbot.activarExtension(intakePower);
+        hardbot.foundationDerecha.setPosition(foundationDerechaPosicion);
+        hardbot.foundationIzquierda.setPosition(foundationIzquierdaPosicion);
 
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addData("Servo Dos: ", servoDosPosition);
         telemetry.addData("Servo Uno: ", servoPositionUno);
-        telemetry.addData("elevador: ", elevadorPower);
+        telemetry.addData("elevador: ", hardbot.posicionElevador());
         telemetry.addData("intake: ", intakePower);
         telemetry.update();
       }
