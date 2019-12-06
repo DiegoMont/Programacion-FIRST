@@ -45,14 +45,14 @@ public class NaveDelOlvido {
   public DcMotor frontRight = null;
   public DcMotor backLeft = null;
   public DcMotor backRight = null;
-  public DcMotor elevadorOne = null;
-  public DcMotor elevadorTwo = null;
+  private DcMotor elevadorOne = null;
+  private DcMotor elevadorTwo = null;
   public Servo servoUno = null;
   public Servo servoDos = null;
   private DcMotor extensionIntake = null;
   //Servos para mover foundation
-  public Servo foundationDerecha = null;
-  public Servo foundationIzquierda = null;
+  private Servo foundationDerecha = null;
+  private Servo foundationIzquierda = null;
 
   public VuforiaLocalizer vuforia;
   public TFObjectDetector tfod;
@@ -103,8 +103,7 @@ public class NaveDelOlvido {
       servoDos.setPosition(0.75);
       servoUno.setPosition(0);
 
-      foundationDerecha.setPosition(0.0);
-      foundationIzquierda.setPosition(0.0);
+      activarFoundation(true);
 
   }
 
@@ -136,7 +135,7 @@ public class NaveDelOlvido {
   }
 
   public void activarElevador(double power) {
-    double velocidad = 0.3;
+    double velocidad = 0.25;
     if(power > 0) {
       elevadorOne.setPower(velocidad);
       elevadorTwo.setPower(velocidad);
@@ -157,6 +156,16 @@ public class NaveDelOlvido {
       extensionIntake.setPower(-velocidad);
     } else {
       extensionIntake.setPower(0);
+    }
+  }
+
+  public void activarFoundation(boolean power) {
+    if(power) {
+      foundationDerecha.setPosition(0.8);
+      foundationIzquierda.setPosition(0.0);
+    } else {
+      foundationDerecha.setPosition(0.22);
+      foundationIzquierda.setPosition(0.55);
     }
   }
 
@@ -228,10 +237,10 @@ public class NaveDelOlvido {
   public void movimientoLateral(double distancia){
     final int counts = (int)Math.round(distancia * 1631 / 10.16 / Math.PI);
     resetEncoders();
-    backLeft.setTargetPosition(counts);
-    backRight.setTargetPosition(-counts);
-    frontLeft.setTargetPosition(-counts);
-    frontRight.setTargetPosition(counts);
+    backLeft.setTargetPosition(-counts);
+    backRight.setTargetPosition(counts);
+    frontLeft.setTargetPosition(counts);
+    frontRight.setTargetPosition(-counts);
     backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -279,4 +288,13 @@ public class NaveDelOlvido {
     defaultRunmode();
   }
 
+  public void acomodarRobot() {
+    moverDistanciaRecta(5);
+    servoUno.setPosition(0.6);
+    programa.sleep(1000);
+    while(posicionElevador() > -545) {
+      activarElevador(-1);
+    }
+    activarElevador(0);
+  }
 }

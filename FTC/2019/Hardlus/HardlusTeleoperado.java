@@ -40,21 +40,28 @@ public class HardlusTeleoperado extends LinearOpMode {
       runtime.reset();
       double servoPositionUno = 0;
       double servoDosPosition = 0.75;
-      double foundationDerechaPosicion = 0.3;
-      double foundationIzquierdaPosicion = 0.5;
       double lastServoChange = runtime.milliseconds();
-      double lastFoundationChange = runtime.milliseconds();
+      boolean click = false;
+      boolean foundation = true;
       while(opModeIsActive()) {
         double frontLeftPower, frontRightPower, backLeftPower, backRightPower;
 
         double drive = -gamepad1.left_stick_y;
-        double lateral = 1.28*gamepad1.right_stick_x;
+        double lateral = gamepad1.right_stick_x;
         double turn = gamepad1.left_stick_x;
-        double elevadorPower = 0.35*gamepad2.left_stick_y;
-        frontLeftPower = Range.clip(drive + lateral + turn, -1.0, 1.0);
-        frontRightPower = Range.clip(drive - lateral -turn, -1.0, 1.0);
-        backLeftPower = Range.clip(drive - lateral + turn, -1.0, 1.0);
-        backRightPower = Range.clip(drive + lateral - turn, -1.0, 1.0);
+        double elevadorPower = gamepad2.left_stick_y;
+        frontLeftPower = drive + lateral + turn;
+        frontRightPower = drive - lateral - turn;
+        backLeftPower = drive - lateral + turn;
+        backRightPower = drive + lateral - turn;
+
+        double biggest = Math.max(Math.abs(frontLeftPower), Math.max(Math.abs(frontRightPower), Math.max(Math.abs(backRightPower), Math.abs(backLeftPower))));
+        if(biggest > 1) {
+          frontLeftPower /= biggest;
+          frontRightPower /= biggest;
+          backLeftPower /= biggest;
+          backRightPower /= biggest;
+        }
 
         if(gamepad1.right_bumper){
           frontLeftPower *= 0.75;
@@ -112,41 +119,22 @@ public class HardlusTeleoperado extends LinearOpMode {
         servoDosPosition = Range.clip(servoDosPosition, 0, 1);
 
         //métodos para la foundation
-        if(runtime.milliseconds()> 100 + lastFoundationChange){
-          if((foundationIzquierdaPosicion < 0.8) & (foundationDerechaPosicion < 0.8)){
-            if(gamepad1.a){
-            foundationDerechaPosicion += 0.09;
-            foundationIzquierdaPosicion -= 0.09;
-            lastFoundationChange = runtime.milliseconds();
-            }
-
-            else if(gamepad1.b){
-            foundationDerechaPosicion -= 0.09;
-            foundationIzquierdaPosicion += 0.09;
-            lastFoundationChange = runtime.milliseconds();
-            }
-          }
-          /*((foundationDerechaPosicion > 0.8) & (foundationIzquierdaPosicion > 0.10)){
-            foundationDerechaPosicion = 0.65;
-            foundationIzquierdaPosicion = 0.65;
-            break;
-          }*/
+        if(gamepad1.a) {
+          click = true;
+        } else if ( !gamepad1.back && click) {
+          foundation = !foundation;
+          click = false;
         }
-
-        foundationDerechaPosicion = Range.clip(foundationDerechaPosicion, 0, 1);
-        foundationIzquierdaPosicion = Range.clip(foundationIzquierdaPosicion, 0, 1);
 
         hardbot.frontLeft.setPower(frontLeftPower);
         hardbot.frontRight.setPower(frontRightPower);
         hardbot.backLeft.setPower(backLeftPower);
         hardbot.backRight.setPower(backRightPower);
-        hardbot.elevadorOne.setPower(elevadorPower);
-        hardbot.elevadorTwo.setPower(elevadorPower);
+        hardbot.activarElevador(elevadorPower);
         hardbot.servoUno.setPosition(servoPositionUno);
         hardbot.servoDos.setPosition(servoDosPosition);
         hardbot.activarExtension(intakePower);
-        hardbot.foundationDerecha.setPosition(foundationDerechaPosicion);
-        hardbot.foundationIzquierda.setPosition(foundationIzquierdaPosicion);
+        hardbot.activarFoundation(foundation);
 
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addData("Servo Dos: ", servoDosPosition);
