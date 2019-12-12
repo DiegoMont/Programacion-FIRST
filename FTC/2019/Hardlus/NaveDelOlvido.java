@@ -36,6 +36,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
+import com.qualcomm.robotcore.util.Range;
 
 @Disabled
 public class NaveDelOlvido {
@@ -51,8 +52,8 @@ public class NaveDelOlvido {
   public Servo servoDos = null;
   private DcMotor extensionIntake = null;
   //Servos para mover foundation
-  private Servo foundationDerecha = null;
-  private Servo foundationIzquierda = null;
+  public Servo foundationDerecha = null;
+  public Servo foundationIzquierda = null;
 
   public VuforiaLocalizer vuforia;
   public TFObjectDetector tfod;
@@ -123,6 +124,15 @@ public class NaveDelOlvido {
     //imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
   }
 
+  public double getDesviacion(){
+    if(imu == null)
+      return 0;
+    angles   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+    gravity  = imu.getGravity();
+    programa.sleep(50);
+    return angles.firstAngle;
+  }
+
   public int posicionElevador() {
     return (elevadorOne.getCurrentPosition() + elevadorTwo.getCurrentPosition()) / 2;
   }
@@ -164,8 +174,8 @@ public class NaveDelOlvido {
       foundationDerecha.setPosition(0.8);
       foundationIzquierda.setPosition(0.0);
     } else {
-      foundationDerecha.setPosition(0.22);
-      foundationIzquierda.setPosition(0.55);
+      foundationDerecha.setPosition(0.18);
+      foundationIzquierda.setPosition(0.59);
     }
   }
 
@@ -182,14 +192,6 @@ public class NaveDelOlvido {
     frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     backLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     backRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-  }
-
-  public double getDesviacion(){
-    if(imu == null)
-      return 0;
-    angles   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-    gravity  = imu.getGravity();
-    return angles.firstAngle;
   }
 
   public void initVuforia() {
@@ -214,6 +216,9 @@ public class NaveDelOlvido {
   //Este metodo movera al robot en linea recta la distancia que se especifique
   public void moverDistanciaRecta(double distancia){
     final int counts = (int)Math.round(distancia * 1631 / 10.16 / Math.PI);
+    double desiredPosition = getDesviacion();
+    if(desiredPosition == 0)
+      desiredPosition = 0.0625;
     resetEncoders();
     backLeft.setTargetPosition(counts);
     backRight.setTargetPosition(counts);
@@ -224,11 +229,36 @@ public class NaveDelOlvido {
     backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     while (programa.opModeIsActive() && backLeft.isBusy() && backRight.isBusy() && frontLeft.isBusy() && frontRight.isBusy()) {
-      double velocidad = 1;
-      backLeft.setPower(velocidad);
-      backRight.setPower(velocidad);
-      frontRight.setPower(velocidad);
-      frontLeft.setPower(velocidad);
+      double desviacion = getDesviacion();
+      double errorRelativo = (desiredPosition-desviacion)/desiredPosition;
+      double leftPower = 0;
+      double rightPower = 0;
+      double velocidad = 0.7;
+      final double PROPORTIONAL = 0.002;
+      if(distancia > 0) {
+        leftPower = velocidad;
+        rightPower = velocidad;
+        leftPower -= leftPower * errorRelativo * PROPORTIONAL;
+        rightPower += rightPower * errorRelativo * PROPORTIONAL;
+      } else if(distancia < 0) {
+        velocidad *= -1;
+        leftPower = velocidad;
+        rightPower = velocidad;
+        leftPower += leftPower * errorRelativo * PROPORTIONAL;
+        rightPower -= rightPower * errorRelativo * PROPORTIONAL;
+      }
+      leftPower = Range.clip(leftPower, -1.0, 1.0);
+      rightPower = Range.clip(rightPower, -1.0, 1.0);
+      programa.telemetry.addData("Left power: ", leftPower);
+      programa.telemetry.addData("Right power: ", rightPower);
+      programa.telemetry.addData("Error: ", errorRelativo);
+      programa.telemetry.addData("Desviacion: ", desviacion);
+      programa.telemetry.addData("Target ", desiredPosition);
+      programa.telemetry.update();
+      backLeft.setPower(leftPower);
+      backRight.setPower(rightPower);
+      frontRight.setPower(rightPower);
+      frontLeft.setPower(leftPower);
     }
     frenar();
     defaultRunmode();
@@ -236,6 +266,9 @@ public class NaveDelOlvido {
 
   public void movimientoLateral(double distancia){
     final int counts = (int)Math.round(distancia * 1631 / 10.16 / Math.PI);
+    double desiredPosition = getDesviacion();
+    if(desiredPosition == 0)
+      desiredPosition = 0.0625;
     resetEncoders();
     backLeft.setTargetPosition(-counts);
     backRight.setTargetPosition(counts);
@@ -246,11 +279,36 @@ public class NaveDelOlvido {
     backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     while (programa.opModeIsActive() && backLeft.isBusy() && backRight.isBusy() && frontLeft.isBusy() && frontRight.isBusy()) {
-      double velocidad = 1;
-      backLeft.setPower(velocidad);
-      backRight.setPower(velocidad);
-      frontRight.setPower(velocidad);
-      frontLeft.setPower(velocidad);
+      double desviacion = getDesviacion();
+      double errorRelativo = (desiredPosition-desviacion)/desiredPosition;
+      double leftPower = 0;
+      double rightPower = 0;
+      double velocidad = 0.7;
+      final double PROPORTIONAL = 0.002;
+      if(distancia > 0) {
+        leftPower = velocidad;
+        rightPower = velocidad;
+        leftPower -= leftPower * errorRelativo * PROPORTIONAL;
+        rightPower += rightPower * errorRelativo * PROPORTIONAL;
+      } else if(distancia < 0) {
+        velocidad *= -1;
+        leftPower = velocidad;
+        rightPower = velocidad;
+        leftPower += leftPower * errorRelativo * PROPORTIONAL;
+        rightPower -= rightPower * errorRelativo * PROPORTIONAL;
+      }
+      leftPower = Range.clip(leftPower, -1.0, 1.0);
+      rightPower = Range.clip(rightPower, -1.0, 1.0);
+      programa.telemetry.addData("Left power: ", leftPower);
+      programa.telemetry.addData("Right power: ", rightPower);
+      programa.telemetry.addData("Error: ", errorRelativo);
+      programa.telemetry.addData("Desviacion: ", desviacion);
+      programa.telemetry.addData("Target ", desiredPosition);
+      programa.telemetry.update();
+      backLeft.setPower(leftPower);
+      backRight.setPower(rightPower);
+      frontRight.setPower(leftPower);
+      frontLeft.setPower(rightPower);
     }
     frenar();
     defaultRunmode();
@@ -296,5 +354,33 @@ public class NaveDelOlvido {
       activarElevador(-1);
     }
     activarElevador(0);
+  }
+
+  public void girarEnEje(double distancia) {
+    if(!programa.opModeIsActive()) return;
+      final int counts = (int)Math.round(distancia * 1631 / 10.16 / Math.PI);
+
+      //Establecer la posicion actual del encoder como nuestro cero
+      resetEncoders();
+
+      //Establecer a que posicion y velocidad se debe mover el robot
+      frontLeft.setTargetPosition(counts);
+      backLeft.setTargetPosition(counts);
+      frontRight.setTargetPosition(-counts);
+      backRight.setTargetPosition(-counts);
+      backLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+      backRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+      frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+      frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+      double velocidad = 0.75;
+      frontLeft.setPower(velocidad);
+      backRight.setPower(velocidad);
+      frontRight.setPower(velocidad);
+      backLeft.setPower(velocidad);
+      //Cambiar el modo del motor para comenzar movimiento automatico
+      while(programa.opModeIsActive() && frontLeft.isBusy() && frontRight.isBusy()) {
+      }
+      frenar();
+      defaultRunmode();
   }
 }
