@@ -174,8 +174,8 @@ public class NaveDelOlvido {
       foundationDerecha.setPosition(0.8);
       foundationIzquierda.setPosition(0.0);
     } else {
-      foundationDerecha.setPosition(0.18);
-      foundationIzquierda.setPosition(0.59);
+      foundationDerecha.setPosition(0.024);
+      foundationIzquierda.setPosition(0.596);
     }
   }
 
@@ -285,13 +285,7 @@ public class NaveDelOlvido {
       double rightPower = 0;
       double velocidad = 0.7;
       final double PROPORTIONAL = 0.002;
-      if(distancia > 0) {
-        leftPower = velocidad;
-        rightPower = velocidad;
-        leftPower -= leftPower * errorRelativo * PROPORTIONAL;
-        rightPower += rightPower * errorRelativo * PROPORTIONAL;
-      } else if(distancia < 0) {
-        velocidad *= -1;
+      if(distancia != 0) {
         leftPower = velocidad;
         rightPower = velocidad;
         leftPower += leftPower * errorRelativo * PROPORTIONAL;
@@ -307,8 +301,8 @@ public class NaveDelOlvido {
       programa.telemetry.update();
       backLeft.setPower(leftPower);
       backRight.setPower(rightPower);
-      frontRight.setPower(leftPower);
-      frontLeft.setPower(rightPower);
+      frontRight.setPower(rightPower);
+      frontLeft.setPower(leftPower);
     }
     frenar();
     defaultRunmode();

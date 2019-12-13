@@ -15,6 +15,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -32,6 +33,7 @@ public class HardlusTeleoperado extends LinearOpMode {
       telemetry.update();
 
       hardbot.getHardware(hardwareMap);
+      //hardbot.iniciarAcelerometro(hardwareMap);
 
       hardbot.resetEncoders();
 
@@ -63,29 +65,28 @@ public class HardlusTeleoperado extends LinearOpMode {
           backRightPower /= biggest;
         }
 
-        if(gamepad1.right_bumper){
-          frontLeftPower *= 0.75;
-          frontRightPower *= 0.75;
-          backLeftPower *= 0.75;
-          backRightPower *= 0.75;
-        }
-
-        if(gamepad1.left_bumper){
-          frontLeftPower *= 0.5;
-          frontRightPower *= 0.5;
-          backLeftPower *= 0.5;
-          backRightPower *= 0.5;
-        }
-
-        if(gamepad1.left_bumper && gamepad1.right_bumper){
+        if((gamepad1.left_trigger > 0 || gamepad1.left_bumper) && (gamepad1.right_trigger > 0 || gamepad1.right_bumper)){
           frontLeftPower *= 0.4;
           frontRightPower *= 0.4;
           backLeftPower *= 0.4;
           backRightPower *= 0.4;
+        } else {
+          if(gamepad1.right_trigger > 0 || gamepad1.right_bumper){
+            frontLeftPower *= 0.25;
+            frontRightPower *= 0.25;
+            backLeftPower *= 0.25;
+            backRightPower *= 0.25;
+          }
+          if(gamepad1.left_trigger > 0 || gamepad1.left_bumper){
+            frontLeftPower *= 0.5;
+            frontRightPower *= 0.5;
+            backLeftPower *= 0.5;
+            backRightPower *= 0.5;
+          }
         }
 
         if(gamepad2.left_bumper){
-          elevadorPower *= 0.33;
+          elevadorPower *= 0.20;
         }
 
         double intakePower = 0;
@@ -139,8 +140,11 @@ public class HardlusTeleoperado extends LinearOpMode {
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addData("Servo Dos: ", servoDosPosition);
         telemetry.addData("Servo Uno: ", servoPositionUno);
-        telemetry.addData("elevador: ", hardbot.posicionElevador());
-        telemetry.addData("intake: ", intakePower);
+        //telemetry.addData("Giroscopio: ", hardbot.getDesviacion());
+        //telemetry.addData("elevador: ", hardbot.posicionElevador());
+        //telemetry.addData("intake: ", intakePower);
+        telemetry.addData("posicion servo foundation derecha: ", hardbot.foundationDerecha.getPosition());
+        telemetry.addData("posicion servo foundation izquierda: ", hardbot.foundationIzquierda.getPosition());
         telemetry.update();
       }
     }

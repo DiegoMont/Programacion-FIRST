@@ -29,7 +29,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import java.util.List;
 
-@Autonomous(name="Foundation read alliance")
+@Autonomous(name="Foundation Red Alliance")
 
 public class HardlusAutonomoTres extends LinearOpMode {
 
@@ -53,7 +53,7 @@ public class HardlusAutonomoTres extends LinearOpMode {
         hardbot.moverDistanciaRecta(25);
         hardbot.movimientoLateral(22);
         hardbot.moverDistanciaRecta(10);
-        hardbot.girarEnEje(-3);
+        //hardbot.girarEnEje(-3);
         hardbot.activarFoundation(false);
         sleep(1000);
         hardbot.frontRight.setPower(-0.75);

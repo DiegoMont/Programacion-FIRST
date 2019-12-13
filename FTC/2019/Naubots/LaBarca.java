@@ -54,6 +54,7 @@ public class LaBarca {
   private Servo foundationRight = null;
   private DcMotor motor1 = null;
   private DcMotor motor2 = null;
+  private TouchSensor boton2 = null;
 
   private BNO055IMU imu;
   private Orientation angles;
@@ -76,6 +77,7 @@ public class LaBarca {
       boton = hwMap.get(TouchSensor.class, "boton");
       motor1 = hwMap.get(DcMotor.class, "motor1");
       motor2 = hwMap.get(DcMotor.class, "motor2");
+      boton2 = hwMap.get(TouchSensor.class, "boton2");
       //color1 = hwMap.get(ColorSensor.class, "colorLeft");
       //color2 = hwMap.get(ColorSensor.class, "colorRight");
 
@@ -144,7 +146,7 @@ public class LaBarca {
     if(power > 0){
       elevadorRight.setPower(velocidadSubida);
       elevadorLeft.setPower(velocidadSubida);
-    } else if (power < 0){
+    } else if (power < 0 && !boton2.isPressed()){
       elevadorRight.setPower(-velocidadBajada);
       elevadorLeft.setPower(-velocidadBajada);
     } else {
