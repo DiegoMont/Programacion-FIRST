@@ -29,7 +29,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import java.util.List;
 
-@Autonomous(name="Stones Blue Alliance")
+@Autonomous(name="Estacionarse hacia Derecha")
 
 public class HardlusAutonomo extends LinearOpMode {
 
@@ -40,26 +40,19 @@ public class HardlusAutonomo extends LinearOpMode {
     public void runOpMode() {
 
       hardbot.getHardware(hardwareMap);
+      hardbot.iniciarAcelerometro(hardwareMap);
 
       telemetry.addData("Status", "Initialized");
       telemetry.update();
       waitForStart();
-
       runtime.reset();
 
-      hardbot.resetEncoders();
-
-      double periodo = runtime.milliseconds() + 200;
-      while(opModeIsActive() && periodo > runtime.milliseconds())
-        hardbot.activarExtension(-9);
-      hardbot.activarExtension(0);
-
-      hardbot.servoDos.setPosition(0.44);
-      hardbot.servoUno.setPosition(0.7);
-
-      while(hardbot.posicionElevador() > -545) {
-        hardbot.activarElevador(-1);
+      if(opModeIsActive()) {
+        hardbot.acomodarRobot();
+        hardbot.movimientoLateral(20);
+        hardbot.servoUno.setPosition(0.1);
+        sleep(1000);
+        hardbot.moverDistanciaRecta(20);
       }
-
     }
 }

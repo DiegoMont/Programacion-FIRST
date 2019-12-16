@@ -56,9 +56,11 @@ public class HardlusAutonomoTres extends LinearOpMode {
         //hardbot.girarEnEje(-3);
         hardbot.activarFoundation(false);
         sleep(1000);
+        hardbot.frontLeft.setPower(-0.15);
+        hardbot.backLeft.setPower(-0.15);
         hardbot.frontRight.setPower(-0.75);
         hardbot.backRight.setPower(-0.75);
-        sleep(2000);
+        sleep(2500);
         hardbot.frenar();
         hardbot.frontRight.setPower(0.7);
         hardbot.backRight.setPower(0.7);
@@ -68,7 +70,7 @@ public class HardlusAutonomoTres extends LinearOpMode {
         hardbot.frenar();
         hardbot.activarFoundation(true);
         sleep(1000);
-        hardbot.moverDistanciaRecta(-30);
+        hardbot.moverDistanciaRecta(-37);
         hardbot.movimientoDiagonalDerecha(-15);
         hardbot.movimientoLateral(-18);
       }

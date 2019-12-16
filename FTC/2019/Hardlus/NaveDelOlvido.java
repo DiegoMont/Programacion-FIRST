@@ -129,7 +129,7 @@ public class NaveDelOlvido {
       return 0;
     angles   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
     gravity  = imu.getGravity();
-    programa.sleep(50);
+    programa.sleep(25);
     return angles.firstAngle;
   }
 

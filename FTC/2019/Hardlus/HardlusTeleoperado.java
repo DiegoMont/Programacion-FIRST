@@ -29,14 +29,13 @@ public class HardlusTeleoperado extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-      telemetry.addData("Status", "Initialized");
-      telemetry.update();
 
       hardbot.getHardware(hardwareMap);
       //hardbot.iniciarAcelerometro(hardwareMap);
 
       hardbot.resetEncoders();
-
+      telemetry.addData("Status", "Initialized");
+      telemetry.update();
       waitForStart();
 
       runtime.reset();
@@ -45,8 +44,10 @@ public class HardlusTeleoperado extends LinearOpMode {
       double lastServoChange = runtime.milliseconds();
       boolean click = false;
       boolean foundation = true;
+      //double desiredPosition = hardbot.getDesviacion();
       while(opModeIsActive()) {
         double frontLeftPower, frontRightPower, backLeftPower, backRightPower;
+        //double desviacion = hardbot.getDesviacion();
 
         double drive = -gamepad1.left_stick_y;
         double lateral = gamepad1.right_stick_x;
@@ -64,6 +65,30 @@ public class HardlusTeleoperado extends LinearOpMode {
           backLeftPower /= biggest;
           backRightPower /= biggest;
         }
+
+        /*if(turn != 0)
+          desiredPosition = desviacion;
+        else {
+          if(desiredPosition == 0)
+            desiredPosition = 0.0625;
+          double errorRelativo = (desiredPosition-desviacion)/desiredPosition;
+          final double PROPORTIONAL = 0.002;
+          if(drive >= 0) {
+            frontLeftPower -= frontLeftPower * errorRelativo * PROPORTIONAL;
+            backLeftPower -= backLeftPower * errorRelativo * PROPORTIONAL;
+            frontRightPower += frontRightPower * errorRelativo * PROPORTIONAL;
+            backRightPower += backRightPower * errorRelativo * PROPORTIONAL;
+          } else if(drive < 0) {
+            backLeftPower += backLeftPower * errorRelativo * PROPORTIONAL;
+            frontLeftPower += frontLeftPower * errorRelativo * PROPORTIONAL;
+            backRightPower -= backRightPower * errorRelativo * PROPORTIONAL;
+            frontRightPower -= frontRightPower * errorRelativo * PROPORTIONAL;
+          }
+          backLeftPower = Range.clip(backLeftPower, -1, 1);
+          frontLeftPower = Range.clip(frontLeftPower, -1, 1);
+          backRightPower = Range.clip(backRightPower, -1, 1);
+          frontRightPower = Range.clip(frontRightPower, -1, 1);
+        }*/
 
         if((gamepad1.left_trigger > 0 || gamepad1.left_bumper) && (gamepad1.right_trigger > 0 || gamepad1.right_bumper)){
           frontLeftPower *= 0.4;
@@ -96,7 +121,7 @@ public class HardlusTeleoperado extends LinearOpMode {
           intakePower = -1;
 
         //método para los servos
-        if(runtime.milliseconds() > 50 + lastServoChange) {
+        if(runtime.milliseconds() > 30 + lastServoChange) {
           if(gamepad2.a) {
             servoPositionUno += 0.02;
             lastServoChange = runtime.milliseconds();
@@ -115,6 +140,7 @@ public class HardlusTeleoperado extends LinearOpMode {
             lastServoChange = runtime.milliseconds();
           }
         }
+
 
         servoPositionUno = Range.clip(servoPositionUno, 0, 1);
         servoDosPosition = Range.clip(servoDosPosition, 0, 1);
@@ -138,8 +164,12 @@ public class HardlusTeleoperado extends LinearOpMode {
         hardbot.activarFoundation(foundation);
 
         telemetry.addData("Status", "Run Time: " + runtime.toString());
-        telemetry.addData("Servo Dos: ", servoDosPosition);
-        telemetry.addData("Servo Uno: ", servoPositionUno);
+        telemetry.addData("Front left: ", frontLeftPower);
+        telemetry.addData("Front right: ", frontRightPower);
+        telemetry.addData("Back left: ", backLeftPower);
+        telemetry.addData("Back right: ", backRightPower);
+        //telemetry.addData("Servo Dos: ", servoDosPosition);
+        //telemetry.addData("Servo Uno: ", servoPositionUno);
         //telemetry.addData("Giroscopio: ", hardbot.getDesviacion());
         //telemetry.addData("elevador: ", hardbot.posicionElevador());
         //telemetry.addData("intake: ", intakePower);
