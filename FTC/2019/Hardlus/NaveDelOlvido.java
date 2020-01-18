@@ -215,6 +215,10 @@ public class NaveDelOlvido {
 
   //Este metodo movera al robot en linea recta la distancia que se especifique
   public void moverDistanciaRecta(double distancia){
+    moverDistanciaRecta(distancia, 0.7);
+  }
+
+  public void moverDistanciaRecta(double distancia, double velocidad){
     final int counts = (int)Math.round(distancia * 1631 / 10.16 / Math.PI);
     double desiredPosition = getDesviacion();
     if(desiredPosition == 0)
@@ -233,7 +237,6 @@ public class NaveDelOlvido {
       double errorRelativo = (desiredPosition-desviacion)/desiredPosition;
       double leftPower = 0;
       double rightPower = 0;
-      double velocidad = 0.7;
       final double PROPORTIONAL = 0.002;
       if(distancia > 0) {
         leftPower = velocidad;
@@ -265,6 +268,10 @@ public class NaveDelOlvido {
   }
 
   public void movimientoLateral(double distancia){
+    movimientoLateral(distancia, 0.7);
+  }
+
+  public void movimientoLateral(double distancia, double velocidad){
     final int counts = (int)Math.round(distancia * 1631 / 10.16 / Math.PI);
     double desiredPosition = getDesviacion();
     if(desiredPosition == 0)
@@ -283,7 +290,6 @@ public class NaveDelOlvido {
       double errorRelativo = (desiredPosition-desviacion)/desiredPosition;
       double leftPower = 0;
       double rightPower = 0;
-      double velocidad = 0.7;
       final double PROPORTIONAL = 0.002;
       if(distancia != 0) {
         leftPower = velocidad;

@@ -55,6 +55,7 @@ public class LaBarca {
   private DcMotor motor1 = null;
   private DcMotor motor2 = null;
   private TouchSensor boton2 = null;
+  public Servo servo2 = null;
 
   private BNO055IMU imu;
   private Orientation angles;
@@ -78,6 +79,7 @@ public class LaBarca {
       motor1 = hwMap.get(DcMotor.class, "motor1");
       motor2 = hwMap.get(DcMotor.class, "motor2");
       boton2 = hwMap.get(TouchSensor.class, "boton2");
+      servo2 = hwMap.get(Servo.class, "servo12");
       //color1 = hwMap.get(ColorSensor.class, "colorLeft");
       //color2 = hwMap.get(ColorSensor.class, "colorRight");
 
@@ -96,6 +98,7 @@ public class LaBarca {
 
       foundationLeft.setPosition(0.5);
       foundationRight.setPosition(0.5);
+      servo2.setPosition(0.5);
 
   }
 
@@ -133,7 +136,7 @@ public class LaBarca {
 
   public double getDesviacion(){
     if(imu == null)
-      return 0;
+      return 0.0625;
     angles   = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
     gravity  = imu.getGravity();
     programa.sleep(50);
@@ -141,8 +144,8 @@ public class LaBarca {
   }
 
   public void activarElevador(double power) {
-    final double velocidadSubida = 1;
-    final double velocidadBajada = 1;
+    final double velocidadSubida = 0.85;
+    final double velocidadBajada = 0.85;
     if(power > 0){
       elevadorRight.setPower(velocidadSubida);
       elevadorLeft.setPower(velocidadSubida);
@@ -177,9 +180,6 @@ public class LaBarca {
     if(power < 0 && !boton.isPressed()){
       intakeLeft.setPower(0.6);
       intakeRight.setPower(0.6);
-    } else if(power < 0 && posicionElevador() > 300) {
-      intakeLeft.setPower(0.3);
-      intakeRight.setPower(0.3);
     } else if(power > 0){
       intakeRight.setPower(-0.3);
       intakeLeft.setPower(-0.3);
@@ -187,6 +187,11 @@ public class LaBarca {
       intakeRight.setPower(0);
       intakeLeft.setPower(0);
     }
+  }
+
+  public void activarIntake() {
+    intakeRight.setPower(-0.6);
+    intakeLeft.setPower(-0.6);
   }
 
   public void activarFoundation(boolean power) {
@@ -201,8 +206,12 @@ public class LaBarca {
 
   /* Metodos para programacion autonoma */
 
-  //Este metodo movera al robot en linea recta la distancia que se especifique
   public void moverDistanciaRecta(double distancia){
+    moverDistanciaRecta(distancia, 1);
+  }
+
+  //Este metodo movera al robot en linea recta la distancia que se especifique
+  public void moverDistanciaRecta(double distancia, double velocidad){
     if(!programa.opModeIsActive()) return;
     double desiredPosition = getDesviacion();
     if(desiredPosition == 0)
@@ -226,7 +235,7 @@ public class LaBarca {
         double errorRelativo = (desiredPosition-desviacion)/desiredPosition;
         double leftPower = 0;
         double rightPower = 0;
-        double velocidad = 1;
+
         final double PROPORTIONAL = 0.0015;
         if(distancia > 0) {
           leftPower = velocidad;

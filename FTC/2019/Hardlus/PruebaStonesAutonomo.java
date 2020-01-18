@@ -1,12 +1,15 @@
 /*
-Copyright 2019 FIRST Tech Challenge Team 4010
+Copyright 2019 FIRST Tech Challenge Team 15704
+
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
 associated documentation files (the "Software"), to deal in the Software without restriction,
 including without limitation the rights to use, copy, modify, merge, publish, distribute,
 sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
+
 The above copyright notice and this permission notice shall be included in all copies or substantial
 portions of the Software.
+
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT
 NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
 NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
@@ -16,56 +19,53 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import java.util.List;
 
-@Autonomous(name="Stones Red Alliance", group="Linear Opmode")
+@Autonomous(name="Prueba de stones")
 
-public class NaubotsAutonomoDos extends LinearOpMode {
+public class PruebaStonesAutonomo extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
-    private LaBarca naubot = new LaBarca(this);
+    private NaveDelOlvido hardbot = new NaveDelOlvido(this);
 
     @Override
     public void runOpMode() {
 
-        telemetry.addData("Status", "Initialized");
-        telemetry.update();
+      hardbot.getHardware(hardwareMap);
+      hardbot.iniciarAcelerometro(hardwareMap);
 
+      telemetry.addData("Status", "Initialized");
+      telemetry.update();
+      waitForStart();
 
-        naubot.getHardware(hardwareMap);
-        naubot.resetEncoders();
-        waitForStart();
-
-        naubot.moverDistanciaRecta(60);
+      if(opModeIsActive()) {
         runtime.reset();
-        double periodo = runtime.milliseconds() + 2000;
-        while(!naubot.boton.isPressed() && runtime.milliseconds() < periodo && opModeIsActive()) {
-            naubot.activarIntake(-1);
-            naubot.leftDrive.setPower(0.3);
-            naubot.rightDrive.setPower(0.3);
-        }
-        naubot.moverDistanciaRecta(-70);
-        naubot.girarEnEje(-45);
-        naubot.moverDistanciaRecta(150);
-        naubot.activarIntake(1);
-        sleep(1000);
-        naubot.moverDistanciaRecta(-220);
-        naubot.girarEnEje(50);
-        periodo = runtime.milliseconds() + 2000;
-        while(!naubot.boton.isPressed() && runtime.milliseconds() < periodo && opModeIsActive()) {
-            naubot.activarIntake(-1);
-            naubot.leftDrive.setPower(0.3);
-            naubot.rightDrive.setPower(0.3);
-        }
-        naubot.moverDistanciaRecta(-70);
-        naubot.girarEnEje(-50);
-        naubot.moverDistanciaRecta(170);
-        naubot.activarIntake(1);
-        sleep(1000);
+        hardbot.resetEncoders();
+        //hardbot.acomodarRobot();
+        hardbot.moverDistanciaRecta(48.5);
+        hardbot.movimientoLateral(-22, 0.5);
+        sleep(500);
+        hardbot.moverDistanciaRecta(-20, 0.5);
+        hardbot.movimientoLateral(-45);
+        sleep(100);
+        hardbot.frontLeft.setPower(0.5);
+        hardbot.frontRight.setPower(-0.5);
+        hardbot.backLeft.setPower(-0.5);
+        hardbot.backRight.setPower(0.5);
+        sleep(3500);
+        hardbot.frontLeft.setPower(0);
+        hardbot.frontRight.setPower(0);
+        hardbot.backLeft.setPower(0);
+        hardbot.backRight.setPower(0);
+        hardbot.moverDistanciaRecta(29);
+      }
     }
 }
