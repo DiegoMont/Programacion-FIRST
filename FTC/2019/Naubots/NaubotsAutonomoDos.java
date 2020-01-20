@@ -33,14 +33,14 @@ public class NaubotsAutonomoDos extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        telemetry.addData("Status", "Initialized");
-        telemetry.update();
-
-
         naubot.getHardware(hardwareMap);
         naubot.resetEncoders();
+
+        telemetry.addData("Status", "Initialized");
+        telemetry.update();
         waitForStart();
 
+        //Primer Stone
         naubot.moverDistanciaRecta(60);
         runtime.reset();
         double periodo = runtime.milliseconds() + 2000;
@@ -56,6 +56,23 @@ public class NaubotsAutonomoDos extends LinearOpMode {
         sleep(1000);
         naubot.moverDistanciaRecta(-220);
         naubot.girarEnEje(50);
+
+        //Comenzar por el segundo Stone
+        periodo = runtime.milliseconds() + 2000;
+        while(!naubot.boton.isPressed() && runtime.milliseconds() < periodo && opModeIsActive()) {
+            naubot.activarIntake(-1);
+            naubot.leftDrive.setPower(0.3);
+            naubot.rightDrive.setPower(0.3);
+        }
+        naubot.moverDistanciaRecta(-70);
+        naubot.girarEnEje(-50);
+        naubot.moverDistanciaRecta(170);
+        naubot.activarIntake(1);
+        sleep(1000);
+        naubot.moverDistanciaRecta(-220);
+        naubot.girarEnEje(50);
+
+        //Comenzar por el tercer Stone
         periodo = runtime.milliseconds() + 2000;
         while(!naubot.boton.isPressed() && runtime.milliseconds() < periodo && opModeIsActive()) {
             naubot.activarIntake(-1);

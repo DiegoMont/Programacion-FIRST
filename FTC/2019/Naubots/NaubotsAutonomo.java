@@ -36,12 +36,11 @@ public class NaubotsAutonomo extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        telemetry.addData("Status", "Initialized");
-        telemetry.update();
-
-
         naubot.getHardware(hardwareMap);
         naubot.resetEncoders();
+
+        telemetry.addData("Status", "Initialized");
+        telemetry.update();
         waitForStart();
 
         naubot.moverDistanciaRecta(-30);
