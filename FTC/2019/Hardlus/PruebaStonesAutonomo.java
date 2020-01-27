@@ -1,5 +1,5 @@
 /*
-Copyright 2019 FIRST Tech Challenge Team 4010
+Copyright 2019 FIRST Tech Challenge Team 15704
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and
 associated documentation files (the "Software"), to deal in the Software without restriction,
@@ -19,43 +19,53 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SO
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import java.util.List;
 
-@Autonomous(name="Foundation Red Alliance", group="Linear Opmode")
+@Autonomous(name="Prueba de stones")
 
-public class NaubotsAutonomo extends LinearOpMode {
+public class PruebaStonesAutonomo extends LinearOpMode {
 
     private ElapsedTime runtime = new ElapsedTime();
-    private LaBarca naubot = new LaBarca(this);
+    private NaveDelOlvido hardbot = new NaveDelOlvido(this);
 
     @Override
     public void runOpMode() {
 
-        naubot.getHardware(hardwareMap);
-        naubot.resetEncoders();
+      hardbot.getHardware(hardwareMap);
+      hardbot.iniciarAcelerometro(hardwareMap);
 
-        telemetry.addData("Status", "Initialized");
-        telemetry.update();
-        waitForStart();
+      telemetry.addData("Status", "Initialized");
+      telemetry.update();
+      waitForStart();
 
-        naubot.moverDistanciaRecta(-30);
-        naubot.girarEnEje(-30);
-        naubot.moverDistanciaRecta(-80);
-        naubot.girarEnEje(20);
-        naubot.moverDistanciaRecta(-40);
-        naubot.activarFoundation(true);
-        sleep(500);
-        naubot.moverDistanciaRecta(70);
+      if(opModeIsActive()) {
         runtime.reset();
-        double periodo = runtime.milliseconds() + 3000;
-        while(periodo > runtime.milliseconds()) {
-            naubot.leftDrive.setPower(1);
-            naubot.rightDrive.setPower(-1);
-        }
+        hardbot.resetEncoders();
+        //hardbot.acomodarRobot();
+        hardbot.moverDistanciaRecta(48.5);
+        hardbot.movimientoLateral(-22, 0.5);
+        sleep(500);
+        hardbot.moverDistanciaRecta(-20, 0.5);
+        hardbot.movimientoLateral(-45);
+        sleep(100);
+        hardbot.frontLeft.setPower(0.5);
+        hardbot.frontRight.setPower(-0.5);
+        hardbot.backLeft.setPower(-0.5);
+        hardbot.backRight.setPower(0.5);
+        sleep(3500);
+        hardbot.frontLeft.setPower(0);
+        hardbot.frontRight.setPower(0);
+        hardbot.backLeft.setPower(0);
+        hardbot.backRight.setPower(0);
+        hardbot.moverDistanciaRecta(29);
+      }
     }
 }
