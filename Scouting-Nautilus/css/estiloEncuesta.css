@@ -1,27 +1,36 @@
-h6 {
+form {
+  width: 100%;
+}
+
+h5 {
   text-align: left;
   margin: 0.5rem 0;
 }
 
-.aumentar, .cifra-contador, .restar, .btn-simbol {
+h6, h3, h4, h5 {
+  color: #fafafa;
+}
+
+.aumentar, .cifra-contador, .restar, .btn-symbol {
   display: inline-block;
 }
 
 .aumentar, .restar {
   background-color: #f0e332;
   width: 27.5%;
-  max-width: 5.75rem;
+  max-width: 4.5rem;
 }
 
-.btn-simbol {
+.btn-symbol {
   box-sizing: border-box;
-  padding: 1.5rem;
+  padding: 1.3rem;
   border-radius: 50%;
 }
 
 .centre {
   max-width: 700px;
-  margin: 0 auto !important;
+  padding: 0.5rem 10px;
+  margin: 0 auto;
 }
 
 .checkbox-imagenes {
@@ -29,9 +38,14 @@ h6 {
 }
 
 .cifra-contador {
-  font-size: 4rem;
+  font-size: 2.5rem;
   text-align: center;
   width: 3ch;
+}
+
+.contador {
+  max-width: 23rem;
+  margin: 0 auto;
 }
 
 .habitats {
@@ -84,6 +98,10 @@ h6 {
   padding: 0.4rem 0;
 }
 
+#autonomous {
+  background-color: #003974;
+}
+
 #btn-submit {
   color: #3d3d3d;
   background-color: #f0e332;
@@ -102,6 +120,10 @@ h6 {
   height: 5rem;
 }
 
+#driver-controlled {
+  background-color: #202124;
+}
+
 #info-match div {
   margin: 0.5rem 0;
 }
@@ -112,8 +134,6 @@ h6 {
   }
 }
 
-@media screen and (max-width: 700px) {
-  .centre {
-    margin: 0 10px !important;
-  }
+@media screen and (max-width: 425px) {
+
 }
