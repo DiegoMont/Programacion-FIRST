@@ -1,55 +1,57 @@
 function verificar() {
-  let comprobados = [false, false, false, false, false]
-  let errores = Array.from(document.getElementsByClassName("error"));
-  errores.forEach(function(elemento){
+  let errorFree = true;
+  const errores = Array.from(document.getElementsByClassName("error"));
+  errores.forEach(elemento => {
     elemento.classList.add("ocultar");
   });
 
-  let numTeam = document.getElementById("Team-Number");
-  if (Number(numTeam.value) > 0) {
-    comprobados[0] = true;
-  } else {
+
+  //Errores en el numero de equipo
+  const equipo = document.getElementById("Team-Number");
+  if(equipo.value < 1000){
+    errorFree = false;
     errores[0].classList.remove("ocultar");
   }
 
-  let numMatch = document.getElementById("Match-Number");
-  if (Number(numMatch.value) > 0) {
-    comprobados[1] = true;
-  } else {
+  //Errores en el numero de match
+  const match = document.getElementById("Match-Number");
+  if (match.value < 1 || match.value > 200) {
+    errorFree = false;
     errores[1].classList.remove("ocultar");
   }
 
-  if (!(Array.from(document.getElementsByName("hab-start")).some(function(elemento){
-    return elemento.checked;
-  }))) {
+  //Contadores power port
+  if(document.getElementById("auto-outer").value < 0 || document.getElementById("auto-abajo").value < 0 || document.getElementById("teleop-target").value < 0 || document.getElementById("teleop-abajo").value < 0) {
+    errorFree = false;
     errores[2].classList.remove("ocultar");
-  } else {
-    comprobados[2] = true;
   }
 
-  if (!(Array.from(document.getElementsByName("sandstorm")).some(function(elemento){
-    return elemento.checked;
-  }))) {
+  //Pregunta Rotation control
+  const respuestas = Array.from(document.getElementsByName("rotation-control"));
+  if(!respuestas.some(radio => {
+    return radio.checked;
+  })) {
+    errorFree = false;
     errores[3].classList.remove("ocultar");
-  } else {
-    comprobados[3] = true;
   }
 
-  if (!(Array.from(document.getElementsByName("hab-final")).some(function(elemento){
-    return elemento.checked;
-  }))) {
+  //Pregunta Generator Switch
+  const respuestas1 = Array.from(document.getElementsByName("shield-generator"));
+  if(!respuestas1.some(radio => {
+    return radio.checked;
+  })) {
+    errorFree = false;
     errores[4].classList.remove("ocultar");
-  } else {
-    comprobados[4] = true;
   }
 
-  document.getElementById("Cargo-Number").value = Number(document.getElementById("num-cargos").innerHTML);
-  console.log(document.getElementById("Cargo-Number"));
+  //Pregunta Sistema de vision
+  const vision = Array.from(document.getElementsByName("vision-enabled"));
+  if(!vision.some(radio => {
+    return radio.checked;
+  })) {
+    errorFree = false;
+    errores[5].classList.remove("ocultar");
+  }
 
-  document.getElementById("Hatches-Number").value = Number(document.getElementById("num-hatch").innerHTML);
-  console.log(document.getElementById("Hatches-Number"));
-
-  return comprobados.every(function(test){
-    return test;
-  });
+  return errorFree;
 }
