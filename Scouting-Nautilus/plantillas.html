@@ -3,18 +3,18 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="../../../Programas/Reset.css">
+    <link rel="stylesheet" type="text/css" href="css/Reset.css">
     <link rel="stylesheet" type="text/css" href="css/general.css">
     <link rel="stylesheet" type="text/css" href="css/estiloEncuesta.css">
     <script src="js/interactividad.js" charset="utf-8" defer></script>
     <title>Copiar y pegar</title>
   </head>
   <body>
+    <div class="centre">
 
     <!-- Botones radio con imagenes -->
     <h5>Pregunta</h5>
-    <div class="radio-imagenes">
-      <!-- Ajustar en .radio-imagenes filas y columnas del grid-->
+    <div class="radio-imagenes flexbox">
       <label class="img-opc btn">
         <img src="" alt="">
         <input type="radio" name="" value="" class="ocultar">
@@ -32,9 +32,13 @@
     <!-- Contador numerico -->
     <h5>Pregunta</h5>
     <div class="flexbox contador">
-      <img src="img/minus.svg" class="btn restar btn-symbol">
+      <button type="button" class="restar btn-symbol">
+        <img src="img/minus.svg">
+      </button>
       <input type="number" name="" id="" value="0" class="cifra-contador">
-      <img src="img/add.svg" class="btn aumentar btn-symbol">
+      <button type="button" class="aumentar btn-symbol">
+        <img src="img/add.svg">
+      </button>
     </div>
 
     <!-- Seleccion de hab para Deep Space -->
@@ -79,5 +83,6 @@
       </label>
     </div>
 
+  </div>
   </body>
 </html>

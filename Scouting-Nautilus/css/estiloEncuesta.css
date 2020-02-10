@@ -4,7 +4,7 @@ form {
 
 h5 {
   text-align: left;
-  margin: 0.5rem 0;
+  margin: 1rem 0 0.5rem;
 }
 
 h6, h3, h4, h5 {
@@ -17,8 +17,8 @@ h6, h3, h4, h5 {
 
 .aumentar, .restar {
   background-color: #f0e332;
-  width: 27.5%;
-  max-width: 4.5rem;
+  width: 5rem;
+  height: 5rem;
 }
 
 .btn-symbol {
@@ -29,7 +29,7 @@ h6, h3, h4, h5 {
 
 .centre {
   max-width: 700px;
-  padding: 0.5rem 10px;
+  padding: 2rem 1rem;
   margin: 0 auto;
 }
 
@@ -82,12 +82,10 @@ h6, h3, h4, h5 {
 }
 
 .radio-imagenes {
-  display: grid;
-  grid-gap: 10px;
-  grid-template: 1fr / repeat(3, 1fr);
+  justify-content: space-evenly;
 }
 
-.checkbox-imagenes label {
+.checkbox-imagenes label, .radio-imagenes label {
   width: 24%;
   min-width: 100px;
 }

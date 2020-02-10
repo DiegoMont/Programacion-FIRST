@@ -32,15 +32,22 @@
           <h5>Power Port</h5>
           <h6>Outer/Inner Port</h6>
           <div class="flexbox contador">
-            <img src="img/minus.svg" class="btn restar btn-symbol">
+            <button type="button" class="restar btn-symbol">
+              <img src="img/minus.svg">
+            </button>
             <input type="number" name="autonomous-outer" id="auto-outer" value="0" class="cifra-contador">
-            <img src="img/add.svg" class="btn aumentar btn-symbol">
+            <button type="button" class="aumentar btn-symbol">
+              <img src="img/add.svg">
+            </button>
           </div>
           <h6>Bottom Port</h6>
           <div class="flexbox contador">
-            <img src="img/minus.svg" class="btn restar btn-symbol">
-            <input type="number" name="autonomous-bottom" id="auto-abajo" value="0" class="cifra-contador">
-            <img src="img/add.svg" class="btn aumentar btn-symbol">
+            <button type="button" class="restar btn-symbol">
+              <img src="img/minus.svg">
+            </button>
+            <input type="number" name="autonomous-bottom" id="auto-abajo" value="0" class="cifra-contador"><button type="button" class="aumentar btn-symbol">
+              <img src="img/add.svg">
+            </button>
           </div>
 
         </div>
@@ -52,20 +59,27 @@
           <h5>Power Port</h5>
           <h6>Outer/Inner Port</h6>
           <div class="flexbox contador">
-            <img src="img/minus.svg" class="btn restar btn-symbol">
+            <button type="button" class="restar btn-symbol">
+              <img src="img/minus.svg">
+            </button>
             <input type="number" name="teleop-outer" id="teleop-target" value="0" class="cifra-contador">
-            <img src="img/add.svg" class="btn aumentar btn-symbol">
+            <button type="button" class="aumentar btn-symbol">
+              <img src="img/add.svg">
+            </button>
           </div>
           <h6>Bottom Port</h6>
           <div class="flexbox contador">
-            <img src="img/minus.svg" class="btn restar btn-symbol">
+            <button type="button" class="restar btn-symbol">
+              <img src="img/minus.svg">
+            </button>
             <input type="number" name="teleop-bottom" id="teleop-abajo" value="0" class="cifra-contador">
-            <img src="img/add.svg" class="btn aumentar btn-symbol">
+            <button type="button" class="aumentar btn-symbol">
+              <img src="img/add.svg">
+            </button>
           </div>
 
           <h5>Rotation/Position Control</h5>
-          <div class="radio-imagenes">
-            <!-- Ajustar en .radio-imagenes filas y columnas del grid-->
+          <div class="radio-imagenes flexbox">
             <label class="img-opc btn">
               <img src="img/control-panel.jpg" alt="Control panel">
               <input type="radio" name="rotation-control" value="1" class="ocultar">
@@ -77,8 +91,7 @@
           </div>
 
           <h5>Hanging from the Generator Switch</h5>
-          <div class="radio-imagenes">
-            <!-- Ajustar en .radio-imagenes filas y columnas del grid-->
+          <div class="radio-imagenes flexbox">
             <label class="img-opc btn">
               <img src="img/shield-generator.jpg" alt="Hanging from the Generator Switch">
               <input type="radio" name="shield-generator" value="1" class="ocultar">
