@@ -122,8 +122,25 @@ h6, h3, h4, h5 {
   background-color: #202124;
 }
 
+#header {
+  padding: 1rem;
+}
+
+#Match-Number {
+  width: 5ch;
+}
+
+#Team-Number {
+  width: 6ch;
+}
+
 #info-match div {
   margin: 0.5rem 0;
+}
+
+#info-match label {
+  display: block;
+  margin-bottom: 0.25rem;
 }
 
 @media screen and (min-width: 2016px) {

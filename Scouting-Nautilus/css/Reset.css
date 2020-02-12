@@ -29,7 +29,7 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0 auto;
 }
 
-p, a, label, input, button, li, textarea {
+p, a, input, button, li, textarea, select, datalist {
   font-size: 1rem;
 }
 
@@ -61,7 +61,7 @@ h5 {
   font-size: 1.35rem;
 }
 
-h6 {
+h6, label {
   font-size: 1.2rem;
 }
 
@@ -85,10 +85,10 @@ textarea {
   resize: none;
 }
 
-textarea, input[type=email], input[type=password], input[type=tel], input[type=text], input[type=date], input[type=number] {
+textarea, select, datalist, input[type=email], input[type=password], input[type=tel], input[type=text], input[type=date], input[type=number] {
   color: #3d3d3d;
   background-color: #fafafa;
-  padding: 0.25rem 0.3rem;
+  padding: 0.3rem 0.5rem;
   border-radius: 1px;
 }
 

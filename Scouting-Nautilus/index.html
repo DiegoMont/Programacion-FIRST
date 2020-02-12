@@ -12,14 +12,21 @@
   </head>
   <body>
     <form action="Guardar.php" method="post" onsubmit="return verificar()">
-        <div class="centre">
+        <div class="centre" id="header">
           <div class="flexbox" id="info-match">
             <div>
-              <label for="Team-Number" class="light-font"># Equipo</label>
+              <label for="Regional" class="light-font">Regional</label>
+              <select class="" id="Regional" name="zona-regional">
+                <option value="monterrey">Monterrey</option>
+                <option value="calgary">Calgary</option>
+              </select>
+            </div>
+            <div>
+              <label for="Team-Number" class="light-font">Equipo</label>
               <input type="number" name="nombre-equipo" id="Team-Number" placeholder="4010">
             </div>
             <div>
-              <label for="Match-Number" class="light-font"># Match</label>
+              <label for="Match-Number" class="light-font">Match</label>
               <input type="number" name="numero-match" id="Match-Number" placeholder="1">
             </div>
           </div>

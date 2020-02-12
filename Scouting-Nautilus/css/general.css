@@ -6,9 +6,11 @@ corbel, arial, sans-serif
 border level 2: outset
 */
 
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap');
+
 * {
   color: #b4b3b3;
-  font-family: Helvetica, Arial, sans-serif;
+  font-family: 'Roboto', Helvetica, Arial, sans-serif;
 }
 
 body {
@@ -17,8 +19,4 @@ body {
 
 h1 {
   margin: 1.2rem 0;
-}
-
-#Team-Number, #Match-Number {
-  width: 5rem;
 }
