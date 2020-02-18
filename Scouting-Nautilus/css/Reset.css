@@ -29,7 +29,7 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0 auto;
 }
 
-p, a, input, button, li, textarea, select, datalist {
+p, a, input, button, li, textarea, select, datalist, td, th {
   font-size: 1rem;
 }
 
@@ -93,7 +93,10 @@ textarea, select, datalist, input[type=email], input[type=password], input[type=
 }
 
 button, .btn {
+  text-align: center;
   cursor: pointer;
+  box-sizing: border-box;
+  display: block;
 }
 
 .centre {
