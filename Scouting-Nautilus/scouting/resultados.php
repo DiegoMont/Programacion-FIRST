@@ -28,15 +28,16 @@ mysqli_close($connection);
     <meta name="keywords" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Resultados | Scouting</title>
-    <link rel="stylesheet" type="text/css" href="../css/Reset.css">
-    <link rel="stylesheet" type="text/css" href="../css/general.css">
-    <link rel="stylesheet" type="text/css" href="../css/estilo-resultados.css">
+    <link rel="stylesheet" type="text/css" href="css/Reset.css">
+    <link rel="stylesheet" type="text/css" href="css/general.css">
+    <link rel="stylesheet" type="text/css" href="css/estilo-resultados.css">
     <link rel="icon" type="image/png" href="">
     <!--<script src="js/interactividad.js" charset="utf-8" defer></script>-->
   </head>
   <body>
     <header>
       <div class="centre">
+        <img src="img/nautilus.png" alt="Nautilus" id="logo">
         <h3>Scouting</h3>
         <div class="flexbox">
           <button type="button" class="active btn-display">Tabla</button>

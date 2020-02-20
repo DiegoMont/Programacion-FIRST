@@ -3,10 +3,18 @@ header {
   padding: 0 0 1rem;
 }
 
+#logo {
+  display: inline-block;
+  width: auto;
+  height: 6vh;
+  min-height: 30px;
+  margin-right: 0.5rem;
+}
+
 h3 {
+  display: inline-block;
   color: #000;
   text-align: left;
-  width: 90%;
   padding: 1.2rem 0 0;
   margin: auto;
 }

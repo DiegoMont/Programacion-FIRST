@@ -181,8 +181,9 @@ if(isset($_POST["comentarios"])) {
       </h1>
       <img src="img/bb8.jpg" alt="Exito" class="foto">
       <div class="flexbox">
-        <a href="index.php" class="btn boton">Scouting nuevo</a>
-        <a href="resultados/index.php" class="btn boton">Estad&iacute;sticas</a>
+        <a href="index.php" class="btn boton">Scouting match</a>
+        <a href="resultados.php" class="btn boton">Estad&iacute;sticas</a>
+        <a href="scouting-pit.html" class="btn boton"></a>
       </div>
     </div>
   </body>

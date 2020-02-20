@@ -2,7 +2,7 @@
 session_start(['cookie_lifetime' => 172800]);
 if (isset($_SESSION["sesionIniciada"])) {
   if ($_SESSION["sesionIniciada"] == 125) {
-    header("Location: resultados.php");
+    header("Location: Menu.html");
     exit;
   }
 }
@@ -15,8 +15,8 @@ if (isset($_SESSION["sesionIniciada"])) {
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar sesion</title>
-    <link rel="stylesheet" type="text/css" href="../css/Reset.css">
-    <link rel="stylesheet" type="text/css" href="../css/general.css">
+    <link rel="stylesheet" type="text/css" href="css/Reset.css">
+    <link rel="stylesheet" type="text/css" href="css/general.css">
     <style media="screen">
       .flexbox {
         width: 100vw;
@@ -61,7 +61,7 @@ if (isset($_SESSION["sesionIniciada"])) {
             $contrasenia = htmlspecialchars($_POST["contrasenia"]);
             if($contrasenia === "dieguapo") {
               $_SESSION["sesionIniciada"] = 125;
-              header("Location: resultados.php");
+              header("Location: Menu.html");
               exit;
             } else {
               echo "<p class='error'>Contrase&ntildea incorrecta</p>";
