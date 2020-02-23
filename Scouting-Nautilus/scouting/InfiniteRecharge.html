@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scouting | Infinite Recharge</title>
+    <title>Scouting | Match</title>
     <link rel="stylesheet" type="text/css" href="css/Reset.css">
     <link rel="stylesheet" type="text/css" href="css/general.css">
     <link rel="stylesheet" type="text/css" href="css/estiloEncuesta.css">
@@ -96,15 +96,27 @@
             </button>
           </div>
 
-          <h5>Rotation/Position Control</h5>
+          <h5>Rotation Control</h5>
           <div class="radio-imagenes flexbox">
             <label class="img-opc btn">
-              <img src="img/control-panel.jpg" alt="Control panel">
+              <img src="img/control-panel.jpg" alt="Rotation Control task">
               <input type="radio" name="rotation-control" value="1" class="ocultar">
             </label>
             <label class="img-opc btn">
               <img src="img/robot-roto.jpg" alt="No puede">
               <input type="radio" name="rotation-control" value="0" class="ocultar">
+            </label>
+          </div>
+
+          <h5>Position Control</h5>
+          <div class="radio-imagenes flexbox">
+            <label class="img-opc btn">
+              <img src="img/control-panel.jpg" alt="PositionControl task">
+              <input type="radio" name="position-control" value="1" class="ocultar">
+            </label>
+            <label class="img-opc btn">
+              <img src="img/robot-roto.jpg" alt="No puede">
+              <input type="radio" name="position-control" value="0" class="ocultar">
             </label>
           </div>
 
@@ -133,9 +145,9 @@
           <p class="error ocultar">*El n&uacute;mero de equipo no es v&aacute;lido</p>
           <p class="error ocultar">*El n&uacute;mero de match no es v&aacute;lido</p>
           <p class="error ocultar">*El numero de Power Cells de un Port es demasiado peque&ntilde;o</p>
-          <p class="error ocultar">*No has seleccionado si el robot interact&uacute;a con el Rotation Control</p>
+          <p class="error ocultar">*No has seleccionado si el robot completa el Rotation Control</p>
           <p class="error ocultar">*No has seleccionado si el robot se cuelga del Switch</p>
-          <p class="error ocultar">*El robot tiene sistema de visi&oacute;n?</p>
+          <p class="error ocultar">*No has seleccionado si el robot completa el Position Control</p>
 
           <button type="submit" value="Enviar" id="btn-submit">Enviar</button>
         </div>

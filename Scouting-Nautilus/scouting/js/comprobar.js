@@ -35,6 +35,15 @@ function verificar() {
     errores[3].classList.remove("ocultar");
   }
 
+  //Pregunta Rotation control
+  const respuestas2 = Array.from(document.getElementsByName("position-control"));
+  if(!respuestas2.some(radio => {
+    return radio.checked;
+  })) {
+    errorFree = false;
+    errores[5].classList.remove("ocultar");
+  }
+
   //Pregunta Generator Switch
   const respuestas1 = Array.from(document.getElementsByName("shield-generator"));
   if(!respuestas1.some(radio => {
@@ -42,15 +51,6 @@ function verificar() {
   })) {
     errorFree = false;
     errores[4].classList.remove("ocultar");
-  }
-
-  //Pregunta Sistema de vision
-  const vision = Array.from(document.getElementsByName("vision-enabled"));
-  if(!vision.some(radio => {
-    return radio.checked;
-  })) {
-    errorFree = false;
-    errores[5].classList.remove("ocultar");
   }
 
   return errorFree;

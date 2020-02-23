@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scouting | Ingenier&iacute;a</title>
+    <title>Scouting | Pit</title>
     <link rel="stylesheet" type="text/css" href="css/Reset.css">
     <link rel="stylesheet" type="text/css" href="css/general.css">
     <link rel="stylesheet" type="text/css" href="css/estiloEncuesta.css">
@@ -27,7 +27,7 @@
     </style>
   </head>
   <body>
-    <form action="Guardar.php" method="post" onsubmit="return verificar()">
+    <form action="Guardar.php" method="POST" onsubmit="return verificar()">
         <div class="centre" id="header">
           <div class="flexbox" id="info-match">
             <div>
@@ -50,11 +50,11 @@
           <div class="btn-bool flexbox">
             <label class="btn" style="width: 25%; max-width: 7rem;">
               <img src="img/tick.svg" alt="Si"  class="btn-symbol"  style="background-color: #148f12;">
-              <input type="radio" name="" value="" class="ocultar">
+              <input type="radio" name="collectors" value="1" class="ocultar">
             </label>
             <label class="btn" style="width: 25%; max-width: 7rem;">
               <img src="img/cancel.svg" alt="No" class="btn-symbol"  style="background-color: #e11610;">
-              <input type="radio" name="" value="" class="ocultar">
+              <input type="radio" name="collectors" value="2" class="ocultar">
             </label>
           </div>
 
@@ -63,7 +63,7 @@
             <button type="button" class="restar btn-symbol">
               <img src="img/minus.svg">
             </button>
-            <input type="number" name="" id="" value="0" class="cifra-contador">
+            <input type="number" name="power-cell-storage" id="almacenamiento-power-cell" value="0" class="cifra-contador">
             <button type="button" class="aumentar btn-symbol">
               <img src="img/add.svg">
             </button>
@@ -73,29 +73,29 @@
           <div class="radio-imagenes flexbox">
             <label class="img-opc btn">
               <img src="img/Mecanum.jpg" alt="Mecanum drivetrain">
-              <input type="radio" name="" value="" class="ocultar">
+              <input type="radio" name="drivetrain" value="1" class="ocultar">
             </label>
             <label class="img-opc btn">
               <img src="img/West_Coast.jpg" alt="West Coast drivetrain">
-              <input type="radio" name="" value="" class="ocultar">
+              <input type="radio" name="drivetrain" value="2" class="ocultar">
             </label>
             <label class="img-opc btn">
               <img src="img/Omni.jpg" alt="Omni drivetrain">
-              <input type="radio" name="" value="" class="ocultar">
+              <input type="radio" name="drivetrain" value="3" class="ocultar">
             </label>
             <label class="img-opc btn">
               <img src="img/High_Traction.jpg" alt="High traction drivetrain">
-              <input type="radio" name="" value="" class="ocultar">
+              <input type="radio" name="drivetrain" value="4" class="ocultar">
             </label>
             <label class="img-opc btn">
               <img src="img/Confused-Robot.jpg" alt="Otro">
-              <input type="radio" name="" value="" class="ocultar">
+              <input type="radio" name="drivetrain" value="5" class="ocultar">
             </label>
           </div>
 
           <div class="texto-adicional">
             <label for="">Especificar otro tipo de drivetrain:</label>
-            <input type="text" name="" value="" id="">
+            <input type="text" name="other-drivetrain" value="" id="otro-drivetrain">
           </div>
 
           <h5>Hanging from the Generator Switch</h5>
@@ -111,19 +111,19 @@
           </div>
 
           <div>
-            <h6>En que posiciones se cuelga</h6>
+            <h6>En que posiciones se cuelga:</h6>
             <div class="checkbox-texto">
               <div>
-                <input type="checkbox" name="" value="" id="">
-                <label for="">Lado izquierdo</label>
+                <input type="checkbox" name="position-switch" value="1" id="lado-izquierdo">
+                <label for="lado-izquierdo">Lado izquierdo</label>
               </div>
               <div>
-                <input type="checkbox" name="" value="" id="">
-                <label for="">Centro</label>
+                <input type="checkbox" name="position-switch" value="2" id="lado-centro">
+                <label for="lado-centro">Centro</label>
               </div>
               <div>
-                <input type="checkbox" name="" value="" id="">
-                <label for="">Lado derecho</label>
+                <input type="checkbox" name="position-switch" value="3" id="lado-derecho">
+                <label for="lado-derecho">Lado derecho</label>
               </div>
             </div>
 
@@ -131,34 +131,34 @@
             <div class="btn-bool flexbox">
               <label class="btn" style="width: 25%; max-width: 7rem;">
                 <img src="img/tick.svg" alt="Si"  class="btn-symbol"  style="background-color: #148f12;">
-                <input type="radio" name="" value="" class="ocultar">
+                <input type="radio" name="carry" value="1" class="ocultar">
               </label>
               <label class="btn" style="width: 25%; max-width: 7rem;">
                 <img src="img/cancel.svg" alt="No" class="btn-symbol"  style="background-color: #e11610;">
-                <input type="radio" name="" value="" class="ocultar">
+                <input type="radio" name="carry" value="2" class="ocultar">
               </label>
             </div>
           </div>
 
           <h5>En que se especializa?</h5>
-          <textarea name="name"></textarea>
+          <textarea name="specialty" id="especialidad"></textarea>
 
           <h5>Qu&eacute; buscan en alianza?</h5>
-          <textarea name="name"></textarea>
+          <textarea name="needs-ally" id="necesidad-alianza"></textarea>
 
-          <h5>En qu&eacute; Ports puede anotar</h5>
+          <h5>En qu&eacute; Ports puede anotar?</h5>
           <div class="checkbox-texto">
             <div>
-              <input type="checkbox" name="" value="" id="">
-              <label for="">Inner Port</label>
+              <input type="checkbox" name="ports" value="1" id="inner-port">
+              <label for="inner-port">Inner Port</label>
             </div>
             <div>
-              <input type="checkbox" name="" value="" id="">
-              <label for="">Outer Port</label>
+              <input type="checkbox" name="ports" value="2" id="outer-port">
+              <label for="outer-port">Outer Port</label>
             </div>
             <div>
-              <input type="checkbox" name="" value="" id="">
-              <label for="">Bottom Port</label>
+              <input type="checkbox" name="ports" value="3" id="bottom-port">
+              <label for="bottom-port">Bottom Port</label>
             </div>
           </div>
 
@@ -174,15 +174,15 @@
             </label>
           </div>
 
-          <h5>Interact&uacute;a con el Rotation Control</h5>
-          <div class="btn-bool flexbox">
-            <label class="btn" style="width: 25%; max-width: 7rem;">
-              <img src="img/tick.svg" alt="Si"  class="btn-symbol"  style="background-color: #148f12;">
-              <input type="radio" name="" value="" class="ocultar">
+          <h5>Interact&uacute;a con el Control Panel</h5>
+          <div class="radio-imagenes flexbox">
+            <label class="img-opc btn">
+              <img src="img/control-panel.jpg" alt="Control Panel">
+              <input type="radio" name="control-panel" value="1" class="ocultar">
             </label>
-            <label class="btn" style="width: 25%; max-width: 7rem;">
-              <img src="img/cancel.svg" alt="No" class="btn-symbol"  style="background-color: #e11610;">
-              <input type="radio" name="" value="" class="ocultar">
+            <label class="img-opc btn">
+              <img src="img/robot-roto.jpg" alt="No puede">
+              <input type="radio" name="control-panel" value="2" class="ocultar">
             </label>
           </div>
 
@@ -191,40 +191,28 @@
             <div class="btn-bool flexbox">
               <label class="btn" style="width: 25%; max-width: 7rem;">
                 <img src="img/tick.svg" alt="Si"  class="btn-symbol"  style="background-color: #148f12;">
-                <input type="radio" name="" value="" class="ocultar">
+                <input type="radio" name="position-control" value="1" class="ocultar">
               </label>
               <label class="btn" style="width: 25%; max-width: 7rem;">
                 <img src="img/cancel.svg" alt="No" class="btn-symbol"  style="background-color: #e11610;">
-                <input type="radio" name="" value="" class="ocultar">
+                <input type="radio" name="position-control" value="2" class="ocultar">
               </label>
             </div>
           </div>
 
           <div class="input-texto">
-            <label for="">Cu&aacute;nto tiempo tarda en lanzar un Power Cell (s)?</label>
-            <input type="number" name="" value=""  style="width: 4rem;">
+            <label for="cadencia">Cu&aacute;nto tiempo tarda en lanzar un Power Cell(s)?</label>
+            <input type="number" name="fire-rate"  style="width: 4rem;" id="cadencia">
           </div>
 
           <div class="input-texto">
-            <label for="">Peso(lbs):</label>
-            <input type="number" name="" value="" placeholder="125" style="width: 4rem;">
+            <label for="peso">Peso(lbs):</label>
+            <input type="number" name="weight" placeholder="125" style="width: 4rem;" id="peso">
           </div>
 
           <div class="input-texto">
-            <label for="">Altura(in):</label>
-            <input type="number" name="" value="" placeholder="45" style="width: 4rem;">
-          </div>
-
-          <h5>Puede pasar por el Trench Run?</h5>
-          <div class="btn-bool flexbox">
-            <label class="btn" style="width: 25%; max-width: 7rem;">
-              <img src="img/tick.svg" alt="Si"  class="btn-symbol"  style="background-color: #148f12;">
-              <input type="radio" name="" value="" class="ocultar">
-            </label>
-            <label class="btn" style="width: 25%; max-width: 7rem;">
-              <img src="img/cancel.svg" alt="No" class="btn-symbol"  style="background-color: #e11610;">
-              <input type="radio" name="" value="" class="ocultar">
-            </label>
+            <label for="altura">Altura(in):</label>
+            <input type="number" name="height" placeholder="45" style="width: 4rem;" id="altura">
           </div>
 
         </div>
@@ -237,10 +225,28 @@
 
           <!-- Seccion para colocar errores -->
           <p class="error ocultar">*Falta el n&uacute;mero de equipo</p>
+          <p class="error ocultar">*El robot tiene recolector para los Power Cells?</p>
+          <p class="error ocultar">*El n&uacute;mero de Power Cells que almacena el robot no cumple con la regla G6. No more than five (5) POWER CELLS at a time</p>
+          <p class="error ocultar">*No has elegido el tipo de drivetrain del robot</p>
+          <p class="error ocultar">*Especifica otro tipo de drivetrain</p>
+          <p class="error ocultar">*No has seleccionado si el robot se cuelga del Switch</p>
+          <p class="error ocultar">*Selecciona al menos una posicion del Switch en la que se cuelgue el robot</p>
+          <p class="error ocultar">*El robot puede cargar a otro robot?</p>
+          <p class="error ocultar">*En que se especializa el robot?</p>
+          <p class="error ocultar">*Agrega mas detalle en cuanto a en qu&eacute; se especializa el robot</p>
+          <p class="error ocultar">*Que busca el equipo en una alianza?</p>
+          <p class="error ocultar">*Selecciona al menos un Port</p>
+          <p class="error ocultar">*El robot tiene sistema de visi&oacute;n?</p>
+          <p class="error ocultar">*Selecciona si el robot interact&uacute;a con el Control Panel</p>
+          <p class="error ocultar">*Selecciona si el robot completa el Position Control</p>
+          <p class="error ocultar">*El valor del tiempo no es v&aacute;lido</p>
+          <p class="error ocultar">*El peso no cumple con la regla R5.</p>
+          <p class="error ocultar">*La altura no cumple con la regla R3.</p>
 
           <button type="submit" value="Enviar" id="btn-submit">Enviar</button>
         </div>
     </form>
+    <script src="js/comprobar-scouting-pit.js" charset="utf-8"></script>
     <div style="font-size: 0.5rem; color: #3e3e3e;">Icons made by <a href="https://www.flaticon.com/authors/hanan" title="Hanan" style="font-size: 0.5rem; color: #3e3e3e;">Hanan</a> from <a href="https://www.flaticon.com/" title="Flaticon" style="font-size: 0.5rem; color: #3e3e3e;">www.flaticon.com </a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/"                 title="Creative Commons BY 3.0" target="_blank" style="font-size: 0.5rem; color: #3e3e3e;">CC 3.0 BY</a></div>
   </body>
 </html>

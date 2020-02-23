@@ -118,6 +118,8 @@ textarea {
 
 .input-texto label {
   font-size: 1.2rem;
+  font-weight: bolder;
+  color: #fafafa;
   display: inline-block;
   margin: 0 0.4rem 0.4rem 0;
 }
