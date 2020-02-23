@@ -20,3 +20,7 @@ body {
 h1 {
   margin: 1.2rem 0;
 }
+
+.opacar {
+  opacity: 0.35;
+}
