@@ -1,17 +1,9 @@
 <?php
 //Buscar sesion activa
-session_start();
-if (!isset($_SESSION["sesionIniciada"]) && !$_SESSION["sesionIniciada"] == 125) {
-  header("Location: index.php");
-  exit;
-}
+include "php/iniciar-sesion.php";
 
 //Conectar a base de datos
-$connection = mysqli_connect('localhost', "diegod", 'dieguapo1234', 'bd_scouting');
-
-if (!$connection) {
-  $mensaje = "Error: " . mysqli_connect_error();
-}
+include "php/conectar-DB.php";
 
 $query = "SELECT lugar_regional, numero_equipo, numero_match, auto_upper, auto_bottom, teleop_upper, teleop_bottom, control_panel, shield_generator, vision, comentarios, created_at FROM equipos";
 $result = mysqli_query($connection, $query);

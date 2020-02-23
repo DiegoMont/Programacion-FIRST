@@ -1,8 +1,8 @@
 <?php
-session_start(['cookie_lifetime' => 172800]);
+include "php/iniciar-sesion.php";
 if (isset($_SESSION["sesionIniciada"])) {
-  if ($_SESSION["sesionIniciada"] == 125) {
-    header("Location: Menu.html");
+  if($_SESSION["sesionIniciada"] == 125) {
+    header("Location: menu.html");
     exit;
   }
 }
@@ -61,7 +61,7 @@ if (isset($_SESSION["sesionIniciada"])) {
             $contrasenia = htmlspecialchars($_POST["contrasenia"]);
             if($contrasenia === "dieguapo") {
               $_SESSION["sesionIniciada"] = 125;
-              header("Location: Menu.html");
+              header("Location: menu.html");
               exit;
             } else {
               echo "<p class='error'>Contrase&ntildea incorrecta</p>";

@@ -3,17 +3,14 @@ $regional;
 $team_number;
 $match;
 $power_ports = [-1, -1, -1, -1];
-$control_panel;
+$fouls;
+$rotation_control;
+$position_control;
 $shield_generator;
-$vision_enabled;
 $comentarios = "";
 
 //Buscar sesion activa
-session_start();
-if (!isset($_SESSION["sesionIniciada"]) && !$_SESSION["sesionIniciada"] == 125) {
-  header("Location: index.php");
-  exit;
-}
+include "php/iniciar-sesion.php";
 
 //Validar campo zona-regional
 if(isset($_POST["zona-regional"])){
@@ -61,7 +58,7 @@ $temp = ["autonomous-outer", "autonomous-bottom", "teleop-outer", "teleop-bottom
 for ($i = 0; $i < count($power_ports); $i++) {
   if (isset($_POST[$temp[$i]])) {
     $temp2 = htmlspecialchars($_POST[$temp[$i]]);
-    $temp2 = filter_var(filter_var($temp2, FILTER_SANITIZE_NUMBER_INT), FILTER_VALIDATE_INT, ["options" => ["min_range" => -1, "max_range" => 99]]);
+    $temp2 = filter_var(filter_var($temp2, FILTER_SANITIZE_NUMBER_INT), FILTER_VALIDATE_INT, ["options" => ["min_range" => 0, "max_range" => 99]]);
     if($temp2 >= 0)
       $power_ports[$i] = $temp2;
   }
@@ -71,15 +68,40 @@ for ($i = 0; $i < count($power_ports); $i++) {
   }
 }
 
+//Validar campo fouls
+if (isset($_POST["fouls"])) {
+  $temp = htmlspecialchars($_POST["fouls"]);
+  $temp = filter_var(filter_var($temp, FILTER_SANITIZE_NUMBER_INT), FILTER_VALIDATE_INT, ["options" => ["min_range" => 0, "max_range" => 50]]);
+  if($temp >= 0)
+    $fouls = $temp;
+}
+if (!isset($fouls)) {
+  header("Location: InfiniteRecharge.html");
+  exit;
+}
+
 //Validar campo rotation-control
 if (isset($_POST["rotation-control"])) {
   $temp = htmlspecialchars($_POST["rotation-control"]);
   if (strlen($temp) == 1 && $temp === "1") {
-    $control_panel = "Activa";
+    $rotation_control = "Activa";
   } else
-    $control_panel = "No aplica";
+    $rotation_control = "No aplica";
 }
-if(!isset($control_panel)) {
+if(!isset($rotation_control)) {
+  header("Location: InfiniteRecharge.html");
+  exit;
+}
+
+//Validar campo position-control
+if (isset($_POST["position-control"])) {
+  $temp = htmlspecialchars($_POST["position-control"]);
+  if (strlen($temp) == 1 && $temp === "1") {
+    $position_control = "Activa";
+  } else
+    $position_control = "No aplica";
+}
+if(!isset($position_control)) {
   header("Location: InfiniteRecharge.html");
   exit;
 }
@@ -94,20 +116,6 @@ if (isset($_POST["shield-generator"])) {
   }
 }
 if(!isset($shield_generator)) {
-  header("Location: InfiniteRecharge.html");
-  exit;
-}
-
-//Validar campo vision-enabled
-if (isset($_POST["vision-enabled"])) {
-  $temp = htmlspecialchars($_POST["vision-enabled"]);
-  if (strlen($temp) == 1 && $temp === "1") {
-    $vision_enabled = "Vision";
-  } else {
-    $vision_enabled = "No vision";
-  }
-}
-if(!isset($vision_enabled)) {
   header("Location: InfiniteRecharge.html");
   exit;
 }
@@ -160,19 +168,16 @@ if(isset($_POST["comentarios"])) {
         $mensaje = "Se ha guardado exitosamente. Gracias!";
 
         //Conectar a base de datos
-        $connection = mysqli_connect('localhost', "diegod", 'dieguapo1234', 'bd_scouting');
-
-        if (!$connection) {
-          $mensaje = "Error: " . mysqli_connect_error();
-        }
+        include "php/conectar-DB.php";
 
         //Guardar scouting en la base de datos
-        $query = "INSERT INTO equipos(lugar_regional, numero_equipo, numero_match, auto_upper, auto_bottom, teleop_upper, teleop_bottom, control_panel, shield_generator, vision, comentarios) VALUES ('$regional', '$team_number', '$match', '${power_ports[0]}', '${power_ports[1]}', '${power_ports[2]}', '${power_ports[3]}', '$control_panel', '$shield_generator', '$vision_enabled', '$comentarios')";
+        $query = "INSERT INTO match_results(lugar_regional, numero_equipo, numero_match, auto_upper, auto_bottom, teleop_upper, teleop_bottom, fouls, rotation_control, position_control, shield_generator, comentarios) VALUES ('$regional', '$team_number', '$match', '${power_ports[0]}', '${power_ports[1]}', '${power_ports[2]}', '${power_ports[3]}', '$fouls', '$rotation_control', '$position_control', '$shield_generator', '$comentarios')";
 
         $result = mysqli_query($connection, $query);
 
         if (!$result) {
           $mensaje = "Error: Unable to save data";
+          echo $result;
         }
 
         mysqli_close($connection);
@@ -181,9 +186,9 @@ if(isset($_POST["comentarios"])) {
       </h1>
       <img src="img/bb8.jpg" alt="Exito" class="foto">
       <div class="flexbox">
-        <a href="index.php" class="btn boton">Scouting match</a>
+        <a href="InfiniteRecharge.html" class="btn boton">Scouting match</a>
         <a href="resultados.php" class="btn boton">Estad&iacute;sticas</a>
-        <a href="scouting-pit.html" class="btn boton"></a>
+        <a href="scouting-pit.html" class="btn boton">Scouting pit</a>
       </div>
     </div>
   </body>

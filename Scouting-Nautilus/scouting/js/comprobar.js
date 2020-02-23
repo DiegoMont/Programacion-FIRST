@@ -26,6 +26,14 @@ function verificar() {
     errores[2].classList.remove("ocultar");
   }
 
+  //Contador numero Fouls
+  const faltas = document.getElementById("faltas").value;
+  console.log(faltas);
+  if (faltas < 0 || faltas > 50) {
+    errorFree = false;
+    errores[6].classList.remove("ocultar");
+  }
+
   //Pregunta Rotation control
   const respuestas = Array.from(document.getElementsByName("rotation-control"));
   if(!respuestas.some(radio => {
@@ -35,7 +43,7 @@ function verificar() {
     errores[3].classList.remove("ocultar");
   }
 
-  //Pregunta Rotation control
+  //Pregunta Position control
   const respuestas2 = Array.from(document.getElementsByName("position-control"));
   if(!respuestas2.some(radio => {
     return radio.checked;
