@@ -5,10 +5,16 @@ include "php/iniciar-sesion.php";
 //Conectar a base de datos
 include "php/conectar-DB.php";
 
-$query = "SELECT lugar_regional, numero_equipo, numero_match, auto_upper, auto_bottom, teleop_upper, teleop_bottom, control_panel, shield_generator, vision, comentarios, created_at FROM equipos";
+$query = "SELECT lugar_regional, numero_equipo, numero_match, auto_upper, auto_bottom, teleop_upper, teleop_bottom, fouls, rotation_control, position_control, shield_generator, comentarios, created_at FROM match_results";
 $result = mysqli_query($connection, $query);
 
 $respuestas = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+$query2 = "SELECT lugar_regional, numero_equipo, collector, store_cells, drivetrain, shield_generator, switch_positions, carry_robot, specialty, needs_in_allies, target_ports, vision_enabled, control_panel, position_control, fire_rate, weight, height, comments, created_at FROM pit_results";
+$result2 = mysqli_query($connection, $query2);
+
+$respuestas2 = mysqli_fetch_all($result2, MYSQLI_ASSOC);
+print_r($respuestas2);
 #print_r($respuestas);
 
 mysqli_close($connection);
@@ -44,10 +50,11 @@ mysqli_close($connection);
             <th rowspan="2">Equipo</th>
             <th colspan="2">Autonomous</th>
             <th colspan="2">Teleop</th>
-            <th rowspan="2">Control Panel</th>
+            <th rowspan="2">Rotation Control</th>
+            <th rowspan="2">Position Control</th>
             <th rowspan="2">Shield Generator</th>
-            <th rowspan="2">Vision</th>
             <th rowspan="2" class="comentarios">Comentarios</th>
+            <th rowspan="2">Fouls</th>
             <th rowspan="2">Regional</th>
             <th rowspan="2">Match</th>
             <th rowspan="2" class="marca-temporal">Marca Temporal</th>
@@ -68,10 +75,11 @@ mysqli_close($connection);
             echo "<td>" . htmlspecialchars($respuesta['auto_bottom']) . "</td>";
             echo "<td>" . htmlspecialchars($respuesta['teleop_upper']) . "</td>";
             echo "<td>" . htmlspecialchars($respuesta['teleop_bottom']) . "</td>";
-            echo "<td>" . htmlspecialchars($respuesta['control_panel']) . "</td>";
+            echo "<td>" . htmlspecialchars($respuesta['rotation_control']) . "</td>";
+            echo "<td>" . htmlspecialchars($respuesta['position_control']) . "</td>";
             echo "<td>" . htmlspecialchars($respuesta['shield_generator']) . "</td>";
-            echo "<td>" . htmlspecialchars($respuesta['vision']) . "</td>";
             echo "<td>" . htmlspecialchars($respuesta['comentarios']) . "</td>";
+            echo "<td>" . htmlspecialchars($respuesta['fouls']) . "</td>";
             echo "<td>" . htmlspecialchars($respuesta['lugar_regional']) . "</td>";
             echo "<td>" . htmlspecialchars($respuesta['numero_match']) . "</td>";
             echo "<td>" . htmlspecialchars($respuesta['created_at']) . "</td>";
@@ -82,6 +90,49 @@ mysqli_close($connection);
       </table>
       </div>
     </div>
+
+    <div class="seccion flexbox" id="">
+      <div class="tabla">
+      <table>
+        <thead>
+          <tr>
+            <th rowspan="2">Equipo</th>
+            <th rowspan="2">Recolector</th>
+            <th rowspan="2">Almacenamiento Power Cells</th>
+            <th rowspan="2">Drivetrain</th>
+            <th colspan="3">Shield Generator</th>
+            <th rowspan="2">Target Ports</th>
+            <th rowspan="2">Cadencia (s)</th>
+            <th colspan="2">Control Panel</th>
+            <th rowspan="2" class="comentarios">En que se especializa?</th>
+            <th rowspan="2" class="comentarios">Aliados</th>
+            <th rowspan="2">Peso (lbs)</th>
+            <th rowspan="2">Altura (in)</th>
+            <th rowspan="2">Regional</th>
+            <th rowspan="2" class="marca-temporal">Marca Temporal</th>
+          </tr>
+          <tr>
+            <th>Se cuelga?</th>
+            <th>Posiciones</th>
+            <th>Puede cargar?</th>
+            <th>Rotation Control</th>
+            <th>Position Control</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php
+          foreach ($respuestas2 as $respuesta) {
+            echo "<tr>";
+            echo "<td>" . htmlspecialchars($respuesta['numero_equipo']) . "</td>";
+
+            echo "</tr>";
+          }
+          ?>
+        </tbody>
+      </table>
+      </div>
+    </div>
+
     <footer></footer>
   </body>
 </html>

@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="css/general.css">
     <link rel="stylesheet" type="text/css" href="css/estiloEncuesta.css">
     <script src="js/interactividad.js" charset="utf-8" defer></script>
+    <script src="js/interactividad-pit.js" charset="utf-8" defer></script>
     <style media="screen">
     .texto-adicional {
       margin: 0.75rem 0 1rem;
@@ -93,7 +94,7 @@
             </label>
           </div>
 
-          <div class="texto-adicional">
+          <div class="texto-adicional ocultar" id="drivetrain-adicional">
             <label for="">Especificar otro tipo de drivetrain:</label>
             <input type="text" name="other-drivetrain" value="" id="otro-drivetrain">
           </div>
@@ -110,7 +111,7 @@
             </label>
           </div>
 
-          <div>
+          <div id="switch-adicional" class="ocultar">
             <h6>En que posiciones se cuelga:</h6>
             <div class="checkbox-texto">
               <div>
@@ -186,7 +187,7 @@
             </label>
           </div>
 
-          <div>
+          <div id="pregunta-rotation">
             <h6>Hace el Position Control? (Elegir el color)</h6>
             <div class="btn-bool flexbox">
               <label class="btn" style="width: 25%; max-width: 7rem;">
