@@ -27,14 +27,14 @@
     </style>
   </head>
   <body>
-    <form action="Guardar.php" method="POST" onsubmit="return verificar()">
+    <form action="guardar_info_pit.php" method="POST" onsubmit="return verificar()">
         <div class="centre" id="header">
           <div class="flexbox" id="info-match">
             <div>
               <label for="Regional" class="light-font">Regional</label>
               <select class="" id="Regional" name="zona-regional">
                 <option value="monterrey">Monterrey</option>
-                <option value="calgary">Calgary</option>
+                <option value="sacramento">Sacramento</option>
               </select>
             </div>
             <div>
@@ -114,16 +114,16 @@
             <h6>En que posiciones se cuelga:</h6>
             <div class="checkbox-texto">
               <div>
-                <input type="checkbox" name="position-switch" value="1" id="lado-izquierdo">
-                <label for="lado-izquierdo">Lado izquierdo</label>
+                <input type="radio" name="position-switch" value="1" id="ambos-lados">
+                <label for="ambos-lados">Ambos lados</label>
               </div>
               <div>
-                <input type="checkbox" name="position-switch" value="2" id="lado-centro">
+                <input type="radio" name="position-switch" value="2" id="lado-centro">
                 <label for="lado-centro">Centro</label>
               </div>
               <div>
-                <input type="checkbox" name="position-switch" value="3" id="lado-derecho">
-                <label for="lado-derecho">Lado derecho</label>
+                <input type="radio" name="position-switch" value="3" id="cualquier">
+                <label for="cualquier">Cualquier parte</label>
               </div>
             </div>
 
@@ -149,16 +149,16 @@
           <h5>En qu&eacute; Ports puede anotar?</h5>
           <div class="checkbox-texto">
             <div>
-              <input type="checkbox" name="ports" value="1" id="inner-port">
+              <input type="radio" name="ports" value="1" id="inner-port">
               <label for="inner-port">Inner Port</label>
             </div>
             <div>
-              <input type="checkbox" name="ports" value="2" id="outer-port">
+              <input type="radio" name="ports" value="2" id="outer-port">
               <label for="outer-port">Outer Port</label>
             </div>
             <div>
-              <input type="checkbox" name="ports" value="3" id="bottom-port">
-              <label for="bottom-port">Bottom Port</label>
+              <input type="radio" name="ports" value="3" id="bottom-port">
+              <label for="bottom-port">Solo Bottom Port</label>
             </div>
           </div>
 
@@ -202,17 +202,17 @@
 
           <div class="input-texto">
             <label for="cadencia">Cu&aacute;nto tiempo tarda en lanzar un Power Cell(s)?</label>
-            <input type="number" name="fire-rate"  style="width: 4rem;" id="cadencia">
+            <input type="number" step="0.05" name="fire-rate"  style="width: 4rem;" id="cadencia" placeholder="300">
           </div>
 
           <div class="input-texto">
             <label for="peso">Peso(lbs):</label>
-            <input type="number" name="weight" placeholder="125" style="width: 4rem;" id="peso">
+            <input type="number" step="0.05" name="weight" placeholder="125" style="width: 4rem;" id="peso">
           </div>
 
           <div class="input-texto">
             <label for="altura">Altura(in):</label>
-            <input type="number" name="height" placeholder="45" style="width: 4rem;" id="altura">
+            <input type="number" step="0.05" name="height" placeholder="45" style="width: 4rem;" id="altura">
           </div>
 
         </div>

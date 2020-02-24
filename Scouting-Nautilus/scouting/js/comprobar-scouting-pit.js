@@ -24,7 +24,7 @@ function verificar() {
 
   //Errores en almacenamiento de Power Cells
   const storageCells = document.getElementById("almacenamiento-power-cell");
-  if (storageCells.value < 0 || storageCells.value > 5) {
+  if (storageCells.value < 1 || storageCells.value > 5) {
     errorFree = false;
     errores[2].classList.remove("ocultar");
   }
@@ -124,7 +124,7 @@ function verificar() {
 
     //Pregunta cadencia
     const cadencia = document.getElementById("cadencia").value;
-    if(cadencia === "" || cadencia < 0 || cadencia > 300) {
+    if(cadencia === "" || cadencia < 0.01 || cadencia > 300) {
       errorFree = false;
       errores[15].classList.remove("ocultar");
     }
