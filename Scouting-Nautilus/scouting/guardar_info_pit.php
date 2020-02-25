@@ -114,7 +114,7 @@ if (isset($_POST["shield-generator"])) {
         $carry = "No carga";
     }
   } else {
-    $generator_switch = "No aplica";
+    $generator_switch = "No";
   }
 }
 

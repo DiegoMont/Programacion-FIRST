@@ -14,7 +14,7 @@ $query2 = "SELECT lugar_regional, numero_equipo, collector, store_cells, drivetr
 $result2 = mysqli_query($connection, $query2);
 
 $respuestas2 = mysqli_fetch_all($result2, MYSQLI_ASSOC);
-print_r($respuestas2);
+#print_r($respuestas2);
 #print_r($respuestas);
 
 mysqli_close($connection);
@@ -124,7 +124,22 @@ mysqli_close($connection);
           foreach ($respuestas2 as $respuesta) {
             echo "<tr>";
             echo "<td>" . htmlspecialchars($respuesta['numero_equipo']) . "</td>";
-
+            echo "<td>" . htmlspecialchars($respuesta['collector']) . "</td>";
+            echo "<td>" . htmlspecialchars($respuesta['store_cells']) . "</td>";
+            echo "<td>" . htmlspecialchars($respuesta['drivetrain']) . "</td>";
+            echo "<td>" . htmlspecialchars($respuesta['shield_generator']) . "</td>";
+            echo "<td>" . htmlspecialchars($respuesta['switch_positions']) . "</td>";
+            echo "<td>" . htmlspecialchars($respuesta['carry_robot']) . "</td>";
+            echo "<td>" . htmlspecialchars($respuesta['target_ports']) . "</td>";
+            echo "<td>" . htmlspecialchars($respuesta['fire_rate']) . "</td>";
+            echo "<td>" . htmlspecialchars($respuesta['control_panel']) . "</td>";
+            echo "<td>" . htmlspecialchars($respuesta['position_control']) . "</td>";
+            echo "<td>" . htmlspecialchars($respuesta['specialty']) . "</td>";
+            echo "<td>" . htmlspecialchars($respuesta['needs_in_allies']) . "</td>";
+            echo "<td>" . htmlspecialchars($respuesta['weight']) . "</td>";
+            echo "<td>" . htmlspecialchars($respuesta['height']) . "</td>";
+            echo "<td>" . htmlspecialchars($respuesta['lugar_regional']) . "</td>";
+            echo "<td>" . htmlspecialchars($respuesta['created_at']) . "</td>";
             echo "</tr>";
           }
           ?>
