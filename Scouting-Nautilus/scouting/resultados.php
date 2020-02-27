@@ -148,6 +148,10 @@ mysqli_close($connection);
       </div>
     </div>
 
-    <footer></footer>
+    <footer>
+      <div class="centre firma flexbox">
+        <a href="https://github.com/DiegoMont" class="firma">&lt;/&gt; with <span id="corazon" class="firma">&#9829;</span> by <span class="firma">DiegoMont</span></a>
+      </div>
+    </footer>
   </body>
 </html>

@@ -24,3 +24,7 @@ h1 {
 .opacar {
   opacity: 0.35;
 }
+
+div.firma {
+  border-right: 0.5rem solid #000;
+}
