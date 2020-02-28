@@ -59,7 +59,7 @@ if (isset($_SESSION["sesionIniciada"])) {
           <?php
           if (isset($_POST["contrasenia"])) {
             $contrasenia = htmlspecialchars($_POST["contrasenia"]);
-            if($contrasenia === "dieguapo") {
+            if($contrasenia === "futurosWinners") {
               $_SESSION["sesionIniciada"] = 125;
               header("Location: menu.html");
               exit;

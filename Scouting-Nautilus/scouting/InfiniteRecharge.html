@@ -36,6 +36,19 @@
           <h3>Autonomous</h3>
 
           <!-- Colocar divs con tipos de preguntas -->
+
+          <h5>Sale de la Initiation Line?</h5>
+          <div class="btn-bool flexbox">
+            <label class="btn" style="width: 25%; max-width: 7rem;">
+              <img src="img/tick.svg" alt="Si"  class="btn-symbol"  style="background-color: #148f12;">
+              <input type="radio" name="moves" value="1" class="ocultar">
+            </label>
+            <label class="btn" style="width: 25%; max-width: 7rem;">
+              <img src="img/cancel.svg" alt="No" class="btn-symbol"  style="background-color: #e11610;">
+              <input type="radio" name="moves" value="2" class="ocultar">
+            </label>
+          </div>
+
           <h5>Power Port</h5>
           <h6>Outer/Inner Port</h6>
           <div class="flexbox contador">
@@ -55,6 +68,18 @@
             <input type="number" name="autonomous-bottom" id="auto-abajo" value="0" class="cifra-contador"><button type="button" class="aumentar btn-symbol">
               <img src="img/add.svg">
             </button>
+          </div>
+
+          <h5>Recoge Power Cells?</h5>
+          <div class="btn-bool flexbox">
+            <label class="btn" style="width: 25%; max-width: 7rem;">
+              <img src="img/tick.svg" alt="Si"  class="btn-symbol"  style="background-color: #148f12;">
+              <input type="radio" name="auto-retrieve" value="1" class="ocultar">
+            </label>
+            <label class="btn" style="width: 25%; max-width: 7rem;">
+              <img src="img/cancel.svg" alt="No" class="btn-symbol"  style="background-color: #e11610;">
+              <input type="radio" name="auto-retrieve" value="2" class="ocultar">
+            </label>
           </div>
 
         </div>
@@ -120,6 +145,22 @@
             </label>
           </div>
 
+          <h5>Enfoque en Endgame:</h5>
+          <div class="checkbox-texto">
+            <div>
+              <input type="radio" name="endgame" value="1" id="estacionarse">
+              <label for="estacionarse">Estacionarse</label>
+            </div>
+            <div>
+              <input type="radio" name="endgame" value="2" id="colgarse">
+              <label for="colgarse">Colgarse</label>
+            </div>
+            <div>
+              <input type="radio" name="endgame" value="3" id="lanzar">
+              <label for="lanzar">Score Power Cells</label>
+            </div>
+          </div>
+
           <h5>Hanging from the Generator Switch</h5>
           <div class="radio-imagenes flexbox">
             <label class="img-opc btn">
@@ -149,6 +190,9 @@
           <p class="error ocultar">*No has seleccionado si el robot se cuelga del Switch</p>
           <p class="error ocultar">*No has seleccionado si el robot completa el Position Control</p>
           <p class="error ocultar">*El n&uacute;mero de Fouls no es v&aacute;lido</p>
+          <p class="error ocultar">*Selecciona si el robot deja la Initiation Line</p>
+          <p class="error ocultar">*Selecciona si el robot recoge Power Cells durante el aut&oacute;nomo</p>
+          <p class="error ocultar">*Elige el enfoque del robot durante el Endgame</p>
 
           <button type="submit" value="Enviar" id="btn-submit">Enviar</button>
         </div>

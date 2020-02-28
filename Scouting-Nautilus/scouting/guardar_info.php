@@ -8,6 +8,9 @@ $rotation_control;
 $position_control;
 $shield_generator;
 $comentarios = "";
+$moves_on_init;
+$endgame;
+$retrieve_cells;
 
 //Buscar sesion activa
 include "php/iniciar-sesion.php";
@@ -120,6 +123,33 @@ if(!isset($shield_generator)) {
   exit;
 }
 
+//Preguntas adicionales
+if(isset($_POST["moves"])){
+  $temp = $_POST["moves"];
+  if($temp === "1")
+    $moves_on_init = "Se mueve";
+  else
+    $moves_on_init = "No se mueve";
+} else $moves_on_init = "N / A";
+
+if(isset($_POST["auto-retrieve"])){
+  $temp = $_POST["auto-retrieve"];
+  if($temp === "1")
+    $retrieve_cells = "Recoge";
+  else
+    $retrieve_cells = "No recoge";
+} else $retrieve_cells = "N / A";
+
+if(isset($_POST["endgame"])){
+  $temp = $_POST["endgame"];
+  if($temp === "1")
+    $endgame = "Estacionarse";
+  else if($temp === "2")
+    $endgame = "Colgarse";
+  else
+    $endgame = "Score Power Cells";
+} else $endgame = "N / A";
+
 //Validar comentarios
 if(isset($_POST["comentarios"])) {
   $temp = htmlspecialchars($_POST["comentarios"]);
@@ -171,7 +201,7 @@ if(isset($_POST["comentarios"])) {
         include "php/conectar-DB.php";
 
         //Guardar scouting en la base de datos
-        $query = "INSERT INTO match_results(lugar_regional, numero_equipo, numero_match, auto_upper, auto_bottom, teleop_upper, teleop_bottom, fouls, rotation_control, position_control, shield_generator, comentarios) VALUES ('$regional', '$team_number', '$match', '${power_ports[0]}', '${power_ports[1]}', '${power_ports[2]}', '${power_ports[3]}', '$fouls', '$rotation_control', '$position_control', '$shield_generator', '$comentarios')";
+        $query = "INSERT INTO match_results(lugar_regional, numero_equipo, numero_match, auto_upper, auto_bottom, teleop_upper, teleop_bottom, fouls, rotation_control, position_control, shield_generator, comentarios, moves, auto_retrieve, endgame) VALUES ('$regional', '$team_number', '$match', '${power_ports[0]}', '${power_ports[1]}', '${power_ports[2]}', '${power_ports[3]}', '$fouls', '$rotation_control', '$position_control', '$shield_generator', '$comentarios', '$moves_on_init', '$retrieve_cells', '$endgame')";
 
         $result = mysqli_query($connection, $query);
 
@@ -184,7 +214,7 @@ if(isset($_POST["comentarios"])) {
         echo $mensaje;
         ?>
       </h1>
-      <img src="img/bb8.jpg" alt="Exito" class="foto">
+      <img src="img/gracias.jpg" alt="Exito" class="foto">
       <div class="flexbox">
         <a href="InfiniteRecharge.html" class="btn boton">Scouting match</a>
         <a href="resultados.php" class="btn boton">Estad&iacute;sticas</a>
