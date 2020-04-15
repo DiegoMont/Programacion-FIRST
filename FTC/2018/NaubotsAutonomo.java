@@ -80,7 +80,7 @@ public class NaubotsAutonomo extends LinearOpMode {
         runtime.reset();
         double currentTime;
 
-        /*while (opModeIsActive() && elevador1.isBusy()&&elevador2.isBusy()) {
+        while (opModeIsActive() && elevador1.isBusy()&&elevador2.isBusy()) {
             elevador1.setPower(0.4);
             elevador2.setPower(0.4);
             telemetry.addData("Status", "Run Time: " + runtime.toString());
@@ -133,7 +133,7 @@ public class NaubotsAutonomo extends LinearOpMode {
         while(opModeIsActive() && currentTime +500 > runtime.milliseconds()){
             leftDrive.setPower(0);
             rightDrive.setPower(0);
-        }*/
+        }
         leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftDrive.setTargetPosition((int)(-288*3.5));
@@ -149,7 +149,7 @@ public class NaubotsAutonomo extends LinearOpMode {
             telemetry.addData("Right encoder: ", rightDrive.getCurrentPosition());
             telemetry.update();
         }
-        /*
+
         currentTime = runtime.milliseconds();
         while(opModeIsActive() && currentTime +1000 > runtime.milliseconds()){
             catapulta.setPosition(0.5);
@@ -200,6 +200,6 @@ public class NaubotsAutonomo extends LinearOpMode {
             telemetry.addData("Left encoder: ", leftDrive.getCurrentPosition());
             telemetry.addData("Right encoder: ", rightDrive.getCurrentPosition());
             telemetry.update();
-        }*/
+        }
     }
 }
