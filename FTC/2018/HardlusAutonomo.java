@@ -56,11 +56,14 @@ public class HardlusAutonomo extends LinearOpMode {
             telemetry.update();
         }
 
+        //Esperar 1000ms con los motores a velocidad 0
         currentTime = runtime.milliseconds();
         while(opModeIsActive() && currentTime +1000 > runtime.milliseconds()){
             leftDrive.setPower(0);
             rightDrive.setPower(0);
         }
+
+        //girar sobre su propio eje hacia la derecha
         leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftDrive.setTargetPosition(130);
@@ -68,17 +71,21 @@ public class HardlusAutonomo extends LinearOpMode {
         leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+        //mover robot al 100% durante 100ms
         currentTime = runtime.milliseconds();
         while(opModeIsActive() && currentTime +1000 > runtime.milliseconds()){
             leftDrive.setPower(1);
             rightDrive.setPower(1);
         }
 
+        //Esperar 1000ms con los motores a velocidad 0
         currentTime = runtime.milliseconds();
         while(opModeIsActive() && currentTime +1000 > runtime.milliseconds()){
             leftDrive.setPower(0);
             rightDrive.setPower(0);
         }
+
+        //mover al robot hacia adelante
         leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftDrive.setTargetPosition(130);
@@ -86,17 +93,21 @@ public class HardlusAutonomo extends LinearOpMode {
         leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+        //Esperar 1000ms con los motores a velocidad 1
         currentTime = runtime.milliseconds();
         while(opModeIsActive() && currentTime +1000 > runtime.milliseconds()){
             leftDrive.setPower(1);
             rightDrive.setPower(1);
         }
 
+        //Esperar 1000ms con los motores a velocidad 0
         currentTime = runtime.milliseconds();
         while(opModeIsActive() && currentTime +1000 > runtime.milliseconds()){
             leftDrive.setPower(0);
             rightDrive.setPower(0);
         }
+
+        //Girar sobre su propio eje hacia la izquierda
         leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftDrive.setTargetPosition(-130);
@@ -104,17 +115,21 @@ public class HardlusAutonomo extends LinearOpMode {
         leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+        //Esperar 1000ms con los motores a velocidad 1
         currentTime = runtime.milliseconds();
         while(opModeIsActive() && currentTime +1000 > runtime.milliseconds()){
             leftDrive.setPower(1);
             rightDrive.setPower(1);
         }
 
+        //Esperar 1000ms con los motores a velocidad 0
         currentTime = runtime.milliseconds();
         while(opModeIsActive() && currentTime +1000 > runtime.milliseconds()){
             leftDrive.setPower(0);
             rightDrive.setPower(0);
         }
+
+        //Avanzar hacia adelante
         leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftDrive.setTargetPosition((int) Math.round(288*5));
@@ -122,6 +137,7 @@ public class HardlusAutonomo extends LinearOpMode {
         leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+        //Esperar 1000ms con los motores a velocidad 1
         currentTime = runtime.milliseconds();
         while(opModeIsActive() && currentTime +1000 > runtime.milliseconds()){
             leftDrive.setPower(1);

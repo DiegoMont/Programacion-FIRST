@@ -87,11 +87,15 @@ public class NaubotsAutonomo extends LinearOpMode {
             telemetry.addData("Elevador: ", elevador1.getCurrentPosition());
             telemetry.update();
         }
+
+        //Esperar 500ms con los motores apagados
         currentTime = runtime.milliseconds();
         while(opModeIsActive() && currentTime +500 > runtime.milliseconds()){
             leftDrive.setPower(0);
             rightDrive.setPower(0);
         }
+
+        //Girar sobre su propio eje
         leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftDrive.setTargetPosition(160);
@@ -99,6 +103,7 @@ public class NaubotsAutonomo extends LinearOpMode {
         leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+        //Moverse a velocidad 1
         while (opModeIsActive() && rightDrive.isBusy() && leftDrive.isBusy()) {
             leftDrive.setPower(1);
             rightDrive.setPower(1);
@@ -108,11 +113,14 @@ public class NaubotsAutonomo extends LinearOpMode {
             telemetry.update();
         }
 
+        //Esperar con los motores a 0 500ms
         currentTime = runtime.milliseconds();
         while(opModeIsActive() && currentTime +500 > runtime.milliseconds()){
             leftDrive.setPower(0);
             rightDrive.setPower(0);
         }
+
+        //Girar sobre su propio eje
         leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftDrive.setTargetPosition(-160);
@@ -120,6 +128,7 @@ public class NaubotsAutonomo extends LinearOpMode {
         leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+        //Moverse con motores a velocidad 1
         while (opModeIsActive() && rightDrive.isBusy() && leftDrive.isBusy()) {
             leftDrive.setPower(1);
             rightDrive.setPower(1);
@@ -129,11 +138,14 @@ public class NaubotsAutonomo extends LinearOpMode {
             telemetry.update();
         }
 
+        //apagar motores durante 500ms
         currentTime = runtime.milliseconds();
         while(opModeIsActive() && currentTime +500 > runtime.milliseconds()){
             leftDrive.setPower(0);
             rightDrive.setPower(0);
         }
+
+        //moverse hacia atras
         leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftDrive.setTargetPosition((int)(-288*3.5));
@@ -141,6 +153,7 @@ public class NaubotsAutonomo extends LinearOpMode {
         leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+        //moverse a velocidad 0.85
         while (opModeIsActive() && rightDrive.isBusy() && leftDrive.isBusy()) {
             leftDrive.setPower(0.85);
             rightDrive.setPower(0.85);
