@@ -10,6 +10,14 @@ public class Main {
         Mentor mentor2;
         */
 
+        TeamMember estudiante1 = new TeamMember("Ernesto", "Solis",
+        "Ingenieria", "Hardlus");
+        TeamMember estudiante2 = new TeamMember("Victoria", "de Leon",
+        "Ingenieria", "Hardlus");
+        TeamMember estudiante3 = new TeamMember("Tony", "Cedillo",
+        "AxM, Ingenieria", "Naubots");
+        TeamMember estudiante4;
+
         //Variables para guardar herramientas
         /*
         Herramienta herramienta1;
@@ -32,7 +40,14 @@ public class Main {
                 case 1:
                     System.out.print("Ingresa el nombre del miembro del equipo: ");
                     String nombre = sc.next();
+                    String apellido = sc.next();
+                    String area = sc.next();
+                    String equipoFTC = sc.next();
                     //mentor = new Mentor("Diego");
+                    estudiante4 = new TeamMember(nombre, apellido,
+                    area, equipoFTC);
+                    System.out.println("El nuevo miembro es " +
+                    estudiante4.nombre);
                     break;
                 case 2:
                     System.out.print("Ingresa el nombre de la herramienta: ");
