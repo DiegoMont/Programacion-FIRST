@@ -10,13 +10,16 @@ public class Main {
         Mentor mentor2;
         */
 
-        TeamMember estudiante1 = new TeamMember("Ernesto", "Solis",
+        //Declarar arreglo para guardar a todos los TeamMembers
+        TeamMember[] teamMembers;
+        teamMembers = new TeamMember[30];
+        //Añadir estudiantes
+        teamMembers[0] = new TeamMember("Ernesto", "Solis",
         "Ingenieria", "Hardlus");
-        TeamMember estudiante2 = new TeamMember("Victoria", "de Leon",
+        teamMembers[1] = new TeamMember("Victoria", "de Leon",
         "Ingenieria", "Hardlus");
-        TeamMember estudiante3 = new TeamMember("Tony", "Cedillo",
+        teamMembers[2] = new TeamMember("Tony", "Cedillo",
         "AxM, Ingenieria", "Naubots");
-        TeamMember estudiante4;
 
         //Variables para guardar herramientas
         /*
@@ -44,10 +47,10 @@ public class Main {
                     String area = sc.next();
                     String equipoFTC = sc.next();
                     //mentor = new Mentor("Diego");
-                    estudiante4 = new TeamMember(nombre, apellido,
+                    teamMembers[3] = new TeamMember(nombre, apellido,
                     area, equipoFTC);
                     System.out.println("El nuevo miembro es " +
-                    estudiante4.nombre);
+                    teamMembers[3].nombre);
                     break;
                 case 2:
                     System.out.print("Ingresa el nombre de la herramienta: ");
