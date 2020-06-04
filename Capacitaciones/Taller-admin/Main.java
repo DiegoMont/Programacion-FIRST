@@ -4,11 +4,16 @@ public class Main {
     public static void main(String[] args){
         Scanner sc = new Scanner(System.in);
         //Variables para guardar a mentores
-        /*
-        Mentor mentor;
-        Mentor mentor1;
-        Mentor mentor2;
-        */
+        Mentor[] mentores = new Mentor[10];
+
+        mentores[0] = new Mentor("Diego", "Montano", "Programacion", "Robbit");
+        mentores[0].tomarHerramienta();
+
+        //Ver que si exista mentor
+        System.out.println("Nombre: " + mentores[0].nombre);
+        System.out.println("Apellido: " + mentores[0].apellido);
+        System.out.println("Area: " + mentores[0].areaDelEquipo);
+        System.out.println("FTC: " + mentores[0].equipoFTC);
 
         //Declarar arreglo para guardar a todos los TeamMembers
         TeamMember[] teamMembers;

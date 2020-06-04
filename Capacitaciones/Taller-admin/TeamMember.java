@@ -5,6 +5,7 @@ public class TeamMember {
   //Variables de instancia o propiedades para guardar la informacion de nuestro objeto
     String nombre;
     String apellido;
+    String matricula;
     int semestre;
     String plan;
     String areaDelEquipo;
@@ -16,6 +17,7 @@ public class TeamMember {
     //Constructor
     public TeamMember(String nombre, String apellido,
     String areaDelEquipo, String equipoFTC) {
+        System.out.println("Este es el constructor de TeamMember");
         this.nombre = nombre;
         this.apellido = apellido;
         this.areaDelEquipo = areaDelEquipo;
@@ -25,5 +27,6 @@ public class TeamMember {
     //Método que permitira a una persona tomar prestada una herramienta
     public void tomarHerramienta(/*Herramienta herramienta*/){
       /*Codigo pendiente*/
+      System.out.println(nombre + " esta tomando una herramienta");
     }
 }
