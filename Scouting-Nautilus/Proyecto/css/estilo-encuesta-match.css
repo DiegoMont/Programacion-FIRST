@@ -1,0 +1,11 @@
+section.autonomo {
+  background-color: #003974;
+}
+
+section.teleoperado {
+  background-color: #202124;
+}
+
+#match-number {
+  width: 5ch;
+}

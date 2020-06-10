@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scouting | Pit</title>
+    <link rel="stylesheet" type="text/css" href="css/Reset.css">
+    <link rel="stylesheet" type="text/css" href="css/general.css">
+    <link rel="stylesheet" type="text/css" href="css/estilo-encuesta.css">
+    <!--<script src="js/interactividad.js" charset="utf-8" defer></script>-->
+    <!--<script src="js/interactividad-pit.js" charset="utf-8" defer></script>-->
+  </head>
+  <body>
+    <!--<form action="guardar_info_pit.php" method="POST" onsubmit="return verificar()">-->
+      <form action="" method="POST">
+
+        <!-- Seccion para colocar la info basica de la encuesta -->
+        <section class="info-match">
+          <div class="centre flexbox info-match">
+            <div>
+              <label for="regional">Regional</label>
+            <select name="zona-regional" id="regional">
+              <option value="monterrey">Monterrey</option>
+              <option value="sacramento">Sacramento</option>
+              <option value="laguna">Laguna</option>
+            </select>
+            </div>
+            <div>
+              <label for="team-number">Equipo</label>
+              <input type="number" name="numero-equipo" id="team-number" placeholder="4010">
+            </div>
+          </div>
+        </section>
+
+        <!-- Colocar las preguntas de la encuesta en esta seccion -->
+        <section style="background-color: #202124;"></section>
+
+        <!-- Seccion para comentarios, errores y submit -->
+        <section>
+          <div class="centre">
+            <h6 class="comentarios">Comentarios</h6>
+            <textarea name="comentarios" id="comments"></textarea>
+            <button type="submit" value="Enviar" id="btn-submit">Enviar</button>
+          </div>
+        </section>
+    </form>
+    <!--<script src="js/comprobar-scouting-pit.js" charset="utf-8"></script>-->
+    <footer>
+      <div style="font-size: 0.5rem; color: #3e3e3e;">Icons made by <a href="https://www.flaticon.com/authors/hanan" title="Hanan" style="font-size: 0.5rem; color: #3e3e3e;">Hanan</a> from <a href="https://www.flaticon.com/" title="Flaticon" style="font-size: 0.5rem; color: #3e3e3e;">www.flaticon.com </a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/"                 title="Creative Commons BY 3.0" target="_blank" style="font-size: 0.5rem; color: #3e3e3e;">CC 3.0 BY</a></div>
+      <div class="centre firma flexbox">
+        <a href="https://github.com/DiegoMont" class="firma">&lt;/&gt; with <span id="corazon" class="firma">&#9829;</span> by <span class="firma">DiegoMont</span></a>
+      </div>
+    </footer>
+  </body>
+</html>

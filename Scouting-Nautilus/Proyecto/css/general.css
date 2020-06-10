@@ -1,0 +1,20 @@
+:root {
+  --amarillo: #f0e332;
+}
+
+* {
+  color: var(--blanco-texto);
+  font-family: 'Roboto', Helvetica, Arial, sans-serif;
+}
+
+body {
+  background-color: #000;
+}
+
+.opacar {
+  opacity: 0.35;
+}
+
+a.firma, span.firma {
+  color: #b4b3b3;
+}
