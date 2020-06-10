@@ -7,7 +7,9 @@ public class Main {
         Mentor[] mentores = new Mentor[10];
 
         mentores[0] = new Mentor("Diego", "Montano", "Programacion", "Robbit");
-        mentores[0].tomarHerramienta();
+        mentores[1] = new Coach("Victor", "Gomez", "Coach", "En todos");
+        mentores[1].tomarHerramienta();
+
 
         //Ver que si exista mentor
         System.out.println("Nombre: " + mentores[0].nombre);
