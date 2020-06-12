@@ -1,3 +1,31 @@
+@font-face {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 400;
+  src: url(fonts/Roboto-Regular.ttf);
+}
+
+@font-face {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 300;
+  src: url(fonts/Roboto-Light.ttf);
+}
+
+@font-face {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 500;
+  src: url(fonts/Roboto-Medium.ttf);
+}
+
+@font-face {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 700;
+  src: url(fonts/Roboto-Bold.ttf);
+}
+
 :root {
   --amarillo: #f0e332;
 }
@@ -8,7 +36,11 @@
 }
 
 body {
-  background-color: #000;
+  background-color: #272727;
+}
+
+h3 {
+  font-weight: 500;
 }
 
 .opacar {
@@ -17,4 +49,21 @@ body {
 
 a.firma, span.firma {
   color: #b4b3b3;
+}
+
+#btn-submit {
+  color: #000;
+  background-color: var(--amarillo);
+  display: block;
+  width: 50%;
+  min-width: 6rem;
+  border: 2px solid var(--amarillo);
+  border-radius: 2px;
+  padding: 0.75rem 0;
+  margin: 0.5rem auto 0;
+}
+
+#btn-submit:hover {
+  color: var(--amarillo);
+  background-color: #000;
 }
