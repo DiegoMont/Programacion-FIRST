@@ -1,10 +1,18 @@
 import java.util.Scanner;
 
+import team_member.los_jefes.TeamMember;
+import team_member.los_jefes.Coach;
+import team_member.los_jefes.Mentor;
+import herramienta.Herramienta;
+
 public class Main {
     public static void main(String[] args){
         Scanner sc = new Scanner(System.in);
         //Variables para guardar a mentores
         Mentor[] mentores = new Mentor[10];
+        Herramienta[] herramientas = new Herramienta[20];
+        herramientas[0] = new Herramienta("Flexo", "Color naranja", false);
+        herramientas[1] = new Herramienta("Taladro", "Taladro color rojo", true);
 
         mentores[0] = new Mentor("Diego", "Montano", "Programacion", "Robbit");
         mentores[1] = new Coach("Victor", "Gomez", "Coach", "En todos");

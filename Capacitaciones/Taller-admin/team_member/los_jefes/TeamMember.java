@@ -1,18 +1,19 @@
+package team_member.los_jefes;
 import java.util.Date;
 
 public class TeamMember {
 
   //Variables de instancia o propiedades para guardar la informacion de nuestro objeto
-    String nombre;
-    String apellido;
-    String matricula;
-    int semestre;
-    String plan;
-    String areaDelEquipo;
-    String tarea;
-    String equipoFTC;
-    int anioEnElEquipo;
-    Date cumpleanios;
+    public  String nombre;
+    public  String apellido;
+    public  String matricula;
+    public  int semestre;
+    public  String plan;
+    public  String areaDelEquipo;
+    public  String tarea;
+    public  String equipoFTC;
+    public  int anioEnElEquipo;
+    public  Date cumpleanios;
 
     //Constructor
     public TeamMember(String nombre, String apellido,

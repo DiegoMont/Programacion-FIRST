@@ -1,3 +1,4 @@
+package team_member.los_jefes;
 public class Coach extends Mentor {
 
   public Coach(String nombre,String apellido, String areaDelEquipo, String equipoFTC){
