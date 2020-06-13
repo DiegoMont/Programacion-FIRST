@@ -39,8 +39,28 @@ body {
   background-color: #272727;
 }
 
+header {
+  padding-top: 1rem;
+}
+
 h3 {
   font-weight: 500;
+}
+
+.btn-nav {
+  color: #000;
+  background-color: var(--amarillo);
+  font-weight: 500;
+  width: 12rem;
+  padding: 1.5rem;
+  border: 2px solid var(--amarillo);
+  border-radius: 10px;
+  margin: 1.5rem 3rem;
+}
+
+.btn-nav:hover {
+  color: var(--amarillo);
+  background-color: #000;
 }
 
 .opacar {
@@ -66,4 +86,19 @@ a.firma, span.firma {
 #btn-submit:hover {
   color: var(--amarillo);
   background-color: #000;
+}
+
+#logo-header {
+  max-width: 30%;
+  min-width: 300px;;
+  display: block;
+  margin: 0 auto;
+}
+
+#logo-header h2 {
+  color: var(--blanco-texto);
+  font-size: 2rem;
+  font-weight: 300;
+  text-align: left;
+  margin-bottom: 0.5rem;;
 }
