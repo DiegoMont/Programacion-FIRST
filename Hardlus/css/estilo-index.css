@@ -1,0 +1,79 @@
+header {
+  background-color: #000000;
+  border-bottom: 1rem solid var(--rojo);
+}
+
+header * {
+  color: #fff;
+}
+
+header h1 {
+  font-weight: 400;
+}
+
+.header-logo {
+  width: 10vw;
+  min-width: 120px;
+  margin: 0 0 0 auto;
+}
+
+h3.redes-sociales {
+  font-weight: 500;
+  margin-bottom: 2rem;
+}
+
+.redes-sociales img {
+  width: 1.4rem;
+  margin-right: 0.5rem;
+}
+
+section.frase-motivadora {
+  background-color: #C000007F
+}
+
+.frase-izq, .frase-der {
+  width: 49%;
+}
+
+.container-frase {
+  background-color: #fff;
+  box-sizing: border-box;
+  width: 90%;
+  padding: 10%;
+  margin: 0 auto;
+}
+
+.container-frase h3 {
+  font-weight: 400;
+}
+
+@media screen and (max-width: 700px){
+  .frase-izq, .frase-der {
+    width: 100%;
+  }
+}
+
+section.que-ofrece {
+  background-color: #000;
+}
+
+.que-ofrece h5 {
+  color: var(--blanco-texto);
+  font-weight: 400;
+  text-align: justify;
+}
+
+section.cubrebocas {
+  background-color: var(--rojo);
+}
+
+.cubrebocas * {
+  color: var(--blanco-texto);
+}
+
+.cubrebocas h2 {
+  font-weight: 300;
+  text-align: left;
+  max-width: 35rem;
+  margin-bottom: 1.7rem;
+}
