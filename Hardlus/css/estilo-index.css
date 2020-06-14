@@ -1,3 +1,10 @@
+/*****************
+*                *
+*     Header     *
+*                *
+******************/
+
+
 header {
   background-color: #000000;
   border-bottom: 1rem solid var(--rojo);
@@ -8,15 +15,16 @@ header * {
 }
 
 header h1 {
+  color: var(--blanco-texto);
   text-transform: uppercase;
   /*font-weight: 400;*/
 }
 
-.header-logo {
-  width: 10vw;
-  min-width: 120px;
-  margin: 0 0 0 auto;
-}
+/*************************
+*                        *
+*     Redes sociales     *
+*                        *
+**************************/
 
 h3.redes-sociales {
   font-weight: 500;
@@ -28,8 +36,14 @@ h3.redes-sociales {
   margin-right: 0.5rem;
 }
 
+/*************************
+*                        *
+*     Frase e imagen     *
+*                        *
+**************************/
+
 section.frase-motivadora {
-  background-color: #f0000090
+  background-color: var(--rojo-tenue);
 }
 
 .frase-izq, .frase-der {
@@ -41,6 +55,7 @@ section.frase-motivadora {
   box-sizing: border-box;
   width: 90%;
   padding: 10%;
+  border-radius: 5px;
   margin: 0 auto;
 }
 
@@ -54,6 +69,12 @@ section.frase-motivadora {
   }
 }
 
+/************************
+*                       *
+*     Que ofrecemos     *
+*                       *
+*************************/
+
 section.que-ofrece {
   background-color: #000;
 }
@@ -63,6 +84,12 @@ section.que-ofrece {
   font-weight: 400;
   text-align: justify;
 }
+
+/*********************
+*                    *
+*     Cubrebocas     *
+*                    *
+**********************/
 
 section.cubrebocas {
   background-color: var(--rojo);
@@ -77,4 +104,28 @@ section.cubrebocas {
   text-align: left;
   max-width: 35rem;
   margin-bottom: 1.7rem;
+}
+
+div.switch {
+  background-color: var(--rojo-tenue);
+  margin: 1rem auto;
+  border: 2px solid #000;
+}
+
+.switch button {
+  color: var(--negro-texto);
+  background-color: var(--rojo-tenue);
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+}
+
+.idioma-activo {
+  color: var(--blanco-texto) !important;
+  background-color: #000 !important;
+}
+
+#manual-cubrebocas-spanish, #manual-cubrebocas-english {
+  width: 90%;
+  height: 60vh;
+  margin: 2rem auto;
 }

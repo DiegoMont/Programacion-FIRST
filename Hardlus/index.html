@@ -10,40 +10,44 @@
     <link rel="stylesheet" type="text/css" href="css/general.css">
     <link rel="stylesheet" type="text/css" href="css/estilo-index.css">
     <link rel="icon" type="image/png" href="">
-    <!--<script src="js/interactividad.js" charset="utf-8" defer></script>-->
+    <script src="js/interactividad.js" charset="utf-8" defer></script>
+    <script src="js/interactividad-index.js" charset="utf-8" defer></script>
   </head>
   <body>
 
-    <header>
-      <div class="centre">
-        <div class="header-logo">
+    <nav>
+      <div class="centre nav-grid">
+        <div class="btns-nav flexbox">
+          <a  class="btn" href="#" id="btn-pagina-actual">Home</a>
+          <a  class="btn" href="#">Actividades STEM</a>
+        </div>
+        <div class="logo-nav">
           <img src="img/Hardlus-blanco.png" alt="Hardlus 15704">
         </div>
+      </div>
+    </nav>
+    <div id="espacio-nav"></div>
+
+    <header>
+      <div class="centre">
         <h1>Actividades STEM y manuales de cubrebocas</h1>
       </div>
     </header>
 
-    <section class="redes-sociales">
+    <section class="cubrebocas">
       <div class="centre">
-        <h3 class="redes-sociales">¡S&iacute;guenos en redes sociales!</h3>
+        <h2>Crea tu propio cubrebocas</h2>
+        <p class="parrafo">Con el fin de promover la seguridad de las personas que necesitan salir de casa por las complicaciones del día a día, el contenido de los siguientes documentos incluye una guía detallada para fabricar cubrebocas caseros con materiales accesibles.</p>
         <div class="flexbox">
-          <div class="redes-sociales">
-            <a href="https://www.instagram.com/hardlus_15704/">
-              <div class="flexbox">
-                <img src="img/instagram.svg" alt="Siguenosen instagram">
-                <h6 class="link">hardlus_15704</h6>
-              </div>
-            </a>
-          </div>
-          <div class="redes-sociales">
-            <a href="https://twitter.com/Hardlus15704">
-              <div class="flexbox">
-                <img src="img/twitter.svg" alt="Siguenosen instagram">
-                <h6 class="link">Hardlus 15704</h6>
-              </div>
-            </a>
+          <div class="switch">
+            <button type="button" id="espanol" class="idioma-activo">Espa&ntilde;ol</button>
+            <button type="button" id="ingles">English</button>
           </div>
         </div>
+
+        <iframe src="https://drive.google.com/file/d/1Bo5eLQd8sa3FD99QrzP_QbcvqsUEIW9T/preview" id="manual-cubrebocas-spanish"></iframe>
+
+        <iframe src="https://drive.google.com/file/d/1IHeAqhYbB29Qqx0hYyGraWZuvgvTjnBu/preview" id="manual-cubrebocas-english"></iframe>
       </div>
     </section>
 
@@ -68,10 +72,27 @@
       </div>
     </section>
 
-    <section class="cubrebocas">
+    <section class="redes-sociales">
       <div class="centre">
-        <h2>Crea tu propio cubrebocas</h2>
-        <p class="parrafo">Con el fin de promover la seguridad de las personas que necesitan salir de casa por las complicaciones del día a día, el contenido de los siguientes documentos incluye una guía detallada para fabricar cubrebocas caseros con materiales accesibles.</p>
+        <h3 class="redes-sociales">¡S&iacute;guenos en redes sociales!</h3>
+        <div class="flexbox">
+          <div class="redes-sociales">
+            <a href="https://www.instagram.com/hardlus_15704/" target="_blank">
+              <div class="flexbox">
+                <img src="img/instagram.svg" alt="Siguenosen instagram">
+                <h6 class="link">hardlus_15704</h6>
+              </div>
+            </a>
+          </div>
+          <div class="redes-sociales">
+            <a href="https://twitter.com/Hardlus15704" target="_blank">
+              <div class="flexbox">
+                <img src="img/twitter.svg" alt="Siguenosen instagram">
+                <h6 class="link">Hardlus 15704</h6>
+              </div>
+            </a>
+          </div>
+        </div>
       </div>
     </section>
 
