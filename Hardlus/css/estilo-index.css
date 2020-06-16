@@ -103,7 +103,6 @@ section.cubrebocas {
   font-weight: 300;
   text-align: left;
   max-width: 35rem;
-  margin-bottom: 1.7rem;
 }
 
 div.switch {
@@ -122,6 +121,10 @@ div.switch {
 .idioma-activo {
   color: var(--blanco-texto) !important;
   background-color: #000 !important;
+}
+
+iframe {
+  display: block;
 }
 
 #manual-cubrebocas-spanish, #manual-cubrebocas-english {

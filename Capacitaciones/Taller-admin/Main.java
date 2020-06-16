@@ -50,6 +50,7 @@ public class Main {
             System.out.println("3. Prestar herramienta");
             System.out.println("4. Devolver herramienta");
             System.out.println("5. Exit\n");
+            System.out.println("6. Imprimir numero de integrantes");
             System.out.print("Elige una opcion: ");
 
             //Leer input del usuario
@@ -78,6 +79,7 @@ public class Main {
                     break;
                 case 4: break;
                 case 5: return;
+                case 6: break;
             }
         }
     }

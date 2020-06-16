@@ -1,0 +1,73 @@
+/*****************
+*                *
+*     Header     *
+*                *
+******************/
+
+header {
+  background-color: var(--rojo);
+}
+
+header * {
+  color: var(--rojo-tenue);
+}
+
+header h1 {
+
+}
+
+/************************
+*                       *
+*     Botones areas     *
+*                       *
+*************************/
+.botones-areas {
+  background-color: var(--blanco-texto);
+}
+
+.btn-area {
+  color: var(--blanco-texto);
+  background-size: cover;
+  font-size: 2.5rem;
+  font-weight: 400;
+  text-align: left;
+  display: block;
+  box-sizing: border-box;
+  width: 85%;
+  padding: 2rem 5rem;
+  border-radius: 0.5rem;
+  margin: 2rem auto;
+}
+
+.ciencia {
+  background-image: url(../img/ciencia-verde.jpg);
+}
+
+.technology {
+  background-image: url(../img/ciencia-amarillo.jpg);
+}
+
+.engineering {
+  background-image: url(../img/ciencia-azul.jpg);
+}
+
+.maths {
+  background-image: url(../img/ciencia-naranja.jpg);
+}
+
+.sigla {
+  font-size: 2.75rem;
+  font-weight: 700;
+}
+
+@media screen and (max-width: 900px){
+  .btn-area {
+    padding: 1.5rem 2rem;
+  }
+}
+
+@media screen and (max-width: 690px) {
+  .btn-area {
+    width: 95vw;
+  }
+}
