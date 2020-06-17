@@ -80,6 +80,19 @@ section.que-ofrece {
   text-align: justify;
 }
 
+.que-ofrece a {
+  color: var(--blanco-texto);
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  display: block;
+  width: 30%;
+  min-width: 135px;
+  padding: 1.5rem 3rem;
+  border-radius: 0.5rem;
+  margin: 2rem auto 0;
+}
+
 /*********************
 *                    *
 *     Cubrebocas     *

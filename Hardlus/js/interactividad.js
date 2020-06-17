@@ -7,3 +7,4 @@ function llenarEspacioNav() {
 
 window.onload = llenarEspacioNav;
 window.addEventListener('resize', llenarEspacioNav);
+llenarEspacioNav();
