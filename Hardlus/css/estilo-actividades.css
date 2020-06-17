@@ -49,6 +49,11 @@ div.actividades {
   margin: 1rem;
 }
 
+.actividad h6 {
+  font-weight: 500;
+  height: 3rem;
+}
+
 /**************************
 *                         *
 *     Nav actividades     *
@@ -57,13 +62,14 @@ div.actividades {
 
 .select-area {
   background-color: var(--rojo-tenue);
-  position: absolute;
+  position: static;
   padding: 0.5rem 0;
 }
 
 .btn-area {
   color: var(--blanco-texto);
   display: block;
+  margin: 0.5rem 1rem;
   padding: 0.75rem 1.25rem;
   border-radius: 0.5rem;
 }
