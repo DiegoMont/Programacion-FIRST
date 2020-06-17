@@ -37,6 +37,10 @@
   --rojo: #c00000;
   --gris: #9e9e9e;
   --rojo-tenue: #ffdfd8;
+  --verde: #4b8521;
+  --amarillo: #d29437;
+  --azul: #1c4998;
+  --naranja: #bd522a;
 }
 
 * {
@@ -67,6 +71,30 @@ nav * {
   color: var(--blanco-texto);
 }
 
+.back-img-verde:hover, .back-img-amarillo:hover, .back-img-azul:hover, .back-img-naranja:hover {
+  opacity: 1;
+}
+
+.back-img-verde {
+  background-color: var(--verde);
+  background-image: url(../img/ciencia-verde.jpg);
+}
+
+.back-img-amarillo {
+  background-color: var(--amarillo);
+  background-image: url(../img/ciencia-amarillo.jpg);
+}
+
+.back-img-azul {
+  background-color: var(--azul);
+  background-image: url(../img/ciencia-azul.jpg);
+}
+
+.back-img-naranja {
+  background-color: var(--naranja);
+  background-image: url(../img/ciencia-naranja.jpg);
+}
+
 .btns-nav {
   grid-area: 1 / 1 / 2 / 2;
 }
@@ -82,9 +110,23 @@ nav * {
   border-bottom: 2px solid #000;
 }
 
+footer .redes-sociales {
+  margin: 2rem auto;
+}
+
+.redes-sociales img {
+  width: 1.4rem;
+  margin-right: 0.5rem;
+}
+
 #btn-pagina-actual, .btns-nav a:hover {
   color: var(--rojo);
   border-bottom-color: var(--rojo);
+}
+
+#espacio-nav {
+  background-color: var(--rojo);
+  min-width: 5rem;
 }
 
 @media screen and (max-width: 800px){

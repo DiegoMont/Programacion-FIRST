@@ -39,23 +39,8 @@ header h1 {
   margin: 2rem auto;
 }
 
-.ciencia {
-  background-image: url(../img/ciencia-verde.jpg);
-}
-
-.technology {
-  background-image: url(../img/ciencia-amarillo.jpg);
-}
-
-.engineering {
-  background-image: url(../img/ciencia-azul.jpg);
-}
-
-.maths {
-  background-image: url(../img/ciencia-naranja.jpg);
-}
-
 .sigla {
+  color: #000;
   font-size: 2.75rem;
   font-weight: 700;
 }
