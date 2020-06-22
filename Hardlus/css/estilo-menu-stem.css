@@ -40,9 +40,14 @@ header h1 {
 }
 
 .sigla {
-  color: #000;
+  color: var(--rojo);
   font-size: 2.75rem;
   font-weight: 700;
+}
+.haz-click {
+  color: var(--blanco-texto);
+  font-size: 1rem;
+  display: block;
 }
 
 @media screen and (max-width: 900px){
@@ -53,6 +58,6 @@ header h1 {
 
 @media screen and (max-width: 690px) {
   .btn-area {
-    width: 95vw;
+    width: 95%;
   }
 }

@@ -81,15 +81,16 @@ section.que-ofrece {
 }
 
 .que-ofrece a {
-  color: var(--blanco-texto);
+  color: var(--rojo-tenue);
   font-size: 1.5rem;
   font-weight: 700;
   text-align: center;
+  text-decoration: underline;
   display: block;
-  width: 30%;
+  /*width: 100%;
   min-width: 135px;
   padding: 1.5rem 3rem;
-  border-radius: 0.5rem;
+  border-radius: 0.5rem;*/
   margin: 2rem auto 0;
 }
 
