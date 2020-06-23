@@ -26,3 +26,20 @@ btnIngles.addEventListener("click", function () {
 });
 
 manualCubrebocas();
+
+// Foto frase motivadora
+
+function alturaImagen() {
+  const alturaGrid = document.getElementById("frase").getElementsByClassName("frase-izq")[0].offsetHeight;
+  //console.log(alturaGrid);
+  const elementoImg = document.getElementById("foto-ingenieria");
+  if (document.getElementById("frase").offsetWidth > 700) {
+    elementoImg.style.height = alturaGrid+"px";
+  } else {
+    console.log("altura auto");
+    elementoImg.style.height = "auto";
+  }
+}
+
+alturaImagen();
+window.addEventListener("resize", alturaImagen);

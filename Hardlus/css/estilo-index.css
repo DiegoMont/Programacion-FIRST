@@ -58,9 +58,28 @@ section.frase-motivadora {
   font-weight: 400;
 }
 
+.frase-der {
+  overflow: hidden;
+  justify-content: flex-end;
+}
+
+#foto-ingenieria {
+  width: auto;
+}
+
 @media screen and (max-width: 700px){
   .frase-izq, .frase-der {
     width: 100%;
+    margin: 1rem 0;
+  }
+
+  .frase-der {
+    justify-content: center;
+  }
+
+  #foto-ingenieria {
+    width: 90%;
+    height: auto;
   }
 }
 
@@ -76,6 +95,7 @@ section.que-ofrece {
 
 .que-ofrece h5 {
   color: var(--blanco-texto);
+  font-size: 1rem;
   font-weight: 400;
   text-align: justify;
 }
