@@ -58,6 +58,10 @@ div.actividades {
   height: 3rem;
 }
 
+#cuenta-act {
+  text-align: center;
+}
+
 /**************************
 *                         *
 *     Nav actividades     *
