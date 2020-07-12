@@ -113,7 +113,7 @@ nav * {
   grid-template-columns: 1fr 15%;
 }
 
-.redes-sociales {
+div.redes-sociales {
   margin: 1rem;
 }
 
