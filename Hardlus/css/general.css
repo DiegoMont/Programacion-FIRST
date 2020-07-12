@@ -103,9 +103,18 @@ nav * {
   grid-area: 1 / 1 / 2 / 2;
 }
 
+.iconos-redes {
+  justify-content: center;
+  margin: 2rem auto;
+}
+
 .nav-grid {
   display: grid;
   grid-template-columns: 1fr 15%;
+}
+
+.redes-sociales {
+  margin: 1rem;
 }
 
 .btns-nav a {
@@ -114,17 +123,9 @@ nav * {
   border-bottom: 2px solid #000;
 }
 
-.iconos-redes {
-  justify-content: center;
-}
-
-footer .redes-sociales {
-  margin: 2rem 1rem;
-}
-
 .redes-sociales img {
   width: 2rem;
-  margin-right: 0.5rem;
+  margin-right: 0.25rem;
 }
 
 #btn-pagina-actual, .btns-nav a:hover {
