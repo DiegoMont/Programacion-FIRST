@@ -41,6 +41,7 @@
   --amarillo: #000;
   --azul: #021d4b;
   --naranja: #000;
+  --verde-ecologia: #8ac848;
 }
 
 * {
@@ -71,7 +72,7 @@ nav * {
   color: var(--blanco-texto);
 }
 
-.back-img-verde:hover, .back-img-amarillo:hover, .back-img-azul:hover, .back-img-naranja:hover {
+.back-img-verde:hover, .back-img-amarillo:hover, .back-img-azul:hover, .back-img-naranja:hover, .back-img-ecologia:hover {
   opacity: 1;
 }
 
@@ -97,6 +98,12 @@ nav * {
   background-color: var(--naranja);
   background-image: url(../img/fondo-mate.jpeg);
   background-position: 55% 60%;
+}
+
+.back-img-ecologia {
+  background-color: var(--verde-ecologia);
+  background-image: url(../img/fondo-ecologia.jpg);
+  background-position: 50% 80%;
 }
 
 .btns-nav {
