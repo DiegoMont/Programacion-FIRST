@@ -101,17 +101,35 @@ section.que-ofrece {
 }
 
 .que-ofrece a {
-  color: var(--rojo-tenue);
+  color: var(--rojo);
+  background-color: var(--rojo-tenue);
   font-size: 1.5rem;
   font-weight: 700;
   text-align: center;
-  text-decoration: underline;
   display: block;
-  /*width: 100%;
-  min-width: 135px;
+  box-sizing: border-box;
+  width: 60%;
   padding: 1.5rem 3rem;
-  border-radius: 0.5rem;*/
+  border: 0.35rem solid var(--rojo);
+  border-radius: 0.5rem;
   margin: 2rem auto 0;
+}
+
+.que-ofrece a:hover {
+  background-color: #000;
+}
+
+@media screen and (max-width: 780px) {
+  .que-ofrece a {
+    width: 75%;
+    padding: 0.5rem 2rem;
+  }
+}
+
+@media screen and (max-width: 425px) {
+  .que-ofrece a {
+    width: 90%;
+  }
 }
 
 /*********************

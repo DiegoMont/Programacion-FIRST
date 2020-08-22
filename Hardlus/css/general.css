@@ -72,7 +72,7 @@ nav * {
   color: var(--blanco-texto);
 }
 
-.back-img-verde:hover, .back-img-amarillo:hover, .back-img-azul:hover, .back-img-naranja:hover, .back-img-ecologia:hover {
+.back-img-verde:hover, .back-img-amarillo:hover, .back-img-azul:hover, .back-img-naranja:hover, .back-img-ecologia:hover, .back-img-arte:hover {
   opacity: 1;
 }
 
@@ -104,6 +104,12 @@ nav * {
   background-color: var(--verde-ecologia);
   background-image: url(../img/fondo-ecologia.jpg);
   background-position: 50% 80%;
+}
+
+.back-img-arte {
+  background-color: var(blanco-texto);
+  background-image: url(../img/fondo-arte.jpg);
+  background-position: 50% 50%;
 }
 
 .btns-nav {

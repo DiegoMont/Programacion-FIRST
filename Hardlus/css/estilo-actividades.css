@@ -34,6 +34,20 @@ header .centre {
 
 /******************************
 *                             *
+*     Display video           *
+*                             *
+*******************************/
+
+#video {
+  background-color: #000;
+}
+
+#video-origami {
+  width: 90%;
+}
+
+/******************************
+*                             *
 *     Display actividades     *
 *                             *
 *******************************/
@@ -41,6 +55,10 @@ header .centre {
 iframe {
   width: 100%;
   min-height: 40vh;
+}
+
+.actividad iframe {
+  box-shadow: 3px 7px 5px #bbb;
 }
 
 div.actividades {
