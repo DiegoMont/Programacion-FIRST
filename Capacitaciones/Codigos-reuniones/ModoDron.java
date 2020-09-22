@@ -22,8 +22,8 @@ public class ModoDron extends OpMode{
     double turn = gamepad1.right_stick_x;
     double lateral = gamepad1.left_stick_x;
 
-    double leftPower = Range.clip(-1, 1, drive + turn);
-    double rightPower = Range.clip(-1, 1, drive - turn);
+    double leftPower = Range.clip(drive + turn, -1, 1);
+    double rightPower = Range.clip(drive - turn, -1, 1);
 
     derecho.setPower(rightPower);
     izquierdo.setPower(leftPower);
