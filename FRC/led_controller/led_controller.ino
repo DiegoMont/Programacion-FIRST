@@ -29,7 +29,7 @@ class LedController {
         for(int i = 0; i < 3; i++) {
             int color = 0xff0000 >> (8*i);
             setColor(color);
-            delay(delay);
+            delay(DELAY_MS);
             turnOff();
             delay(DELAY_MS);
         }

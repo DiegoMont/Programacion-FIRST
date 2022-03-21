@@ -1,3 +1,3 @@
 namespace Color {
-    int AMARILLO = 0xf2df0c;
+    unsigned int AMARILLO = 0xf2df0c;
 }
