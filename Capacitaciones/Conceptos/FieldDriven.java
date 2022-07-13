@@ -1,21 +1,35 @@
 public class FieldDriven extends LinearOpMode {
     private BNO055IMU imu;
+    private boolean fieldOriented = false;
+    private double FIELD_NORTH;
 
     @Override
     public void runOpMode() {
         initIMU();
         waitForStart();
-
+        FIELD_NORTH = getHeading();
         boolean drivingModeClick = false;
-        boolean fieldOriented = false;
-        double fieldNorth = getHeading();
         while(opModeIsActive()) {
-
-            if(fieldOriented) {
-                // Implement logic
-            }
-
+            if(!gamepad1.dpad_down && drivingModeClick) {
+                fieldOriented = !fieldOriented;
+                fieldNorth = getHeading();
+            }            
+            drivingModeClick = gamepad1.dpad_down;
+            controlChasis();
         }
+    }
+
+    private void controlChasis() {
+        double drive = -gamepad1.left_stick_y;
+        double lateral = gamepad1.left_stick_x;
+        double turn = gamepad1.right_stick_x;
+        if(fieldOriented) {
+            double heading = getHeading();
+            double degreesToRotate = FIELD_NORTH - heading;
+            lateral = Math.cos(lateral * Math.toRadians(degreesToRotate)) - Math.sin(drive * Math.toRadians(degreesToRotate));
+            drive = Math.sin(lateral * Math.toRadians(degreesToRotate)) + Math.cos(drive * Math.toRadians(degreesToRotate));
+        }
+        // TODO: Assign motor power
     }
 
     public void initIMU() {
